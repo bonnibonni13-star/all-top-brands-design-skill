@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>:root{color-scheme:light}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<title>All Top Brands Design</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Schibsted+Grotesk:wght@400..700&family=JetBrains+Mono:wght@400..800&family=Inter:wght@100..900&family=Fraunces:opsz,wght@9..144,100..900&display=swap">
+<style>
+/* Layout: sticky filter bar above a grid of specimen cards. The cards carry the brand colors;
+   the page itself stays a quiet, cool frame so 74 palettes can sit side by side. */
+:root {
+  --bg: #eceff3;
+  --surface: #ffffff;
+  --fg: #141922;
+  --muted: #586273;
+  --line: #d3d9e2;
+  --accent: #2f45c8;
+  --on-accent: #ffffff;
+  --star: #b97c00;
+  --font-display: "Bricolage Grotesque", "Schibsted Grotesk", system-ui, sans-serif;
+  --font-ui: "Schibsted Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --radius: 14px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0e1117; --surface: #161a22; --fg: #e7ebf1; --muted: #9aa3b3; --line: #29303c;
+    --accent: #8593ff; --on-accent: #0e1117; --star: #f2b23a; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0e1117; --surface: #161a22; --fg: #e7ebf1; --muted: #9aa3b3; --line: #29303c;
+  --accent: #8593ff; --on-accent: #0e1117; --star: #f2b23a; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font: 15px/1.5 var(--font-ui); }
+.wrap { max-width: 1240px; margin: 0 auto; padding-inline: 16px; padding-block: 28px 48px; }
+@media (min-width: 720px) { .wrap { padding-inline: 28px; } }
+
+.intro { display: grid; gap: 10px; max-width: 68ch; padding-block: 8px 20px; }
+.eyebrow { margin: 0; font: 600 12px/1 var(--font-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+h1 { margin: 0; font: 800 clamp(34px, 7vw, 58px)/1 var(--font-display); letter-spacing: -0.03em; text-wrap: balance; }
+.lede { margin: 0; color: var(--muted); font-size: 16px; }
+.steps { display: flex; flex-wrap: wrap; gap: 6px 18px; margin: 4px 0 0; padding: 0; list-style: none; font-size: 14px; }
+.steps li { display: flex; gap: 8px; align-items: baseline; }
+.steps b { font: 700 12px/1 var(--font-mono); color: var(--accent); }
+
+.bar {
+  position: relative; top: env(safe-area-inset-top, 0px); z-index: 5;
+  display: grid; gap: 10px; padding: 12px; margin-bottom: 18px;
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--line); border-radius: var(--radius);
+}
+.bar { grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 720px) { .bar { position: sticky; } }
+.bar-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; min-width: 0; }
+#q {
+  flex: 1 1 260px; min-width: 0; height: 42px; padding: 0 14px; font: inherit; color: var(--fg);
+  background: var(--surface); border: 1px solid var(--line); border-radius: 10px;
+}
+#cat {
+  flex: 0 1 220px; min-width: 0; height: 42px; padding: 0 10px; font: inherit; color: var(--fg);
+  background: var(--surface); border: 1px solid var(--line); border-radius: 10px;
+}
+.chips { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 2px; scrollbar-width: none; min-width: 0; flex: 1 1 auto; max-width: 100%; }
+.chips::-webkit-scrollbar { display: none; }
+.chip {
+  flex: 0 0 auto; height: 34px; padding: 0 14px; border-radius: 999px; font: 600 13px/1 var(--font-ui);
+  color: var(--fg); background: var(--surface); border: 1px solid var(--line); cursor: pointer;
+}
+.chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.chip.fav-chip[aria-pressed="true"] { background: var(--star); border-color: var(--star); color: #1b1300; }
+.count { margin-left: auto; font: 500 13px/1 var(--font-mono); color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+.grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 290px), 1fr)); }
+.card {
+  display: flex; flex-direction: column; min-width: 0; overflow: hidden;
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+  scroll-margin-top: 150px;
+}
+.card.flash { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+.preview { display: flex; flex-direction: column; height: 168px; border-bottom: 1px solid var(--line); }
+.band { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 8px; padding: 14px 18px; background: var(--pv-bg); color: var(--pv-ink); }
+.pv-h { margin: 0; font-size: 30px; line-height: 1.05; }
+.pv-t { margin: 0; font: 400 13px/1.35 Inter, system-ui, sans-serif; opacity: .78; }
+.pv-btn { align-self: flex-start; padding: 8px 16px; font: 600 13px/1.1 Inter, system-ui, sans-serif; border: 1px solid transparent; }
+
+.info { display: flex; flex-direction: column; gap: 10px; padding: 14px 16px 16px; flex: 1; }
+.head { display: flex; align-items: center; gap: 10px; }
+.card h2 { margin: 0; font: 700 21px/1.1 var(--font-display); letter-spacing: -0.01em; min-width: 0; overflow-wrap: anywhere; }
+.tone { margin-left: auto; flex: 0 0 auto; padding: 4px 9px; border-radius: 999px; font: 600 11px/1 var(--font-mono); letter-spacing: .04em; text-transform: uppercase; border: 1px solid var(--line); color: var(--muted); }
+.cat { margin: -6px 0 0; font-size: 13px; color: var(--muted); }
+.blurb { margin: 0; font-size: 14px; }
+.swatches { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.swatches li { display: grid; gap: 4px; justify-items: center; }
+.swatches i { display: block; width: 34px; height: 34px; border-radius: 8px; background: var(--c); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--fg) 16%, transparent); }
+.swatches small { font: 500 9.5px/1 var(--font-mono); color: var(--muted); letter-spacing: -.02em; }
+.meta { margin: 0; font: 500 12px/1.4 var(--font-mono); color: var(--muted); overflow-wrap: anywhere; }
+.actions { display: flex; gap: 8px; align-items: center; margin-top: auto; padding-top: 4px; }
+.pick {
+  height: 38px; padding: 0 16px; border-radius: 10px; border: 0; cursor: pointer;
+  font: 700 14px/1 var(--font-ui); background: var(--accent); color: var(--on-accent);
+}
+.peek { padding: 0 6px; height: 38px; display: inline-flex; align-items: center; color: var(--fg); font-weight: 600; font-size: 14px; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+.fav {
+  margin-left: auto; width: 38px; height: 38px; border-radius: 10px; cursor: pointer; font-size: 18px; line-height: 1;
+  color: var(--muted); background: transparent; border: 1px solid var(--line);
+}
+.fav[aria-pressed="true"] { color: var(--star); border-color: var(--star); }
+
+.empty { padding: 40px 0; text-align: center; color: var(--muted); }
+.empty button { margin-left: 6px; }
+footer { margin-top: 36px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); max-width: 80ch; }
+footer a { color: inherit; }
+
+#toast {
+  position: fixed; left: 50%; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%);
+  width: min(92vw, 520px); padding: 12px 16px; border-radius: 12px; z-index: 10;
+  background: var(--fg); color: var(--bg); font-size: 14px; box-shadow: 0 10px 30px rgba(0,0,0,.25);
+}
+#toast code { font-family: var(--font-mono); }
+#toast input { width: 100%; margin-top: 8px; padding: 8px; font: 13px var(--font-mono); border-radius: 8px; border: 0; }
+
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+@media (prefers-reduced-motion: no-preference) {
+  .card { transition: transform .15s ease, box-shadow .15s ease; }
+  .card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(10, 20, 40, .10); }
+}
+</style>
+
+<div class="wrap">
+  <header class="intro">
+    <p class="eyebrow">Skill · /all-top-brands-design-skill</p>
+    <h1>All Top Brands Design</h1>
+    <p class="lede">Such dir einen Look für deine App aus. Jede Karte zeigt Grundton, Farben, Schrift und Button-Form eines Marken-Designs.</p>
+    <ol class="steps">
+      <li><b>1</b> Design aussuchen</li>
+      <li><b>2</b> „Auswählen“ tippen</li>
+      <li><b>3</b> Befehl bei Claude einfügen</li>
+    </ol>
+  </header>
+
+  <div class="bar" role="search">
+    <div class="bar-row">
+      <label class="visually-hidden" for="q" hidden>Suchen</label>
+      <input id="q" type="search" autocomplete="off" placeholder="Suchen: Marke, „dunkel“, „Creme“, „Grün“ …">
+      <label for="cat" hidden>Kategorie</label>
+      <select id="cat"><option value="">Alle Kategorien</option></select>
+    </div>
+    <div class="bar-row">
+      <div class="chips" role="group" aria-label="Grundton">
+        <button class="chip" data-mode="" aria-pressed="true">Alle</button>
+        <button class="chip" data-mode="hell" aria-pressed="false">Hell</button>
+        <button class="chip" data-mode="dunkel" aria-pressed="false">Dunkel</button>
+        <button class="chip" data-mode="gemischt" aria-pressed="false">Hell &amp; dunkel</button>
+        <button class="chip" data-mode="retro" aria-pressed="false">Retro</button>
+        <button class="chip fav-chip" id="favOnly" aria-pressed="false">★ Gemerkt</button>
+      </div>
+      <span class="count" id="count" aria-live="polite"></span>
+    </div>
+  </div>
+
+  <main id="grid" class="grid"></main>
+  <p class="empty" id="empty" hidden>Keine Treffer.<button class="chip" id="reset">Filter zurücksetzen</button></p>
+
+  <footer>
+    Grundlage: <a href="https://github.com/VoltAgent/awesome-design-md" target="_blank" rel="noopener">awesome-design-md</a> (MIT-Lizenz).
+    Inoffizielle Nachbildungen aus öffentlich sichtbarem CSS, keine offiziellen Designsysteme; Marken- und Schriftrechte liegen bei den Inhabern.
+    Die Vorschauen nutzen Ersatzschriften (Inter, Fraunces, JetBrains Mono) mit Gewicht und Laufweite des Originals.
+    „Original“ öffnet die Vorschau auf getdesign.md.
+  </footer>
+</div>
+<div id="toast" role="status" hidden></div>
+
+<script>
+const CMD = "all-top-brands-design-skill";
+const DATA = [{"slug":"claude","name":"Claude","cat":"KI & LLM-Plattformen","blurb":"hell, Creme-Fläche; Korallen-Buttons; Serifen-Überschriften, dunkle Produktkarten","mode":"hell","light":"#faf9f5","dark":null,"inkLight":"#141413","inkDark":null,"primary":"#cc785c","onPrimary":"#ffffff","ghost":false,"radius":8.0,"swatches":["#faf9f5","#181715","#cc785c","#5db8a6","#e8a55a","#efe9de"],"font":"Copernicus","generic":"serif","weight":400,"tracking":-0.023,"upper":false},{"slug":"cohere","name":"Cohere","cat":"KI & LLM-Plattformen","blurb":"hell, viel Weiß; dunkelgrüne Produktbänder; Mono-artige Überschriften, runde Medienkarten","mode":"hell","light":"#ffffff","dark":null,"inkLight":"#212121","inkDark":null,"primary":"#17171c","onPrimary":"#ffffff","ghost":false,"radius":32.0,"swatches":["#ffffff","#212121","#000000","#003c33","#071829","#eeece7"],"font":"CohereText","generic":"sans","weight":400,"tracking":-0.02,"upper":false},{"slug":"elevenlabs","name":"ElevenLabs","cat":"KI & LLM-Plattformen","blurb":"hell, Off-White; Pastell-Verlaufskugeln als einzige Farbe; leichte Display-Schrift, magazinartig","mode":"hell","light":"#f5f5f5","dark":null,"inkLight":"#0c0a09","inkDark":null,"primary":"#292524","onPrimary":"#ffffff","ghost":false,"radius":9999,"swatches":["#f5f5f5","#0c0a09","#292524","#4e4e4e","#777169","#a8a29e"],"font":"Waldenburg","generic":"serif","weight":300,"tracking":-0.03,"upper":false},{"slug":"minimax","name":"Minimax","cat":"KI & LLM-Plattformen","blurb":"hell, reines Weiß; schwarze Pill-Buttons; bunte Verlaufs-Produktkarten, riesige Hero-Headline","mode":"hell","light":"#ffffff","dark":null,"inkLight":"#0a0a0a","inkDark":null,"primary":"#0a0a0a","onPrimary":"#ffffff","ghost":false,"radius":9999,"swatches":["#ffffff","#222222","#0a0a0a","#ff5530","#ea5ec1","#1456f0"],"font":"DM Sans","generic":"sans","weight":600,"tracking":-0.025,"upper":false},{"slug":"mistral.ai","name":"Mistral AI","cat":"KI & LLM-Plattformen","blurb":"hell, Cremegelb; orange Buttons; Sonnenuntergangs-Verläufe über Bergfotos","mode":"hell","light":"#ffffff","dark":null,"inkLight":"#1f1f1f","inkDark":null,"primary":"#fa520f","onPrimary":"#ffffff","ghost":false,"radius":8.0,"swatches":["#ffffff","#2c2c2c","#fa520f","#cc3a05","#fff8e0","#ffd06a"],"font":"PP Editorial Old","generic":"serif","weight":400,"tracking":-0.018,"upper":false},{"slug":"ollama","name":"Ollama","cat":"KI & LLM-Plattformen","blurb":"hell, papierweiß, extrem minimal; nur Schwarz, Weiß, Grau; Pill-Buttons, wirkt wie eine README","mode":"hell","light":"#ffffff","dark":null,"inkLight":"#000000","inkDark":null,"primary":"#000000","onPrimary":"#ffffff","ghost":false,"radius":9999,"swatches":["#ffffff","#171717","#000000","#737373","#525252","#a3a3a3"],"font":"SF Pro Rounded","generic":"sans","weight":500,"tracking":0.0,"upper":false},{"slug":"opencode.ai","name":"OpenCode AI","cat":"KI & LLM-Plattformen","blurb":"hell, warme Creme; alles in Monospace; Terminal-Look mit einer dunklen Hero-Karte","mode":"hell","light":"#fdfcfc","dark":null,"inkLight":"#201d1d","inkDark":null,"primary":"#201d1d","onPrimary":"#fdfcfc","ghost":false,"radius":4.0,"swatches":["#fdfcfc","#201d1d","#007aff","#0056b3","#004085","#0f0000"],"font":"Berkeley Mono","generic":"mono","weight":700,"tracking":0.0,"upper":false},{"slug":"replicate","name":"Replicate","cat":"KI & LLM-Plattformen","blurb":"hell, Creme; heißes Orange sparsam; sehr große Display-Schrift, „Labor-Notizbuch“","mode":"hell","light":"#f9f7f3","dark":null,"inkLight":"#202020","inkDark":null,"primary":"#ea2804","onPrimary":"#ffffff","ghost":false,"radius":9999,"swatches":["#f9f7f3","#202020","#ea2804","#c01f00","#000000","#3a3a3a"],"font":"rb-freigeist-neue","generic":"sans","weight":700,"tracking":-0.023,"upper":false},{"slug":"runwayml","name":"Runway","cat":"KI & LLM-Plattformen","blurb":"dunkel, filmisch, helle Lesebänder; Fotos und Videos als UI; eine Schrift, schwarze Pill-Buttons","mode":"dunkel","light":null,"dark":"#000000","inkLight":null,"inkDark":"#ffffff","primary":"#ffffff","onPrimary":"#000000","ghost":false,"radius":4,"swatches":["#000000","#ffffff","#1a1a1a","#e9ecf2","#767d88","#c9ccd1"],"font":"abcNormal","generic":"sans","weight":400,"tracking":-0.025,"upper":false},{"slug":"together.ai","name":"Together AI","cat":"KI & LLM-Plattformen","blurb":"dunkle und helle Bänder im Wechsel; Orange-Magenta-Periwinkle-Verlauf; Mono-Versal-Labels","mode":"gemischt","light":"#ffffff","dark":"#010120","inkLight":"#000000","inkDark":"#ffffff","primary":"#000000","onPrimary":"#ffffff","ghost":false,"radius":4.0,"swatches":["#ffffff","#010120","#000000","#fc4c02","#ef2cc1","#bdbbff"],"font":"The Future","generic":"sans","weight":500,"tracking":-0.03,"upper":false},{"slug":"voltagent","name":"VoltAgent","cat":"KI & LLM-Plattformen","blurb":"dunkel, fast schwarz; ein elektrisches Grün; Code-Editor-Mockups, dunkle Feature-Karten","mode":"dunkel","light":null,"dark":"#101010","inkLight":null,"inkDark":"#f2f2f2","primary":"#00d992","onPrimary":"#101010","ghost":false,"radius":6.0,"swatches":["#101010","#00d992","#2fd6a1","#10b981","#f5f6f7","#bdbdbd"],"font":"Inter","generic":"sans","weight":400,"tracking":-0.011,"upper":false},{"slug":"x.ai","name":"xAI","cat":"KI & LLM-Plattformen","blurb":"dunkel, fast schwarz; weiße Pill-Umrisse, vereinzelt Abendrot-Verläufe; Mono-Versal-Labels","mode":"dunkel","light":null,"dark":"#0a0a0a","inkLight":null,"inkDark":"#ffffff","primary":"#ffffff","onPrimary":"#0a0a0a","ghost":false,"radius":9999,"swatches":["#0a0a0a","#ffffff","#ff7a17","#ffc285","#7c3aed","#c4b5fd"],"font":"universalSans","generic":"sans","weight":400,"tracking":-0.025,"upper":false},{"slug":"cursor","name":"Cursor","cat":"Entwickler-Tools & IDEs","blurb":"hell, warme Creme; Orange nur für Buttons; leichte Display-Schrift, Pastell-Timeline","mode":"hell","light":"#f7f7f4","dark":null,"inkLight":"#26251e","inkDark":null,"primary":"#f54e00","onPrimary":"#ffffff","ghost":false,"radius":8.0,"swatches":["#f7f7f4","#26251e","#f54e00","#e6e5e0","#d04200","#5a5852"],"font":"CursorGothic","generic":"sans","weight":400,"tracking":-0.03,"upper":false},{"slug":"expo","name":"Expo","cat":"Entwickler-Tools & IDEs","blurb":"hell, Weiß mit himmelblauem Hauch; schwarze Buttons; Inter plus Mono","mode":"hell","light":"#ffffff","dark":null,"inkLight":"#171717","inkDark":null,"primary":"#000000","onPrimary":"#ffffff","ghost":false,"radius":8.0,"swatches":["#ffffff","#171717","#000000","#ab6400","#8145b5","#47c2ff"],"font":"Inter","generic":"sans","weight":600,"tracking":-0.03,"upper":false},{"slug":"lovable","name":"Lovable","cat":"Entwickler-Tools & IDEs","blurb":"hell, Pergament-Creme; fast schwarze Schrift; warm, analog, wie ein Notizbuch","mode":"hell","light":"#f7f4ed","dark":null,"inkLight":"#1c1c1c","inkDark":null,"primary":"#1c1c1c","onPrimary":"#fcfbf8","ghost":false,"radius":6,"swatches":["#f7f4ed","#1c1c1c","#fcfbf8","#5f5f5d","#eceae4","#3b82f6"],"font":"Camera Plain Variable","generic":"sans","weight":600,"tracking":-0.025,"upper":false},{"slug":"raycast","name":"Raycast","cat":"Entwickler-Tools & IDEs","blurb":"dunkel, fast schwarz; weiße Pill-Buttons, Haarlinien; bunte Kategorie-Akzente","mode":"dunkel","light":null,"dark":"#07080a","inkLight":null,"inkDark":"#ffffff","primary":"#ffffff","onPrimary":"#000000","ghost":false,"radius":8.0,"swatches":["#07080a","#ffffff","#57c1ff","#ff6161","#59d499","#ffc533"],"font":"Inter","generic":"sans","weight":600,"tracking":0.0,"upper":false},{"slug":"superhuman","name":"Superhuman","cat":"Entwickler-Tools & IDEs","blurb":"dunkler Indigo-Hero, heller Inhalt; dunkles Petrol als Abschluss; schwere, enge Display-Schrift","mode":"gemischt","light":"#ffffff","dark":"#1b1938","inkLight":"#292827","inkDark":"#ffffff","primary":"#1b1938","onPrimary":"#ffffff","ghost":false,"radius":8.0,"swatches":["#ffffff","#292827","#0e0c1f","#c9b4fa","#0e3030","#155555"],"font":"Super Sans VF","generic":"sans","weight":540,"tracking":0.0,"upper":false},{"slug":"vercel","name":"Vercel","cat":"Entwickler-Tools & IDEs","blurb":"hell, fast weiß, Schwarz-Weiß; bunter Mesh-Verlauf im Hero; geometrische Sans plus Mono","mode":"hell","light":"#ffffff","dark":null,"inkLight":"#171717","inkDark":null,"primary":"#171717","onPrimary":"#ffffff","ghost":false,"radius":100.0,"swatches":["#ffffff","#171717","#0070f3","#0761d1","#d3e5ff","#4d4d4d"],"font":"Geist","generic":"sans","weight":600,"tracking":-0.05,"upper":false},{"slug":"warp","name":"Warp","cat":"Entwickler-Tools & IDEs","blurb":"dunkel, warmes Anthrazit; Inter mit Serifen-Kursiv-Akzenten; dichte Terminal-Mockups","mode":"dunkel","light":null,"dark":"#2b2622","inkLight":null,"inkDark":"#f7f5f0","primary":"#f7f5f0","onPrimary":"#2b2622","ghost":false,"radius":3.0,"swatches":["#2b2622","#f7f5f0","#c9c0ad","#dad2c1","#aea69c","#3f3a36"],"font":"Inter","generic":"sans","weight":400,"tracking":-0.025,"upper":false},{"slug":"clickhouse","name":"ClickHouse","cat":"Backend, Datenbanken & DevOps","blurb":"dunkel, fast schwarz; elektrisches Gelb für Buttons und Kennzahlen; Code in dunklen Karten","mode":"dunkel","light":null,"dark":"#0a0a0a","inkLight":null,"inkDark":"#ffffff","primary":"#faff69","onPrimary":"#0a0a0a","ghost":false,"radius":8.0,"swatches":["#0a0a0a","#faff69","#22c55e","#ef4444","#3b82f6","#242424"],"font":"Inter","generic":"sans","weight":700,"tracking":-0.035,"upper":false},{"slug":"composio","name":"Composio","cat":"Backend, Datenbanken & DevOps","blurb":"dunkel, fast schwarz; tiefes Elektroblau mit Spotlight-Glow; Terminal-Raster als Hero","mode":"dunkel","light":null,"dark":"#0f0f0f","inkLight":null,"inkDark":"#ffffff","primary":"#0007cd","onPrimary":"#ffffff","ghost":false,"radius":8.0,"swatches":["#0f0f0f","#0007cd","#00d4ff","#7b3aed","#222222","#0005a3"],"font":"abcDiatype","generic":"sans","weight":500,"tracking":-0.03,"upper":false},{"slug":"hashicorp","name":"HashiCorp","cat":"Backend, Datenbanken & DevOps","blurb":"dunkel, schwarz; eine Akzentfarbe je Produkt; Anthrazit-Karten mit Haarlinien","mode":"dunkel","light":null,"dark":"#000000","inkLight":null,"inkDark":"#ffffff","primary":"#ffffff","onPrimary":"#000000","ghost":false,"radius":8.0,"swatches":["#000000","#ffffff","#2b89ff","#15181e","#3b3d45","#b2b6bd"],"font":"hashicorpSans","generic":"sans","weight":700,"tracking":-0.031,"upper":false},{"slug":"mongodb","name":"MongoDB","cat":"Backend, Datenbanken & DevOps","blurb":"dunkle Petrol-Heros, weiße Doku-Flächen; leuchtend grüne Pill-Buttons","mode":"gemischt","light":"#ffffff","dark":"#001e2b","inkLight":"#001e2b","inkDark":"#ffffff","primary":"#00ed64","onPrimary":"#001e2b","ghost":false,"radius":9999,"swatches":["#ffffff","#001e2b","#00ed64","#00684a","#00a35c","#c3f0d2"],"font":"Euclid Circular A","generic":"sans","weight":500,"tracking":-0.021,"upper":false},{"slug":"posthog","name":"PostHog","cat":"Backend, Datenbanken & DevOps","blurb":"hell, warme Creme; gelb-orange Buttons; handgezeichnete Igel, verspielt","mode":"hell","light":"#eeefe9","dark":null,"inkLight":"#23251d","inkDark":null,"primary":"#f7a501","onPrimary":"#23251d","ghost":false,"radius":6.0,"swatches":["#eeefe9","#23251d","#f7a501","#1d4ed8","#1078a3","#2c84e0"],"font":"IBM Plex Sans Variable","generic":"sans","weight":700,"tracking":0.0,"upper":false},{"slug":"sanity","name":"Sanity","cat":"Backend, Datenbanken & DevOps","blurb":"dunkel, fast schwarz, streng strukturiert; Korallenrot für Buttons; Neon-Grün und Blau als Akzente","mode":"dunkel","light":null,"dark":"#0b0b0b","inkLight":null,"inkDark":"#ffffff","primary":"#f36458","onPrimary":"#ffffff","ghost":false,"radius":9999,"swatches":["#0b0b0b","#ffffff","#f36458","#0052ef","#55beff","#212121"],"font":"waldenburgNormal","generic":"sans","weight":400,"tracking":-0.04,"upper":false},{"slug":"sentry","name":"Sentry","cat":"Backend, Datenbanken & DevOps","blurb":"dunkel, violette Mitternacht; Limetten-Akzente; verspielte Display-Schrift, Sticker-Maskottchen","mode":"dunkel","light":null,"dark":"#1f1633","inkLight":null,"inkDark":"#ffffff","primary":"#150f23","onPrimary":"#ffffff","ghost":false,"radius":8.0,"swatches":["#ffffff","#1f1633","#c2ef4e","#fa7faa","#6a5fc1","#422082"],"font":"Sentri Display","generic":"sans","weight":700,"tracking":0.0,"upper":false},{"slug":"supabase","name":"Supabase","cat":"Backend, Datenbanken & DevOps","blurb":"hell mit Schwarz, fast monochrom; Smaragdgrün nur für Buttons; dichte Produkt-Mockups","mode":"hell","light":"#ffffff","dark":null,"inkLight":"#171717","inkDark":null,"primary":"#3ecf8e","onPrimary":"#171717","ghost":false,"radius":6.0,"swatches":["#ffffff","#1c1c1c","#3ecf8e","#6b01c2","#644fc1","#eddbf9"],"font":"Circular","generic":"sans","weight":500,"tracking":-0.03,"upper":false},{"slug":"cal","name":"Cal.com","cat":"Produktivität & SaaS","blurb":"hell, Weiß; schwarze Buttons; eigene geometrische Display-Schrift, dunkelblauer Footer","mode":"hell","light":"#ffffff","dark":null,"inkLight":"#111111","inkDark":null,"primary":"#111111","onPrimary":"#ffffff","ghost":false,"radius":8.0,"swatches":["#ffffff","#101010","#3b82f6","#e5e7eb","#242424","#374151"],"font":"Cal Sans","generic":"sans","weight":600,"tracking":-0.031,"upper":false},{"slug":"intercom","name":"Intercom","cat":"Produktivität & SaaS","blurb":"hell, Creme-Weiß; Orange nur für die KI-Marke; schlicht, redaktionell, viele Screenshots","mode":"hell","light":"#f5f1ec","dark":null,"inkLight":"#111111","inkDark":null,"primary":"#111111","onPrimary":"#ffffff","ghost":false,"radius":8.0,"swatches":["#f5f1ec","#000000","#111111","#0007cb","#313130","#9c9fa5"],"font":"Saans","generic":"sans","weight":500,"tracking":-0.028,"upper":false},{"slug":"linear.app","name":"Linear","cat":"Produktivität & SaaS","blurb":"dunkel, tiefstes Schwarz; ein Lavendelblau; dicht, technisch, Karten mit Haarlinien","mode":"dunkel","light":null,"dark":"#010102","inkLight":null,"inkDark":"#f7f8f8","primary":"#5e6ad2","onPrimary":"#ffffff","ghost":false,"radius":8.0,"swatches":["#010102","#5e6ad2","#7a7fad","#ffffff","#141516","#828fff"],"font":"Linear Display","generic":"sans","weight":600,"tracking":-0.037,"upper":false},{"slug":"mintlify","name":"Mintlify","cat":"Produktivität & SaaS","blurb":"hell mit Himmelsverläufen, dunkle Bänder; Grün als Akzent; schwarze Pill-Buttons","mode":"hell","light":"#ffffff","dark":null,"inkLight":"#0a0a0a","inkDark":null,"primary":"#0a0a0a","onPrimary":"#ffffff","ghost":false,"radius":9999,"swatches":["#ffffff","#0a0a0a","#00d4a4","#00b48a","#7cebcb","#3772cf"],"font":"Inter","generic":"sans","weight":600,"tracking":-0.028,"upper":false},{"slug":"notion","name":"Notion","cat":"Produktivität & SaaS","blurb":"hell, dunkelblaues Hero-Band; lila Pill-Buttons; pastellige Feature-Karten, Illustrationen","mode":"hell","light":"#ffffff","dark":null,"inkLight":"#1a1a1a","inkDark":null,"primary":"#5645d4","onPrimary":"#ffffff","ghost":false,"radius":8.0,"swatches":["#ffffff","#37352f","#1a1a1a","#5645d4","#1a2a52","#0075de"],"font":"Notion Sans","generic":"sans","weight":600,"tracking":-0.025,"upper":false},{"slug":"resend","name":"Resend","cat":"Produktivität & SaaS","blurb":"dunkel, fast schwarz; große Serifen-Headlines; zarte Glows, Haarlinien","mode":"dunkel","light":null,"dark":"#000000","inkLight":null,"inkDark":"#fcfdff","primary":"#fcfdff","onPrimary":"#000000","ghost":false,"radius":8.0,"swatches":["#000000","#fcfdff","#ff801f","#ffc53d","#3b9eff","#11ff99"],"font":"Domaine Display","generic":"serif","weight":400,"tracking":-0.01,"upper":false},{"slug":"slack","name":"Slack","cat":"Produktivität & SaaS","blurb":"hell, Creme-Lavendel-Verläufe; Aubergine als Hauptfarbe; Pill-Buttons, blaue Links","mode":"hell","light":"#ffffff","dark":null,"inkLight":"#1d1d1d","inkDark":null,"primary":"#4a154b","onPrimary":"#ffffff","ghost":false,"radius":90.0,"swatches":["#ffffff","#1d1d1d","#4a154b","#1264a3","#3860be","#f4ede4"],"font":"Salesforce-Avant-Garde","generic":"sans","weight":700,"tracking":-0.012,"upper":false},{"slug":"zapier","name":"Zapier","cat":"Produktivität & SaaS","blurb":"hell, warme Creme; kräftiges Orange; kaffeebraune Schrift, warm statt kühl","mode":"hell","light":"#fffefb","dark":null,"inkLight":"#201515","inkDark":null,"primary":"#ff4f00","onPrimary":"#fffefb","ghost":false,"radius":12.0,"swatches":["#fffefb","#201515","#ff4f00","#2f2a26","#605d52","#939084"],"font":"Degular Display","generic":"sans","weight":500,"tracking":0.0,"upper":false},{"slug":"airtable","name":"Airtable","cat":"Design- & Kreativ-Tools","blurb":"hell, Weiß; schwarze Pill-Buttons; Farbkarten in Koralle, Dunkelgrün, Pfirsich, Navy","mode":"hell","light":"#ffffff","dark":null,"inkLight":"#181d26","inkDark":null,"primary":"#181d26","onPrimary":"#ffffff","ghost":false,"radius":12.0,"swatches":["#ffffff","#181d26","#1b61c9","#1a3866","#e0e2e6","#333840"],"font":"Haas Groot Disp","generic":"sans","weight":500,"tracking":0.0,"upper":false},{"slug":"clay","name":"Clay","cat":"Design- & Kreativ-Tools","blurb":"hell, Creme; dunkelblaue Buttons; Knet-3D-Illustrationen, bunte Feature-Karten","mode":"hell","light":"#fffaf0","dark":null,"inkLight":"#0a0a0a","inkDark":null,"primary":"#0a0a0a","onPrimary":"#ffffff","ghost":false,"radius":12.0,"swatches":["#fffaf0","#0a1a1a","#ff4d8b","#1a3a3a","#b8a4ed","#ffb084"],"font":"Plain Black","generic":"sans","weight":500,"tracking":-0.035,"upper":false},{"slug":"figma","name":"Figma","cat":"Design- & Kreativ-Tools","blurb":"hell, Schwarz-Weiß; große Pastell-Farbblöcke; Pill-Buttons, technisch und fröhlich","mode":"hell","light":"#ffffff","dark":null,"inkLight":"#000000","inkDark":null,"primary":"#000000","onPrimary":"#ffffff","ghost":false,"radius":50.0,"swatches":["#ffffff","#000000","#ff3d8b","#e6e6e6","#dceeb1","#c5b0f4"],"font":"figmaSans","generic":"sans","weight":340,"tracking":-0.02,"upper":false},{"slug":"framer","name":"Framer","cat":"Design- & Kreativ-Tools","blurb":"dunkel, schwarz; Blau nur für Links; leuchtende Verlaufs-Panels, weiße Pill-Buttons","mode":"dunkel","light":null,"dark":"#090909","inkLight":null,"inkDark":"#ffffff","primary":"#ffffff","onPrimary":"#000000","ghost":false,"radius":100.0,"swatches":["#090909","#ffffff","#0099ff","#1c1c1c","#999999","#d44df0"],"font":"GT Walsheim Framer Medium","generic":"sans","weight":500,"tracking":-0.05,"upper":false},{"slug":"miro","name":"Miro","cat":"Design- & Kreativ-Tools","blurb":"hell, Weiß; Kanariengelb; Pastell-Tönungen, schwarze Pill-Buttons","mode":"hell","light":"#ffffff","dark":null,"inkLight":"#1c1c1e","inkDark":null,"primary":"#1c1c1e","onPrimary":"#ffffff","ghost":false,"radius":9999,"swatches":["#ffffff","#2c2c34","#1c1c1e","#ffd02f","#fcb900","#4262ff"],"font":"Roobert PRO","generic":"sans","weight":500,"tracking":-0.025,"upper":false},{"slug":"webflow","name":"Webflow","cat":"Design- & Kreativ-Tools","blurb":"hell, Weiß mit Fast-Schwarz; fünf Akzentfarben je Produktbereich; enge Laufweite","mode":"hell","light":"#ffffff","dark":null,"inkLight":"#080808","inkDark":null,"primary":"#080808","onPrimary":"#ffffff","ghost":false,"radius":4.0,"swatches":["#ffffff","#080808","#7a3dff","#ed52cb","#3b89ff","#006acc"],"font":"WF Visual Sans Variable","generic":"sans","weight":600,"tracking":-0.01,"upper":false},{"slug":"binance","name":"Binance","cat":"Fintech & Krypto","blurb":"dunkel, fast schwarz (Transaktionen hell); Binance-Gelb für alle Buttons","mode":"dunkel","light":null,"dark":"#0b0e11","inkLight":null,"inkDark":"#ffffff","primary":"#fcd535","onPrimary":"#181a20","ghost":false,"radius":6.0,"swatches":["#ffffff","#0b0e11","#fcd535","#2dbdb6","#1e2329","#f0b90b"],"font":"BinanceNova","generic":"sans","weight":700,"tracking":-0.016,"upper":false},{"slug":"coinbase","name":"Coinbase","cat":"Fintech & Krypto","blurb":"hell, reines Weiß; Blau sparsam; leichte Display-Schrift, ruhig und seriös","mode":"hell","light":"#ffffff","dark":null,"inkLight":"#0a0b0d","inkDark":null,"primary":"#0052ff","onPrimary":"#ffffff","ghost":false,"radius":100.0,"swatches":["#ffffff","#0a0b0d","#0052ff","#f4b000","#003ecc","#a8b8cc"],"font":"Coinbase Display","generic":"sans","weight":400,"tracking":-0.025,"upper":false},{"slug":"kraken","name":"Kraken","cat":"Fintech & Krypto","blurb":"hell, Weiß; Lila als Hauptfarbe; fette Überschriften, seriös","mode":"hell","light":"#ffffff","dark":null,"inkLight":"#101114","inkDark":null,"primary":"#7132f5","onPrimary":"#ffffff","ghost":false,"radius":12,"swatches":["#ffffff","#101114","#7132f5","#5741d8","#686b82","#149e61"],"font":"Kraken-Brand","generic":"sans","weight":700,"tracking":-0.02,"upper":false},{"slug":"mastercard","name":"Mastercard","cat":"Fintech & Krypto","blurb":"hell, Kitt-Creme; Signal-Orange; sehr große Radien, Pillen und Kreise","mode":"hell","light":"#f3f0ee","dark":null,"inkLight":"#141413","inkDark":null,"primary":"#141413","onPrimary":"#ffffff","ghost":false,"radius":20,"swatches":["#f3f0ee","#141413","#cf4500","#f37338","#9a3a0a","#fcfbfa"],"font":"MarkForMC","generic":"sans","weight":500,"tracking":-0.02,"upper":false},{"slug":"revolut","name":"Revolut","cat":"Fintech & Krypto","blurb":"Schwarz und Weiß; Kobalt-Violett plus kräftige Produktfarben; riesige Headlines, Produkt-Mockups","mode":"gemischt","light":"#ffffff","dark":"#000000","inkLight":"#191c1f","inkDark":"#ffffff","primary":"#ffffff","onPrimary":"#000000","ghost":false,"radius":9999,"swatches":["#ffffff","#000000","#191c1f","#00a87e","#376cd5","#007bc2"],"font":"Aeonik Pro","generic":"sans","weight":500,"tracking":-0.02,"upper":false},{"slug":"stripe","name":"Stripe","cat":"Fintech & Krypto","blurb":"hell, fast weiß, Navy-Schrift; Indigo; Verlaufs-Mesh oben, dünne Display-Schrift","mode":"hell","light":"#ffffff","dark":null,"inkLight":"#0d253d","inkDark":null,"primary":"#533afd","onPrimary":"#ffffff","ghost":false,"radius":9999,"swatches":["#ffffff","#0d253d","#533afd","#1c1e54","#4434d4","#665efd"],"font":"sohne-var","generic":"sans","weight":300,"tracking":-0.025,"upper":false},{"slug":"wise","name":"Wise","cat":"Fintech & Krypto","blurb":"hell, blassgrüne Fläche; Limettengrün; extrem fette Display-Schrift","mode":"hell","light":"#ffffff","dark":null,"inkLight":"#0e0f0c","inkDark":null,"primary":"#9fe870","onPrimary":"#0e0f0c","ghost":false,"radius":24.0,"swatches":["#ffffff","#0e0f0c","#9fe870","#ffc091","#38c8ff","#e8ebe6"],"font":"Wise Sans","generic":"sans","weight":900,"tracking":0.0,"upper":false},{"slug":"airbnb","name":"Airbnb","cat":"E-Commerce & Handel","blurb":"hell, Weiß; Pink-Rot für Buttons; fotolastig, großzügig, moderate Schriftgewichte","mode":"hell","light":"#ffffff","dark":null,"inkLight":"#222222","inkDark":null,"primary":"#ff385c","onPrimary":"#ffffff","ghost":false,"radius":8.0,"swatches":["#ffffff","#222222","#ff385c","#e00b41","#ffd1da","#c13515"],"font":"Airbnb Cereal VF","generic":"sans","weight":700,"tracking":0.0,"upper":false},{"slug":"meta","name":"Meta","cat":"E-Commerce & Handel","blurb":"hell, Weiß; Kobaltblau für Kaufaktionen; Produktfotos, Pill-Buttons, große Kartenradien","mode":"hell","light":"#ffffff","dark":null,"inkLight":"#1c1e21","inkDark":null,"primary":"#000000","onPrimary":"#ffffff","ghost":false,"radius":100.0,"swatches":["#ffffff","#1c1e21","#000000","#0457cb","#0091ff","#1876f2"],"font":"Optimistic VF","generic":"sans","weight":500,"tracking":0.0,"upper":false},{"slug":"nike","name":"Nike","cat":"E-Commerce & Handel","blurb":"hell, Schwarz-Weiß; schwarze Pill-Buttons; riesige Versal-Headlines über Kampagnenfotos","mode":"hell","light":"#ffffff","dark":null,"inkLight":"#111111","inkDark":null,"primary":"#111111","onPrimary":"#ffffff","ghost":false,"radius":9999,"swatches":["#ffffff","#39393b","#111111","#ed1aa0","#ffb0dd","#beaffd"],"font":"Nike Futura ND","generic":"sans","weight":500,"tracking":0.0,"upper":true},{"slug":"shopify","name":"Shopify","cat":"E-Commerce & Handel","blurb":"dunkel im Marketing, Creme-Mint bei Preisen und Anmeldung; dünne, große Display-Schrift","mode":"dunkel","light":null,"dark":"#000000","inkLight":null,"inkDark":"#ffffff","primary":"#000000","onPrimary":"#ffffff","ghost":false,"radius":9999,"swatches":["#ffffff","#000000","#9dabad","#bdbdca","#1e2c31","#d4d4d8"],"font":"NeueHaasGrotesk Display","generic":"sans","weight":330,"tracking":0.025,"upper":false},{"slug":"starbucks","name":"Starbucks","cat":"E-Commerce & Handel","blurb":"hell, warme Creme; vier Grüntöne; warm, wie im Laden","mode":"hell","light":"#f2f0eb","dark":null,"inkLight":"#1e3932","inkDark":null,"primary":"#00754a","onPrimary":"#ffffff","ghost":false,"radius":9999,"swatches":["#f2f0eb","#1e3932","#006241","#00754a","#d4e9e2","#cba258"],"font":"SoDoSans","generic":"sans","weight":600,"tracking":0,"upper":false},{"slug":"apple","name":"Apple","cat":"Medien & Consumer-Tech","blurb":"helle und dunkle Flächen im Wechsel; ein Aktionsblau; Produktfotos, keine Deko","mode":"gemischt","light":"#ffffff","dark":"#1d1d1f","inkLight":"#1d1d1f","inkDark":"#ffffff","primary":"#0066cc","onPrimary":"#ffffff","ghost":false,"radius":9999,"swatches":["#ffffff","#1d1d1f","#0066cc","#000000","#d2d2d7","#2997ff"],"font":"SF Pro Display","generic":"sans","weight":600,"tracking":-0.005,"upper":false},{"slug":"hp","name":"HP","cat":"Medien & Consumer-Tech","blurb":"hell, Weiß; Elektroblau für Buttons; Chevron-Deko, dunkelblaue Abschlussbänder","mode":"hell","light":"#ffffff","dark":null,"inkLight":"#1a1a1a","inkDark":null,"primary":"#024ad8","onPrimary":"#ffffff","ghost":false,"radius":4.0,"swatches":["#ffffff","#3d3d3d","#1a1a1a","#024ad8","#0e3191","#c9e0fc"],"font":"Forma DJR Micro","generic":"sans","weight":500,"tracking":0.0,"upper":false},{"slug":"ibm","name":"IBM","cat":"Medien & Consumer-Tech","blurb":"hell, Weiß; IBM-Blau; eckig, leichte Display-Schrift, Carbon-Stil","mode":"hell","light":"#ffffff","dark":null,"inkLight":"#161616","inkDark":null,"primary":"#0f62fe","onPrimary":"#ffffff","ghost":false,"radius":0.0,"swatches":["#ffffff","#161616","#0f62fe","#c6c6c6","#e0e0e0","#525252"],"font":"IBM Plex Sans","generic":"sans","weight":300,"tracking":-0.007,"upper":false},{"slug":"nvidia","name":"NVIDIA","cat":"Medien & Consumer-Tech","blurb":"Schwarz und Weiß im Wechsel; grelles Grün; kantig (2 px Radius)","mode":"gemischt","light":"#ffffff","dark":"#000000","inkLight":"#000000","inkDark":"#ffffff","primary":"#76b900","onPrimary":"#000000","ghost":false,"radius":2.0,"swatches":["#ffffff","#000000","#76b900","#0046a4","#feeeb2","#952fc6"],"font":"NVIDIA-EMEA","generic":"sans","weight":700,"tracking":0.0,"upper":false},{"slug":"pinterest","name":"Pinterest","cat":"Medien & Consumer-Tech","blurb":"hell, warme Creme; Pinterest-Rot; Masonry-Raster, bildzentriert","mode":"hell","light":"#ffffff","dark":null,"inkLight":"#000000","inkDark":null,"primary":"#e60023","onPrimary":"#ffffff","ghost":false,"radius":16.0,"swatches":["#ffffff","#262622","#000000","#e60023","#e5e5e0","#c8c8c1"],"font":"Pin Sans","generic":"sans","weight":600,"tracking":-0.017,"upper":false},{"slug":"playstation","name":"PlayStation","cat":"Medien & Consumer-Tech","blurb":"Schwarz, Weiß und Blau im Kapitelwechsel; blaue Pill-Buttons; Konsolen-Renderings","mode":"gemischt","light":"#ffffff","dark":"#000000","inkLight":"#000000","inkDark":"#ffffff","primary":"#0070d1","onPrimary":"#ffffff","ghost":false,"radius":9999,"swatches":["#ffffff","#000000","#0070d1","#0064b7","#53b1ff","#121314"],"font":"PlayStation SST","generic":"sans","weight":300,"tracking":-0.002,"upper":false},{"slug":"spacex","name":"SpaceX","cat":"Medien & Consumer-Tech","blurb":"dunkel, schwarz; Vollbild-Fotos; Versal-Display, Umriss-Pill-Buttons, sehr karg","mode":"dunkel","light":null,"dark":"#000000","inkLight":null,"inkDark":"#ffffff","primary":"#000000","onPrimary":"#ffffff","ghost":false,"radius":32.0,"swatches":["#ffffff","#000000","#0000ee","#3a3a3f","#e0e0e8","#5a5a5f"],"font":"D-DIN-Bold","generic":"sans","weight":700,"tracking":0.02,"upper":true},{"slug":"spotify","name":"Spotify","cat":"Medien & Consumer-Tech","blurb":"dunkel, Anthrazit; Spotify-Grün; die Inhalte (Cover) liefern die Farbe","mode":"dunkel","light":null,"dark":"#121212","inkLight":null,"inkDark":"#ffffff","primary":"#1ed760","onPrimary":"#000000","ghost":false,"radius":9999,"swatches":["#121212","#ffffff","#1ed760","#181818","#b3b3b3","#539df5"],"font":"SpotifyMixUI","generic":"sans","weight":700,"tracking":-0.01,"upper":false},{"slug":"theverge","name":"The Verge","cat":"Medien & Consumer-Tech","blurb":"dunkel, fast schwarz; Säure-Mint und Ultraviolett; extrem fette Headlines, bunte Kacheln","mode":"dunkel","light":null,"dark":"#131313","inkLight":null,"inkDark":"#ffffff","primary":"#3cffd0","onPrimary":"#000000","ghost":false,"radius":9999,"swatches":["#131313","#ffffff","#3cffd0","#5200ff","#2d2d2d","#949494"],"font":"Manuka","generic":"sans","weight":900,"tracking":0.01,"upper":false},{"slug":"uber","name":"Uber","cat":"Medien & Consumer-Tech","blurb":"hell, Schwarz-Weiß; Pill-Form überall; geometrische Display-Schrift, Illustrationen","mode":"hell","light":"#ffffff","dark":null,"inkLight":"#000000","inkDark":null,"primary":"#000000","onPrimary":"#ffffff","ghost":false,"radius":999.0,"swatches":["#ffffff","#000000","#0000ee","#e2e2e2","#5e5e5e","#afafaf"],"font":"UberMove","generic":"sans","weight":700,"tracking":0.0,"upper":false},{"slug":"vodafone","name":"Vodafone","cat":"Medien & Consumer-Tech","blurb":"hell mit Foto-Heros; Scharlachrot; riesige, fette Versal-Headlines","mode":"hell","light":"#ffffff","dark":null,"inkLight":"#25282b","inkDark":null,"primary":"#e60000","onPrimary":"#ffffff","ghost":false,"radius":60.0,"swatches":["#ffffff","#25282b","#e60000","#7e7e7e","#bebebe"],"font":"Vodafone","generic":"sans","weight":800,"tracking":-0.007,"upper":true},{"slug":"wired","name":"WIRED","cat":"Medien & Consumer-Tech","blurb":"hell, Weiß; schwarze Typo, schmale Display-Serif; wie ein gedrucktes Magazin","mode":"hell","light":"#ffffff","dark":null,"inkLight":"#000000","inkDark":null,"primary":"#000000","onPrimary":"#ffffff","ghost":false,"radius":0.0,"swatches":["#ffffff","#000000","#057dbc","#1a1a1a","#757575","#e0e0e0"],"font":"WiredDisplay","generic":"serif","weight":400,"tracking":-0.008,"upper":false},{"slug":"bmw","name":"BMW","cat":"Automobil","blurb":"hell, Cremeweiß; BMW-Blau für Buttons; dunkelblaue Hero-Bänder, Karten-Raster","mode":"hell","light":"#ffffff","dark":null,"inkLight":"#262626","inkDark":null,"primary":"#1c69d4","onPrimary":"#ffffff","ghost":false,"radius":0.0,"swatches":["#ffffff","#1a2129","#1c69d4","#ebebeb","#0653b6","#d6d6d6"],"font":"BMW Type Next Latin","generic":"sans","weight":700,"tracking":0.0,"upper":false},{"slug":"bmw-m","name":"BMW M","cat":"Automobil","blurb":"dunkel, fast schwarz; weiße Versal-Headlines; M-Farbstreifen sparsam","mode":"dunkel","light":null,"dark":"#000000","inkLight":null,"inkDark":"#ffffff","primary":"#000000","onPrimary":"#ffffff","ghost":false,"radius":0.0,"swatches":["#000000","#1a1a1a","#ffffff","#bbbbbb","#e6e6e6","#7e7e7e"],"font":"BMWTypeNextLatin","generic":"sans","weight":700,"tracking":0.0,"upper":true},{"slug":"bugatti","name":"Bugatti","cat":"Automobil","blurb":"dunkel, schwarz; kein Akzent; Versal-Display mit weiter Laufweite, nur Fotos","mode":"dunkel","light":null,"dark":"#000000","inkLight":null,"inkDark":"#ffffff","primary":null,"onPrimary":"#ffffff","ghost":true,"radius":9999,"swatches":["#000000","#c3d9f3","#141414","#ffffff","#cccccc","#e6e6e6"],"font":"Bugatti Display","generic":"sans","weight":400,"tracking":0.062,"upper":true},{"slug":"ferrari","name":"Ferrari","cat":"Automobil","blurb":"dunkel, fast schwarz; Rennrot sehr sparsam; filmisch-redaktionell","mode":"dunkel","light":null,"dark":"#181818","inkLight":null,"inkDark":"#ffffff","primary":"#da291c","onPrimary":"#ffffff","ghost":false,"radius":0.0,"swatches":["#ffffff","#181818","#da291c","#fff200","#303030","#ebebeb"],"font":"FerrariSans","generic":"sans","weight":500,"tracking":-0.02,"upper":false},{"slug":"lamborghini","name":"Lamborghini","cat":"Automobil","blurb":"dunkel, reines Schwarz; Gold-Akzent; eigene Neo-Grotesk","mode":"dunkel","light":null,"dark":"#000000","inkLight":null,"inkDark":"#ffffff","primary":"#ffc000","onPrimary":"#000000","ghost":false,"radius":0,"swatches":["#000000","#ffffff","#ffc000","#917300","#202020","#29abe2"],"font":"LamboType","generic":"sans","weight":400,"tracking":0,"upper":true},{"slug":"renault","name":"Renault","cat":"Automobil","blurb":"hell, Schwarz-Weiß; Sonnengelb-Akzent; eckige Container, Konfigurator","mode":"hell","light":"#ffffff","dark":null,"inkLight":"#000000","inkDark":null,"primary":"#ffed00","onPrimary":"#000000","ghost":false,"radius":2.0,"swatches":["#ffffff","#000000","#ffed00","#0000ee","#e6d200","#111111"],"font":"NouvelR","generic":"sans","weight":700,"tracking":0.0,"upper":false},{"slug":"tesla","name":"Tesla","cat":"Automobil","blurb":"hell, Weiß; ein Blau für Buttons; Vollbild-Fotos, radikal reduziert","mode":"hell","light":"#ffffff","dark":null,"inkLight":"#171a20","inkDark":null,"primary":"#3e6ae1","onPrimary":"#ffffff","ghost":false,"radius":4,"swatches":["#ffffff","#171a20","#3e6ae1","#393c41","#5c5e62","#f4f4f4"],"font":"Universal Sans Display","generic":"sans","weight":500,"tracking":0,"upper":false},{"slug":"dell-1996","name":"Dell (1996)","cat":"Retro-Web (1996–2001)","blurb":"Retro 1996; schwarzer Seitenrahmen; flache Farbblock-Karten, GIF-Sticker","mode":"retro","light":"#ffffff","dark":null,"inkLight":"#000000","inkDark":null,"primary":"#000000","onPrimary":"#ffffff","ghost":false,"radius":0.0,"swatches":["#ffffff","#000000","#0000ee","#e91d2a","#fcc20f","#6a26a4"],"font":"Arial Black","generic":"sans","weight":900,"tracking":0.0,"upper":false},{"slug":"nintendo-2001","name":"Nintendo.com (2001)","cat":"Retro-Web (1996–2001)","blurb":"Retro 2001; Periwinkle-Metall-Look; bernsteinfarbene Navigation, Platinen-Optik","mode":"retro","light":"#7a8aba","dark":null,"inkLight":"#21242e","inkDark":null,"primary":"#ecab37","onPrimary":"#21242e","ghost":false,"radius":2.0,"swatches":["#ffffff","#21242e","#ecab37","#7a8aba","#9fbee7","#e60012"],"font":"Arial Black","generic":"sans","weight":900,"tracking":0.0,"upper":false}];
+const TONE = { hell: "Hell", dunkel: "Dunkel", gemischt: "Hell & dunkel", retro: "Retro" };
+const FONT = { sans: "Inter, system-ui, sans-serif", serif: "Fraunces, Georgia, serif", mono: "'JetBrains Mono', ui-monospace, monospace" };
+
+function lum(hex) {
+  const v = [1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16) / 255)
+    .map(c => c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4));
+  return 0.2126 * v[0] + 0.7152 * v[1] + 0.0722 * v[2];
+}
+function contrast(a, b) { const x = lum(a), y = lum(b); return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05); }
+function esc(s) { return String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])); }
+function radiusLabel(r) { return r >= 999 ? "Pill" : r === 0 ? "eckig" : Math.round(r) + " px"; }
+
+function button(d, bandBg, bandInk) {
+  const r = Math.min(d.radius, 999);
+  let style = `border-radius:${r}px;`;
+  if (d.ghost || !d.primary) {
+    style += `background:transparent;color:${bandInk};border-color:${bandInk};`;
+  } else {
+    style += `background:${d.primary};color:${d.onPrimary};`;
+    if (contrast(d.primary, bandBg) < 1.4) style += `border-color:${d.onPrimary};`;
+  }
+  return `<span class="pv-btn" style="${style}">Loslegen</span>`;
+}
+
+function preview(d) {
+  const head = `font-family:${FONT[d.generic]};font-weight:${d.weight};letter-spacing:${d.tracking}em;${d.upper ? "text-transform:uppercase;" : ""}`;
+  const h = `<p class="pv-h" style="${head}">Deine App</p>`;
+  const t = `<p class="pv-t">So könnte deine Oberfläche aussehen.</p>`;
+  if (d.mode === "gemischt") {
+    const onDark = !d.primary || contrast(d.primary, d.dark) >= contrast(d.primary, d.light);
+    return `<div class="band" style="--pv-bg:${d.dark};--pv-ink:${d.inkDark}">${h}${onDark ? button(d, d.dark, d.inkDark) : ""}</div>` +
+           `<div class="band" style="--pv-bg:${d.light};--pv-ink:${d.inkLight}">${t}${onDark ? "" : button(d, d.light, d.inkLight)}</div>`;
+  }
+  const bg = d.mode === "dunkel" ? d.dark : d.light;
+  const ink = d.mode === "dunkel" ? d.inkDark : d.inkLight;
+  return `<div class="band" style="--pv-bg:${bg};--pv-ink:${ink}">${h}${t}${button(d, bg, ink)}</div>`;
+}
+
+function card(d) {
+  const sw = d.swatches.map(c => `<li><i style="--c:${c}" title="${c}"></i><small>${c}</small></li>`).join("");
+  return `<article class="card" id="${esc(d.slug)}" data-slug="${esc(d.slug)}">
+    <div class="preview" aria-hidden="true">${preview(d)}</div>
+    <div class="info">
+      <div class="head"><h2>${esc(d.name)}</h2><span class="tone">${TONE[d.mode]}</span></div>
+      <p class="cat">${esc(d.cat)}</p>
+      <p class="blurb">${esc(d.blurb)}</p>
+      <ul class="swatches" aria-label="Farben">${sw}</ul>
+      <p class="meta">Schrift: ${esc(d.font || "–")} · Ecken: ${radiusLabel(d.radius)}</p>
+      <div class="actions">
+        <button class="pick" data-slug="${esc(d.slug)}" data-name="${esc(d.name)}">Auswählen</button>
+        <a class="peek" href="https://getdesign.md/${encodeURIComponent(d.slug)}/design-md" target="_blank" rel="noopener">Original ↗</a>
+        <button class="fav" data-slug="${esc(d.slug)}" aria-pressed="false" aria-label="${esc(d.name)} merken" title="Merken">★</button>
+      </div>
+    </div>
+  </article>`;
+}
+
+const grid = document.getElementById("grid");
+grid.innerHTML = DATA.map(card).join("");
+const cards = [...grid.children];
+const byslug = Object.fromEntries(DATA.map(d => [d.slug, d]));
+
+const cats = [...new Set(DATA.map(d => d.cat))];
+const sel = document.getElementById("cat");
+sel.insertAdjacentHTML("beforeend", cats.map(c => `<option>${esc(c)}</option>`).join(""));
+
+let favs = new Set();
+try { favs = new Set(JSON.parse(localStorage.getItem("md74:favs") || "[]")); } catch (e) {}
+function saveFavs() { try { localStorage.setItem("md74:favs", JSON.stringify([...favs])); } catch (e) {} }
+
+const state = { q: "", mode: "", cat: "", favOnly: false };
+const haystack = Object.fromEntries(DATA.map(d => [d.slug,
+  [d.name, d.slug, d.cat, d.blurb, d.font, TONE[d.mode]].join(" ").toLowerCase()]));
+
+function apply() {
+  const words = state.q.toLowerCase().split(/\s+/).filter(Boolean);
+  let n = 0;
+  for (const el of cards) {
+    const d = byslug[el.dataset.slug];
+    const ok = (!state.mode || d.mode === state.mode) && (!state.cat || d.cat === state.cat)
+      && (!state.favOnly || favs.has(d.slug)) && words.every(w => haystack[d.slug].includes(w));
+    el.hidden = !ok;
+    if (ok) n++;
+  }
+  document.getElementById("count").textContent = n === DATA.length ? `${n} Designs` : `${n} von ${DATA.length}`;
+  document.getElementById("empty").hidden = n > 0;
+}
+function syncFavButtons() {
+  for (const b of grid.querySelectorAll(".fav")) b.setAttribute("aria-pressed", favs.has(b.dataset.slug));
+}
+
+document.getElementById("q").addEventListener("input", e => { state.q = e.target.value; apply(); });
+sel.addEventListener("change", e => { state.cat = e.target.value; apply(); });
+for (const chip of document.querySelectorAll(".chip[data-mode]")) {
+  chip.addEventListener("click", () => {
+    state.mode = chip.dataset.mode;
+    for (const c of document.querySelectorAll(".chip[data-mode]")) c.setAttribute("aria-pressed", c === chip);
+    apply();
+  });
+}
+const favChip = document.getElementById("favOnly");
+favChip.addEventListener("click", () => {
+  state.favOnly = !state.favOnly; favChip.setAttribute("aria-pressed", state.favOnly); apply();
+});
+document.getElementById("reset").addEventListener("click", () => {
+  Object.assign(state, { q: "", mode: "", cat: "", favOnly: false });
+  document.getElementById("q").value = ""; sel.value = "";
+  for (const c of document.querySelectorAll(".chip[data-mode]")) c.setAttribute("aria-pressed", c.dataset.mode === "");
+  favChip.setAttribute("aria-pressed", false); apply();
+});
+
+const toast = document.getElementById("toast");
+let toastTimer;
+function showToast(html, keep) {
+  toast.innerHTML = html; toast.hidden = false; clearTimeout(toastTimer);
+  if (!keep) toastTimer = setTimeout(() => { toast.hidden = true; }, 4200);
+}
+grid.addEventListener("click", async e => {
+  const pick = e.target.closest(".pick");
+  if (pick) {
+    const text = `/${CMD} ${pick.dataset.slug}`;
+    try {
+      await navigator.clipboard.writeText(text);
+      showToast(`<b>${esc(pick.dataset.name)}</b> gewählt. Kopiert: <code>${esc(text)}</code><br>Jetzt bei Claude einfügen und senden.`);
+    } catch (err) {
+      showToast(`<b>${esc(pick.dataset.name)}</b> gewählt. Kopiere diesen Befehl und schick ihn Claude:<input id="cmdOut" readonly value="${esc(text)}">`, true);
+      const inp = document.getElementById("cmdOut"); inp.focus(); inp.select();
+      setTimeout(() => { toast.hidden = true; }, 12000);
+    }
+    return;
+  }
+  const fav = e.target.closest(".fav");
+  if (fav) {
+    const s = fav.dataset.slug;
+    favs.has(s) ? favs.delete(s) : favs.add(s);
+    saveFavs(); syncFavButtons(); if (state.favOnly) apply();
+  }
+});
+
+syncFavButtons();
+apply();
+const target = decodeURIComponent(location.hash.slice(1));
+if (target && byslug[target]) {
+  const el = document.getElementById(target);
+  el.classList.add("flash");
+  el.scrollIntoView({ block: "center" });
+}
+</script>
+
+</body>
+</html>
