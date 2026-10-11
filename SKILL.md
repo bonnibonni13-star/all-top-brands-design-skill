@@ -14,7 +14,16 @@ Dazu kommt der **Animations-Katalog** `animationen/KATALOG.md`: 60 benannte Effe
 
 Katalog mit den Musterscreens aller Marken und Filter nach Ansatz: https://bonnibonni13-star.github.io/all-top-brands-design-skill/katalog.html (lokal: `katalog.html` im Ordner dieses Skills).
 
-**Grundsatz:** Ein Design anwenden heißt, die ganze Designsprache zu übertragen – Anordnung, Navigation, Komponenten, Icons, Bildbehandlung, Typografie, Abstände und Bewegung. Nur Farben und Schrift zu tauschen ist zu wenig; das gibt es nur auf ausdrücklichen Wunsch („nur die Farben“). Funktionen, Daten, Texte und Abläufe der App bleiben erhalten.
+**Grundsatz:** Ein Design anwenden heißt, die ganze Designsprache zu übertragen – Anordnung, Navigation, Komponenten, Icons, Bildbehandlung, Typografie, Abstände und Bewegung. Nur Farben und Schrift zu tauschen ist zu wenig; das gibt es nur auf ausdrücklichen Wunsch („nur die Farben“).
+
+**Fest und frei – das Leitbild für jeden Entwurf:**
+- **Fest:** die Kernfunktionen und ihre Zugehörigkeit. Was die App kann, bleibt; welche Felder zu welchem Objekt gehören, bleibt (Datum an der Aufgabe, kcal am Rezept); bearbeiten, löschen & Co. bleiben erreichbar. Quelle: das Element-Inventar aus Schritt 3b.
+- **Frei – Grundidee:** worum die App herum gebaut ist (listen-, kalender-, personen-, eingabe-/assistent-, dashboard-zentriert …).
+- **Frei – Abläufe:** Seite oder geführter Schritt-Fluss, Formular oder Blatt, Blatt oder Dialog.
+- **Frei – Interaktionswege:** Knopf, Wischen, Ziehen auf den Papierkorb, langes Drücken – mit entdeckbarer Alternative und Zugang für Bedienhilfen.
+- **Frei – Darstellung:** Position, Form, Symbol oder Text, Sortierung, Dichte.
+
+Die Entwürfe einer Runde nutzen diese Freiheitsgrade **unterschiedlich** – fünf Karten mit derselben Struktur in fünf Farben verfehlen den Zweck. Einzelheiten: Schritt 3b (Inventar), Schritt 3d (Bauen).
 
 **Der Ablauf ist ein Gespräch.** Nach jedem Schritt wird gefragt, nie einfach durchgebaut: erst die Anzahl, dann die Vorschläge zur Auswahl, dann der Hauptscreen als Muster, dann jeder Designbereich einzeln, zuletzt der Rest der App. Jede Frage hat konkrete Vorschläge zur Auswahl (AskUserQuestion, wenn vorhanden), nie nur „Was möchtest du?“. Nur wenn niemand mitliest (geplanter Lauf, ausdrücklich „mach einfach alles“), wird mit den Vorgaben durchgearbeitet und am Ende berichtet.
 
