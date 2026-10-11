@@ -1,0 +1,525 @@
+<!doctype html>
+<html lang="de"><head><meta charset="utf-8"><style id="ms-base">
+/* Musterscreens – Basis. Wird vom Renderer vor die eigenen Stile gesetzt; eigene Regeln überschreiben sie.
+   Platzhalter der Form „{{scene:<name>}}“ ersetzt der Renderer durch das SVG aus scenes/<name>.svg. */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body { background: #e7e7eb; font-family: Inter, "DejaVu Sans", sans-serif; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+.ms-wrap { display: inline-block; background: #e7e7eb; }
+.stage { display: flex; gap: 40px; align-items: flex-start; padding: 48px 48px 20px; width: max-content; }
+.shot { margin: 0; display: flex; flex-direction: column; gap: 14px; }
+.shot > figcaption { font: 600 13px/1 Inter, "DejaVu Sans", sans-serif; letter-spacing: .08em; text-transform: uppercase; color: #6b6b74; padding-left: 8px; }
+.phone { position: relative; width: 390px; height: 844px; overflow: hidden; border-radius: 40px; isolation: isolate;
+  box-shadow: 0 0 0 1px rgba(0,0,0,.06), 0 18px 50px rgba(0,0,0,.14); }
+.ms-foot { font: 500 13px/1.4 Inter, "DejaVu Sans", sans-serif; color: #6b6b74; padding: 0 56px 30px; }
+.ms-foot b { color: #3a3a40; font-weight: 600; }
+
+/* Rücksetzungen ohne Spezifität: eigene Klassen gewinnen immer. Eigene Resets bitte ebenfalls mit :where(). */
+:where(.phone) :where(h1, h2, h3, h4, h5, h6, p, ul, ol, li, figure, blockquote, dl, dd) { margin: 0; padding: 0; }
+:where(.phone) :where(ul, ol) { list-style: none; }
+:where(.phone) :where(button, input, select, textarea) { font: inherit; color: inherit; background: none; border: 0; padding: 0; margin: 0; }
+
+/* Icons: <i data-icon="lucide:house"></i> oder <i data-icon="ph-bold:house"></i> → Inline-SVG mit Klasse .ic */
+.ic { width: 1em; height: 1em; display: inline-block; vertical-align: -0.125em; flex: none; }
+.ic-missing { outline: 2px dashed red; }
+
+/* Statusleiste und Gestenleiste */
+.sb { height: 46px; display: flex; align-items: center; justify-content: space-between; padding: 4px 26px 0 32px;
+  font: 600 15px/1 Inter, "DejaVu Sans", sans-serif; position: relative; z-index: 30; }
+.sb-icons { display: flex; gap: 6px; font-size: 16px; align-items: center; }
+.hi { position: absolute; left: 50%; bottom: 8px; width: 134px; height: 5px; border-radius: 3px; transform: translateX(-50%);
+  background: currentColor; opacity: .45; z-index: 40; }
+
+/* Bilder (abstrakte Motive, gleich für alle Marken). Ausschnitt per background-position/-size, Behandlung frei. */
+[class*="scene-"] { background-size: cover; background-position: center; background-repeat: no-repeat; }
+.scene-see { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300' preserveAspectRatio='xMidYMid slice'%3E%3Cdefs%3E%3ClinearGradient id='a' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%2386cdf6'/%3E%3Cstop offset='.64' stop-color='%23ffe4b5'/%3E%3C/linearGradient%3E%3ClinearGradient id='b' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%234fb3cc'/%3E%3Cstop offset='1' stop-color='%231c627d'/%3E%3C/linearGradient%3E%3CradialGradient id='g'%3E%3Cstop offset='0' stop-color='%23fff6dc'/%3E%3Cstop offset='1' stop-color='%23fff6dc' stop-opacity='0'/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect width='400' height='300' fill='url(%23a)'/%3E%3Ccircle cx='296' cy='138' r='70' fill='url(%23g)'/%3E%3Ccircle cx='296' cy='138' r='26' fill='%23fff4d2'/%3E%3Cpath d='M0 176C60 148 112 156 162 166S250 146 312 152 380 168 400 164V300H0Z' fill='%2386b596'/%3E%3Cpath d='M0 190C80 174 140 188 200 184S322 170 400 182V300H0Z' fill='%234c8764'/%3E%3Crect y='198' width='400' height='102' fill='url(%23b)'/%3E%3Cpath d='M262 212H330M30 230H150M210 248H372M80 268H190' stroke='%23c9eef6' stroke-width='3' stroke-linecap='round' opacity='.45'/%3E%3Cpath d='M120 199l18-12 4 12z' fill='%23fdfdfd'/%3E%3Cpath d='M137 186v14' stroke='%23fdfdfd' stroke-width='2'/%3E%3C/svg%3E"); }
+.scene-lissabon { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300' preserveAspectRatio='xMidYMid slice'%3E%3Cdefs%3E%3ClinearGradient id='a' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23ffd9a3'/%3E%3Cstop offset='1' stop-color='%23f39a63'/%3E%3C/linearGradient%3E%3Cpattern id='w' width='18' height='24' patternUnits='userSpaceOnUse'%3E%3Crect x='6' y='7' width='6' height='10' rx='1' fill='%235b3428' opacity='.38'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width='400' height='300' fill='url(%23a)'/%3E%3Ccircle cx='84' cy='80' r='26' fill='%23fff2d4'/%3E%3Cpath d='M0 168h64v132H0z' fill='%23f6e6c8'/%3E%3Cpath d='M-4 170l36-20 36 20z' fill='%23c5513a'/%3E%3Cpath d='M64 146h72v154H64z' fill='%23eaa7a1'/%3E%3Cpath d='M60 148l40-24 40 24z' fill='%23b2412c'/%3E%3Cpath d='M136 180h56v120h-56z' fill='%239fc6d8'/%3E%3Cpath d='M132 182l32-18 32 18z' fill='%23c5513a'/%3E%3Cpath d='M192 136h84v164h-84z' fill='%23e3a65a'/%3E%3Cpath d='M188 138l46-26 46 26z' fill='%23b2412c'/%3E%3Cpath d='M276 162h62v138h-62z' fill='%23f6e6c8'/%3E%3Cpath d='M272 164l35-19 35 19z' fill='%23c5513a'/%3E%3Cpath d='M338 150h66v150h-66z' fill='%23eaa7a1'/%3E%3Cpath d='M334 152l37-22 37 22z' fill='%23b2412c'/%3E%3Crect y='150' width='400' height='150' fill='url(%23w)'/%3E%3Cpath d='M0 262c90-18 210-18 400 0v38H0z' fill='%239b3d2a'/%3E%3Crect x='150' y='236' width='70' height='30' rx='6' fill='%23f2c94c'/%3E%3Crect x='156' y='241' width='16' height='12' rx='2' fill='%235b3428' opacity='.5'/%3E%3Crect x='178' y='241' width='16' height='12' rx='2' fill='%235b3428' opacity='.5'/%3E%3Crect x='200' y='241' width='14' height='12' rx='2' fill='%235b3428' opacity='.5'/%3E%3C/svg%3E"); }
+.scene-konzert { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300' preserveAspectRatio='xMidYMid slice'%3E%3Cdefs%3E%3CradialGradient id='a' cx='.5' cy='1' r='1'%3E%3Cstop offset='0' stop-color='%234a1670'/%3E%3Cstop offset='1' stop-color='%230c0619'/%3E%3C/radialGradient%3E%3ClinearGradient id='p' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23ff5fcf' stop-opacity='.85'/%3E%3Cstop offset='1' stop-color='%23ff5fcf' stop-opacity='0'/%3E%3C/linearGradient%3E%3ClinearGradient id='c' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%2352dcff' stop-opacity='.8'/%3E%3Cstop offset='1' stop-color='%2352dcff' stop-opacity='0'/%3E%3C/linearGradient%3E%3CradialGradient id='s'%3E%3Cstop offset='0' stop-color='%23ff9a5c' stop-opacity='.9'/%3E%3Cstop offset='1' stop-color='%23ff9a5c' stop-opacity='0'/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect width='400' height='300' fill='url(%23a)'/%3E%3Cpath d='M90 0h14l70 260H40z' fill='url(%23p)' opacity='.7'/%3E%3Cpath d='M300 0h14l66 260H230z' fill='url(%23c)' opacity='.7'/%3E%3Cpath d='M196 0h10l60 250H140z' fill='url(%23p)' opacity='.45'/%3E%3Cellipse cx='200' cy='232' rx='190' ry='60' fill='url(%23s)'/%3E%3Cg fill='%23fff' opacity='.8'%3E%3Ccircle cx='40' cy='40' r='1.4'/%3E%3Ccircle cx='150' cy='24' r='1.2'/%3E%3Ccircle cx='260' cy='52' r='1.3'/%3E%3Ccircle cx='360' cy='30' r='1.5'/%3E%3C/g%3E%3Cpath d='M0 300V262c12-10 22-12 30-4 8-14 22-16 30-4 10-12 24-12 32 0 8-16 24-16 32-2 10-10 22-10 30 2 8-14 24-14 32 0 10-10 22-10 30 0 8-16 24-14 32 0 10-10 22-10 30 2 8-12 22-12 30-2 10-8 20-6 32 4V300z' fill='%2307030f'/%3E%3Cpath d='M60 262l-6-26M182 258l8-30M300 262l-4-28' stroke='%2307030f' stroke-width='7' stroke-linecap='round'/%3E%3C/svg%3E"); }
+.scene-nacht { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300' preserveAspectRatio='xMidYMid slice'%3E%3Cdefs%3E%3ClinearGradient id='a' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%230a0f2e'/%3E%3Cstop offset='.45' stop-color='%232d1a5e'/%3E%3Cstop offset='.62' stop-color='%23ff4f7e'/%3E%3C/linearGradient%3E%3ClinearGradient id='s' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23ffd36b'/%3E%3Cstop offset='1' stop-color='%23ff4f7e'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='400' height='300' fill='url(%23a)'/%3E%3Ccircle cx='200' cy='168' r='62' fill='url(%23s)'/%3E%3Cg fill='%234a2a78'%3E%3Crect x='138' y='140' width='124' height='5'/%3E%3Crect x='138' y='152' width='124' height='6'/%3E%3Crect x='138' y='165' width='124' height='7'/%3E%3C/g%3E%3Cpath d='M0 186h22v-22h14v-12h16v34h18v-26h12v26h22v-40h16v40h40V186h120v-30h14v30h18v-22h16v22h14v-36h18v36h40v-24h14v24h18' fill='%231b1145'/%3E%3Crect y='186' width='400' height='114' fill='%23120b2b'/%3E%3Cpath d='M200 186L-60 300M200 186L460 300' stroke='%23ff4fd8' stroke-width='2.5' opacity='.9'/%3E%3Cpath d='M200 186l-30 114M200 186l30 114' stroke='%2352e5ff' stroke-width='2' opacity='.6'/%3E%3Cpath d='M200 186L118 300M200 186l82 114' stroke='%2352e5ff' stroke-width='1.2' opacity='.35'/%3E%3Cpath d='M-20 214H420M-20 238H420M-20 270H420' stroke='%23ff4fd8' stroke-width='1' opacity='.35'/%3E%3Cg fill='%23fff'%3E%3Ccircle cx='60' cy='40' r='1.2'/%3E%3Ccircle cx='330' cy='28' r='1.4'/%3E%3Ccircle cx='250' cy='70' r='1'/%3E%3Ccircle cx='110' cy='90' r='1.1'/%3E%3C/g%3E%3C/svg%3E"); }
+.scene-herbst { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300' preserveAspectRatio='xMidYMid slice'%3E%3Cdefs%3E%3ClinearGradient id='a' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23fbd38d'/%3E%3Cstop offset='1' stop-color='%23e7843f'/%3E%3C/linearGradient%3E%3ClinearGradient id='m' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23fff' stop-opacity='0'/%3E%3Cstop offset='.5' stop-color='%23fff' stop-opacity='.35'/%3E%3Cstop offset='1' stop-color='%23fff' stop-opacity='0'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='400' height='300' fill='url(%23a)'/%3E%3Cg opacity='.55'%3E%3Ccircle cx='40' cy='150' r='46' fill='%23d9663a'/%3E%3Ccircle cx='130' cy='130' r='54' fill='%23e89a3c'/%3E%3Ccircle cx='250' cy='140' r='50' fill='%23c8502f'/%3E%3Ccircle cx='350' cy='125' r='58' fill='%23e89a3c'/%3E%3C/g%3E%3Crect y='150' width='400' height='60' fill='url(%23m)'/%3E%3Cg fill='%234a2a1d'%3E%3Crect x='66' y='170' width='9' height='110'/%3E%3Crect x='186' y='160' width='10' height='120'/%3E%3Crect x='306' y='168' width='9' height='112'/%3E%3C/g%3E%3Ccircle cx='70' cy='160' r='44' fill='%23c2452d'/%3E%3Ccircle cx='96' cy='182' r='30' fill='%23e5862c'/%3E%3Ccircle cx='190' cy='148' r='52' fill='%23f0a93a'/%3E%3Ccircle cx='160' cy='176' r='28' fill='%23c2452d'/%3E%3Ccircle cx='310' cy='156' r='48' fill='%238f2d1f'/%3E%3Ccircle cx='338' cy='186' r='30' fill='%23e5862c'/%3E%3Cpath d='M0 262c80-14 160-10 240-2s120 4 160-6v46H0z' fill='%236b3a22'/%3E%3Cg fill='%23f2b44c'%3E%3Cellipse cx='120' cy='272' rx='6' ry='3'/%3E%3Cellipse cx='260' cy='282' rx='5' ry='2.5'/%3E%3Cellipse cx='340' cy='270' rx='6' ry='3'/%3E%3C/g%3E%3C/svg%3E"); }
+.scene-studio { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300' preserveAspectRatio='xMidYMid slice'%3E%3Cdefs%3E%3CradialGradient id='a' cx='.25' cy='.35' r='.9'%3E%3Cstop offset='0' stop-color='%236b3f12'/%3E%3Cstop offset='.55' stop-color='%231d1209'/%3E%3Cstop offset='1' stop-color='%230a0705'/%3E%3C/radialGradient%3E%3CradialGradient id='l'%3E%3Cstop offset='0' stop-color='%23ffb347' stop-opacity='.55'/%3E%3Cstop offset='1' stop-color='%23ffb347' stop-opacity='0'/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect width='400' height='300' fill='url(%23a)'/%3E%3Cellipse cx='90' cy='90' rx='150' ry='110' fill='url(%23l)'/%3E%3Ccircle cx='262' cy='160' r='116' fill='%23111'/%3E%3Cg fill='none' stroke='%232b2b2b' stroke-width='1.5'%3E%3Ccircle cx='262' cy='160' r='104'/%3E%3Ccircle cx='262' cy='160' r='92'/%3E%3Ccircle cx='262' cy='160' r='80'/%3E%3Ccircle cx='262' cy='160' r='68'/%3E%3Ccircle cx='262' cy='160' r='56'/%3E%3C/g%3E%3Cpath d='M190 84a104 104 0 0 1 120-14' stroke='%235a5a5a' stroke-width='3' fill='none' opacity='.6'/%3E%3Ccircle cx='262' cy='160' r='36' fill='%23e3a33b'/%3E%3Ccircle cx='262' cy='160' r='4' fill='%23111'/%3E%3Cpath d='M380 20l-60 110' stroke='%23c9c9c9' stroke-width='5' stroke-linecap='round'/%3E%3Crect x='306' y='124' width='22' height='12' rx='3' fill='%23d9d9d9' transform='rotate(-60 317 130)'/%3E%3C/svg%3E"); }
+.scene-wien { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300' preserveAspectRatio='xMidYMid slice'%3E%3Cdefs%3E%3ClinearGradient id='a' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23c9dcf2'/%3E%3Cstop offset='.7' stop-color='%23f6d6de'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='400' height='300' fill='url(%23a)'/%3E%3Cg fill='%23aebfd4'%3E%3Crect x='0' y='170' width='70' height='70'/%3E%3Crect x='300' y='160' width='100' height='80'/%3E%3Crect x='60' y='182' width='40' height='58'/%3E%3C/g%3E%3Cg fill='%238ea3bd'%3E%3Crect x='120' y='150' width='160' height='90'/%3E%3Cpath d='M150 150a50 50 0 0 1 100 0z'/%3E%3Crect x='196' y='72' width='8' height='30'/%3E%3Ccircle cx='200' cy='70' r='5'/%3E%3Crect x='104' y='96' width='14' height='144'/%3E%3Crect x='282' y='96' width='14' height='144'/%3E%3Cpath d='M100 96h22l-11-16zM278 96h22l-11-16z'/%3E%3Crect x='166' y='170' width='68' height='70' fill='%237a90ab'/%3E%3Cpath d='M166 170h68l-34-22z' fill='%239fb2c9'/%3E%3C/g%3E%3Cg fill='%237a90ab'%3E%3Crect x='176' y='186' width='6' height='54'/%3E%3Crect x='190' y='186' width='6' height='54'/%3E%3Crect x='204' y='186' width='6' height='54'/%3E%3Crect x='218' y='186' width='6' height='54'/%3E%3C/g%3E%3Cpath d='M0 236c100-10 300-10 400 0v64H0z' fill='%23f6f8fc'/%3E%3Cpath d='M0 262c120-8 280-6 400 4' stroke='%23dfe6f0' stroke-width='3' fill='none'/%3E%3Cg fill='%23fff' opacity='.85'%3E%3Ccircle cx='40' cy='60' r='2'/%3E%3Ccircle cx='90' cy='120' r='1.6'/%3E%3Ccircle cx='150' cy='40' r='2.2'/%3E%3Ccircle cx='250' cy='110' r='1.8'/%3E%3Ccircle cx='330' cy='50' r='2'/%3E%3Ccircle cx='370' cy='120' r='1.6'/%3E%3Ccircle cx='300' cy='200' r='1.8'/%3E%3Ccircle cx='60' cy='210' r='2'/%3E%3C/g%3E%3C/svg%3E"); }
+.scene-film { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300' preserveAspectRatio='xMidYMid slice'%3E%3Cdefs%3E%3ClinearGradient id='a' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%230f4c5c'/%3E%3Cstop offset='.45' stop-color='%231f7a77'/%3E%3Cstop offset='.7' stop-color='%23f4a259'/%3E%3Cstop offset='1' stop-color='%23e76f51'/%3E%3C/linearGradient%3E%3ClinearGradient id='r' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23ffd27a' stop-opacity='.9'/%3E%3Cstop offset='1' stop-color='%23ffd27a' stop-opacity='0'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='400' height='300' fill='url(%23a)'/%3E%3Ccircle cx='250' cy='196' r='44' fill='%23ffd166'/%3E%3Crect x='206' y='214' width='88' height='86' fill='url(%23r)' opacity='.7'/%3E%3Cpath d='M0 214h400v86H0z' fill='%230b2a33' opacity='.55'/%3E%3Cpath d='M0 214c40-6 70-30 96-28s40 20 70 22 70-8 100-4 90 8 134 4v8H0z' fill='%230b2a33'/%3E%3Cpath d='M70 214c-2-40 4-70 14-92' stroke='%230b2a33' stroke-width='5' fill='none'/%3E%3Cpath d='M84 122c-18-8-38-4-50 8M84 122c-6-16-22-24-38-22M84 122c14-12 34-14 48-4M84 122c18-2 32 8 38 22M84 122c4-16 16-26 30-28' stroke='%230b2a33' stroke-width='5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); }
+.scene-person { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='xMidYMid slice'%3E%3Cdefs%3E%3ClinearGradient id='a' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23f3d9c1'/%3E%3Cstop offset='1' stop-color='%23d8a98a'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' fill='url(%23a)'/%3E%3Cpath d='M14 104c4-22 18-32 36-32s32 10 36 32z' fill='%233d5a80'/%3E%3Ccircle cx='50' cy='44' r='19' fill='%239c6b52'/%3E%3Cpath d='M30 44c0-16 9-25 21-25 13 0 21 9 21 22-6-6-16-9-26-8-7 1-12 5-16 11z' fill='%233a2418'/%3E%3C/svg%3E"); }
+
+/* Erprobte Bildausschnitte für weitere „Fotos“ aus einem Motiv (z. B. Fotoraster): class="scene-lissabon crop-3" */
+.crop-1 { background-size: 260%; background-position: 8% 18%; }
+.crop-2 { background-size: 320%; background-position: 85% 60%; }
+.crop-3 { background-size: 360%; background-position: 50% 95%; }
+.crop-4 { background-size: 300%; background-position: 60% 35%; }
+.crop-5 { background-size: 280%; background-position: 0% 60%; }
+.crop-6 { background-size: 500%; background-position: 20% 20%; }
+.crop-7 { background-size: 240%; background-position: 100% 90%; }
+.crop-8 { background-size: 550%; background-position: 70% 55%; }
+.crop-9 { background-size: 220%; background-position: 35% 0%; }
+.crop-10 { background-size: 420%; background-position: 40% 62%; }
+.crop-11 { background-size: 340%; background-position: 95% 45%; }
+.crop-12 { background-size: 300%; background-position: 0% 100%; }
+
+/* Körnung als Überlagerung: Element bekommt .grain, Stärke per --grain (0–1). */
+.grain { position: relative; }
+.grain::after { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: var(--grain, .18); mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E"); background-size: 160px 160px; }
+
+/* Horizontale Reihen dürfen am Rand angeschnitten sein wie beim echten Scrollen. */
+.row-x { display: flex; overflow: hidden; }
+
+</style>
+<title>Musterscreens HashiCorp</title>
+<style>
+/* ==========================================================================
+   HashiCorp – Designsprache als App-Vorlage
+   Werte aus references/hashicorp.md (Farben, Typo, Radien, Abstände).
+   App-Muster, Icons und Bewegung sind Ableitungen/Empfehlungen.
+   Grundsätze: schwarze Leinwand · Flächenstufen statt Schatten · 1-px-Haarlinien
+   · Versal-Augenbraue über jedem Band · eine Identitätsfarbe je Thema
+   · 8-px-Ecken an Buttons/Feldern, 12 px an Karten · kein Monospace.
+   ========================================================================== */
+:root {
+  /* Flächen */
+  --canvas: #000000;
+  --surface-1: #15181e;
+  --surface-2: #1f232b;
+  --surface-3: #3b3d45;
+  --hairline: #3b3d45;
+  --hairline-soft: #252830;
+  --hairline-card: rgba(178, 182, 189, .1);
+  /* Text */
+  --ink: #ffffff;
+  --ink-muted: #b2b6bd;
+  --ink-subtle: #656a76;
+  --inverse-canvas: #ffffff;
+  --inverse-ink: #000000;
+  --accent-blue: #2b89ff;
+  /* Identitätsfarben je Thema (im Original: je Produkt) */
+  --id-fotos: #7b42bc;
+  --id-fotos-bright: #911ced;
+  --id-videos: #14c6cb;
+  --id-musik: #ffcf25;
+  --id-alben: #00ca8e;
+  /* Typografie: eine Familie, Hierarchie über Gewicht + Zeilenhöhe */
+  --font: "Inter", "DejaVu Sans", sans-serif;
+  --font-display: "Inter Display", "Inter", sans-serif;
+  /* Radien */
+  --r-xs: 4px;
+  --r-sm: 6px;
+  --r-md: 8px;
+  --r-lg: 12px;
+  --r-xl: 16px;
+  --r-xxl: 24px;
+  --r-pill: 9999px;
+  /* Abstände (8-px-Basis) */
+  --s-xxs: 4px;
+  --s-xs: 8px;
+  --s-sm: 12px;
+  --s-md: 16px;
+  --s-lg: 24px;
+  --s-xl: 32px;
+  /* Bewegung (Empfehlung) */
+  --dur-s: 120ms;
+  --dur-m: 220ms;
+  --ease: cubic-bezier(.2, 0, 0, 1);
+}
+
+/* ---------- Grundlage ---------- */
+.phone { background: var(--canvas); color: var(--ink); font: 500 16px/1.5 var(--font); }
+.phone .sb, .phone .hi { color: var(--ink); }
+:where(.phone) :where(h1, h2, h3, p, ul, li) { margin: 0; }
+.tnum { font-variant-numeric: tabular-nums; }
+
+/* ---------- Typo-Rollen ---------- */
+.eyebrow { font: 600 12px/1.23 var(--font); letter-spacing: .6px; text-transform: uppercase; color: var(--ink-subtle); }
+.display { font: 600 28px/1.21 var(--font-display); letter-spacing: -.6px; }
+.card-title { font: 600 22px/1.18 var(--font-display); letter-spacing: -.4px; }
+.title-sm { font: 600 15px/1.25 var(--font); letter-spacing: -.2px; }
+.body { font: 500 14px/1.71 var(--font); color: var(--ink-muted); }
+.caption { font: 500 13px/1.38 var(--font); letter-spacing: .2px; color: var(--ink-subtle); }
+
+/* ---------- Kopfleiste (top-nav, 64 px) ---------- */
+.top-nav { position: relative; z-index: 5; height: 56px; display: flex; align-items: center;
+  justify-content: space-between; gap: var(--s-sm); padding: 0 var(--s-md); }
+.brand { display: flex; align-items: center; gap: 10px; }
+.brand-mark { width: 28px; height: 28px; display: grid; place-items: center; color: var(--ink); }
+.brand-mark svg { width: 22px; height: 24px; }
+.brand-name { font: 600 16px/1 var(--font); letter-spacing: -.2px; }
+.nav-actions { display: flex; align-items: center; gap: var(--s-xs); }
+
+/* ---------- Buttons: 8-px-Rechtecke, nie Pillen ---------- */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; flex: none;
+  height: 40px; padding: 0 18px; border-radius: var(--r-md);
+  font: 600 14px/1.29 var(--font); white-space: nowrap;
+  transition: background-color var(--dur-s) var(--ease), transform var(--dur-s) var(--ease); }
+.btn .ic { font-size: 17px; }
+.btn--primary { background: var(--inverse-canvas); color: var(--inverse-ink); }
+.btn--secondary { background: var(--surface-2); color: var(--ink); }
+.btn--sm { height: 34px; padding: 0 14px; }
+.btn:active { transform: scale(.985); }
+.icon-btn { width: 40px; height: 40px; display: grid; place-items: center; border-radius: var(--r-md);
+  background: var(--surface-2); color: var(--ink); font-size: 18px; flex: none;
+  transition: background-color var(--dur-s) var(--ease); }
+.icon-btn--bare { background: none; color: var(--ink-muted); }
+
+/* ---------- Scrollbereich ---------- */
+.content { position: absolute; inset: 102px 0 0 0; overflow: hidden; padding: 0 var(--s-md); }
+.band { margin-bottom: 16px; }
+.band-head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--s-sm);
+  margin-bottom: 10px; }
+
+/* ---------- Rückblick-Band (Marketing-Hero als App-Einstieg) ---------- */
+.hero-title { margin-top: 2px; }
+.hero-meta { margin-top: 2px; }
+.hero-actions { display: flex; gap: var(--s-xs); margin: 12px 0 12px; }
+.media { border-radius: var(--r-lg); border: 1px solid var(--hairline-card); height: 136px; }
+
+/* ---------- Identitätskarten: je Medienart eine Farbe (Ebene 3) ---------- */
+.id-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.id-card { position: relative; overflow: hidden; border-radius: var(--r-lg); padding: 13px 14px 12px;
+  min-height: 76px; display: flex; flex-direction: column; justify-content: space-between;
+  transition: transform var(--dur-s) var(--ease); }
+.id-card:active { transform: scale(.985); }
+.id-card .cube { position: absolute; right: 10px; top: 10px; width: 30px; height: 34px; }
+.id-card .id-name { font: 600 16px/1.18 var(--font); letter-spacing: -.2px; }
+.id-card .id-count { font: 500 13px/1.38 var(--font); letter-spacing: .2px; opacity: .78; }
+.id-card .id-kind { font: 600 11px/1.2 var(--font); letter-spacing: .6px; text-transform: uppercase; opacity: .62; }
+.id--fotos { background: var(--id-fotos); color: #fff; }
+.id--videos { background: var(--id-videos); color: var(--inverse-ink); }
+.id--musik { background: var(--id-musik); color: var(--inverse-ink); }
+.id--alben { background: var(--id-alben); color: var(--inverse-ink); }
+
+/* ---------- Vergleichstabelle (Quellen / Speicher) ---------- */
+.table { background: var(--surface-1); border: 1px solid var(--hairline-card); border-radius: var(--r-lg);
+  padding: 0 14px; }
+.thead { display: grid; grid-template-columns: 1fr auto 72px; gap: var(--s-sm); align-items: center;
+  padding: 11px 0 9px; border-bottom: 1px solid var(--hairline-soft);
+  font: 600 11px/1.2 var(--font); letter-spacing: .6px; text-transform: uppercase; color: var(--ink-subtle); }
+.thead span:last-child, .trow .t-size { text-align: right; }
+.trow { display: grid; grid-template-columns: 1fr auto 72px; gap: var(--s-sm); align-items: center;
+  padding: 11px 0; border-bottom: 1px solid var(--hairline-soft); }
+.trow:last-child { border-bottom: 0; }
+.t-name { display: flex; align-items: center; gap: 10px; font: 500 14px/1.3 var(--font); }
+.t-name .ic { font-size: 17px; color: var(--ink-muted); }
+.t-state { display: inline-flex; align-items: center; gap: 6px; font: 500 13px/1.3 var(--font); color: var(--ink-muted); }
+.dot { width: 7px; height: 7px; border-radius: var(--r-pill); background: var(--ink-subtle); flex: none; }
+.dot--ok { background: #00ca8e; }
+.dot--sync { background: #ffcf25; }
+.dot--off { background: transparent; box-shadow: inset 0 0 0 1.5px var(--ink-subtle); }
+.t-size { font: 500 13px/1.3 var(--font); color: var(--ink-muted); }
+
+/* Speicherbalken */
+.meter-row { display: flex; align-items: baseline; justify-content: space-between; margin: 12px 0 8px; }
+.meter { height: 6px; border-radius: var(--r-xs); background: var(--surface-2); overflow: hidden; margin-bottom: 12px; }
+.meter i { display: block; height: 100%; background: var(--ink); border-radius: var(--r-xs); }
+
+/* ---------- Suche + Chips ---------- */
+.search { display: flex; align-items: center; gap: 10px; height: 42px; padding: 0 14px;
+  background: var(--surface-1); border: 1px solid var(--hairline-card); border-radius: var(--r-md);
+  color: var(--ink-subtle); font: 500 15px/1 var(--font); }
+.search .ic { font-size: 18px; }
+.chips { display: flex; gap: var(--s-xs); margin: 12px 0 14px; }
+.chip { padding: 5px 11px; border-radius: var(--r-pill); background: var(--surface-1);
+  border: 1px solid var(--hairline-card); color: var(--ink-muted);
+  font: 500 13px/1.38 var(--font); letter-spacing: .2px; }
+.chip.is-on { background: var(--inverse-canvas); border-color: var(--inverse-canvas); color: var(--inverse-ink); font-weight: 600; }
+
+/* ---------- Bibliothek: dichte Tabelle ---------- */
+.lib-head { display: grid; grid-template-columns: 1fr 86px; gap: var(--s-sm); align-items: center;
+  padding: 0 0 8px; border-bottom: 1px solid var(--hairline);
+  font: 600 11px/1.2 var(--font); letter-spacing: .6px; text-transform: uppercase; color: var(--ink-subtle); }
+.lib-head span:last-child { text-align: right; }
+.lib-row { display: grid; grid-template-columns: 1fr 86px; gap: var(--s-sm); align-items: center;
+  padding: 11px 0; border-bottom: 1px solid var(--hairline-soft); }
+.lib-main { display: flex; align-items: center; gap: var(--s-sm); min-width: 0; }
+.thumb { width: 40px; height: 40px; border-radius: var(--r-md); border: 1px solid var(--hairline-card); flex: none; }
+.lib-text { min-width: 0; }
+.lib-text .title-sm { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.lib-text .caption { margin-top: 1px; }
+.lib-side { text-align: right; }
+.tag { display: inline-block; padding: 2px 7px; border-radius: var(--r-xs);
+  font: 600 11px/1.45 var(--font); letter-spacing: .4px; text-transform: uppercase; }
+.tag--fotos { background: rgba(123, 66, 188, .22); color: #c79af2; }
+.tag--videos { background: rgba(20, 198, 203, .18); color: #5fdfe3; }
+.tag--musik { background: rgba(255, 207, 37, .16); color: #ffd95c; }
+.tag--alben { background: rgba(0, 202, 142, .16); color: #4fdcb4; }
+.lib-when { display: block; margin-top: 3px; font: 500 12px/1.3 var(--font); color: var(--ink-subtle); }
+
+/* ---------- Detail ---------- */
+.crumbs { display: flex; align-items: center; gap: 6px; min-width: 0;
+  font: 500 14px/1 var(--font); color: var(--ink-subtle); }
+.crumbs .ic { font-size: 13px; }
+.crumbs .back { width: 32px; height: 32px; display: grid; place-items: center; margin-left: -6px;
+  border-radius: var(--r-md); background: var(--surface-2); color: var(--ink); font-size: 18px; flex: none; }
+.crumbs .back .ic { font-size: 18px; }
+.crumbs .here { color: var(--ink); font-weight: 600; }
+.detail-media { height: 150px; border-radius: var(--r-lg); border: 1px solid var(--hairline-card); }
+.detail-actions { display: flex; gap: var(--s-xs); margin: 11px 0 12px; }
+.detail-actions .btn--primary { flex: 1; }
+.seg { display: flex; gap: 2px; padding: 3px; background: var(--surface-1);
+  border: 1px solid var(--hairline-card); border-radius: var(--r-md); margin-bottom: 12px; }
+.seg button { flex: 1; height: 30px; border-radius: var(--r-sm); color: var(--ink-muted);
+  font: 500 13px/1 var(--font); transition: background-color var(--dur-s) var(--ease); }
+.seg button.is-on { background: var(--id-fotos); color: #fff; font-weight: 600; }
+.photo-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.photo { aspect-ratio: 1; border-radius: var(--r-md); border: 1px solid var(--hairline-card); }
+.music-card { display: flex; align-items: center; gap: var(--s-sm); margin: 12px 0; padding: 12px;
+  background: var(--surface-1); border: 1px solid var(--hairline-card); border-radius: var(--r-lg); }
+.music-card .thumb { width: 44px; height: 44px; }
+.music-card .grow { flex: 1; min-width: 0; }
+
+/* ---------- Navigation unten: eckige Felder, kein Pillen-Dock ---------- */
+.tabbar { position: absolute; left: 0; right: 0; bottom: 0; height: 76px; z-index: 20;
+  display: flex; align-items: flex-start; gap: 6px; padding: 8px 12px 0;
+  background: var(--canvas); border-top: 1px solid var(--hairline-soft); }
+.tab { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px;
+  padding: 7px 0 6px; border-radius: var(--r-md); color: var(--ink-subtle);
+  font: 600 11px/1.2 var(--font); letter-spacing: .3px;
+  transition: background-color var(--dur-s) var(--ease), color var(--dur-s) var(--ease); }
+.tab .ic { font-size: 20px; }
+.tab.is-on { background: var(--surface-2); color: var(--ink); box-shadow: inset 0 0 0 1px var(--hairline-card); }
+.tab-avatar { width: 20px; height: 20px; border-radius: var(--r-pill); box-shadow: inset 0 0 0 1px var(--hairline); }
+
+/* ---------- Auslaufen nach unten (Scrollandeutung) ---------- */
+.fade { position: absolute; left: 0; right: 0; bottom: 76px; height: 56px; z-index: 10; pointer-events: none;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0), var(--canvas)); }
+
+/* ---------- Bewegung: knapp, ohne Überschwingen ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+  .band { animation: rise var(--dur-m) var(--ease) both; }
+  .band:nth-child(2) { animation-delay: 40ms; }
+  .band:nth-child(3) { animation-delay: 80ms; }
+}
+</style></head>
+<body>
+<div class="ms-wrap"><main class="stage">
+
+<!-- ================================ START ================================ -->
+<figure class="shot"><figcaption>Start</figcaption><section class="phone" id="start">
+  <div class="sb"><span>9:41</span><span class="sb-icons"><svg class="ic ic-p ic-ph-fill" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-fill:cell-signal-full"><path d="M208,40V200a16,16,0,0,1-16,16H32A16,16,0,0,1,20.7,188.68l160-160A16,16,0,0,1,208,40Z"/></svg><svg class="ic ic-p ic-ph-fill" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-fill:wifi-high"><path d="M244.35,92.8l-104,125.43A15.93,15.93,0,0,1,128,224h0a15.93,15.93,0,0,1-12.31-5.77L11.65,92.8A15.65,15.65,0,0,1,8.11,80.91,15.93,15.93,0,0,1,14.28,70.1,186.67,186.67,0,0,1,128,32,186.67,186.67,0,0,1,241.72,70.1a15.93,15.93,0,0,1,6.17,10.81A15.65,15.65,0,0,1,244.35,92.8Z"/></svg><svg class="ic ic-p ic-ph-fill" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-fill:battery-full"><path d="M200,56H32A24,24,0,0,0,8,80v96a24,24,0,0,0,24,24H200a24,24,0,0,0,24-24V80A24,24,0,0,0,200,56Zm8,120a8,8,0,0,1-8,8H32a8,8,0,0,1-8-8V80a8,8,0,0,1,8-8H200a8,8,0,0,1,8,8ZM192,96v64a8,8,0,0,1-8,8H48a8,8,0,0,1-8-8V96a8,8,0,0,1,8-8H184A8,8,0,0,1,192,96Zm64,0v64a8,8,0,0,1-16,0V96a8,8,0,0,1,16,0Z"/></svg></span></div>
+
+  <header class="top-nav">
+    <div class="brand">
+      <span class="brand-mark"><svg viewBox="0 0 32 36" aria-hidden="true"><path d="M16 1.5 30.5 9.8 16 18.1 1.5 9.8Z" fill="currentColor" opacity=".95"/><path d="M1.5 12.1 14.8 19.7v14.8L1.5 26.9Z" fill="currentColor" opacity=".5"/><path d="M30.5 12.1 17.2 19.7v14.8l13.3-7.6Z" fill="currentColor" opacity=".28"/></svg></span>
+      <span class="brand-name">Medien</span>
+    </div>
+    <div class="nav-actions">
+      <button class="icon-btn icon-btn--bare" type="button" aria-label="Hinweise"><svg class="ic ic-p ic-ph-regular" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-regular:bell"><path d="M221.8,175.94C216.25,166.38,208,139.33,208,104a80,80,0,1,0-160,0c0,35.34-8.26,62.38-13.81,71.94A16,16,0,0,0,48,200H88.81a40,40,0,0,0,78.38,0H208a16,16,0,0,0,13.8-24.06ZM128,216a24,24,0,0,1-22.62-16h45.24A24,24,0,0,1,128,216ZM48,184c7.7-13.24,16-43.92,16-80a64,64,0,1,1,128,0c0,36.05,8.28,66.73,16,80Z"/></svg></button>
+      <button class="btn btn--primary btn--sm" type="button"><svg class="ic ic-p ic-ph-bold" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-bold:plus"><path d="M228,128a12,12,0,0,1-12,12H140v76a12,12,0,0,1-24,0V140H40a12,12,0,0,1,0-24h76V40a12,12,0,0,1,24,0v76h76A12,12,0,0,1,228,128Z"/></svg>Importieren</button>
+    </div>
+  </header>
+
+  <div class="content">
+    <section class="band">
+      <p class="eyebrow">Rückblick · vor einem Jahr</p>
+      <h1 class="display hero-title">Herbstwald</h1>
+      <p class="body hero-meta tnum">86 Fotos · Okt. 2024 · aus Google Fotos</p>
+      <div class="hero-actions">
+        <button class="btn btn--primary" type="button"><svg class="ic ic-p ic-ph-fill" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-fill:play"><path d="M240,128a15.74,15.74,0,0,1-7.6,13.51L88.32,229.65a16,16,0,0,1-16.2.3A15.86,15.86,0,0,1,64,216.13V39.87a15.86,15.86,0,0,1,8.12-13.82,16,16,0,0,1,16.2.3L232.4,114.49A15.74,15.74,0,0,1,240,128Z"/></svg>Diashow starten</button>
+        <button class="btn btn--secondary" type="button">Zum Album</button>
+      </div>
+      <div class="media scene-herbst"></div>
+    </section>
+
+    <section class="band">
+      <div class="band-head"><p class="eyebrow">Sammlungen</p><span class="caption tnum">4 Arten</span></div>
+      <div class="id-grid">
+        <article class="id-card id--fotos">
+          <svg class="cube" viewBox="0 0 32 36" aria-hidden="true"><path d="M16 1.5 30.5 9.8 16 18.1 1.5 9.8Z" fill="currentColor" opacity=".9"/><path d="M1.5 12.1 14.8 19.7v14.8L1.5 26.9Z" fill="currentColor" opacity=".55"/><path d="M30.5 12.1 17.2 19.7v14.8l13.3-7.6Z" fill="currentColor" opacity=".3"/></svg>
+          <p class="id-kind">Bilder</p>
+          <div><p class="id-name">Fotos</p><p class="id-count tnum">1.248 Dateien</p></div>
+        </article>
+        <article class="id-card id--videos">
+          <svg class="cube" viewBox="0 0 32 36" aria-hidden="true"><path d="M16 1.5 30.5 9.8 16 18.1 1.5 9.8Z" fill="currentColor" opacity=".9"/><path d="M1.5 12.1 14.8 19.7v14.8L1.5 26.9Z" fill="currentColor" opacity=".55"/><path d="M30.5 12.1 17.2 19.7v14.8l13.3-7.6Z" fill="currentColor" opacity=".3"/></svg>
+          <p class="id-kind">Bewegt</p>
+          <div><p class="id-name">Videos</p><p class="id-count tnum">96 Dateien</p></div>
+        </article>
+        <article class="id-card id--musik">
+          <svg class="cube" viewBox="0 0 32 36" aria-hidden="true"><path d="M16 1.5 30.5 9.8 16 18.1 1.5 9.8Z" fill="currentColor" opacity=".9"/><path d="M1.5 12.1 14.8 19.7v14.8L1.5 26.9Z" fill="currentColor" opacity=".55"/><path d="M30.5 12.1 17.2 19.7v14.8l13.3-7.6Z" fill="currentColor" opacity=".3"/></svg>
+          <p class="id-kind">Ton</p>
+          <div><p class="id-name">Musik</p><p class="id-count tnum">312 Titel</p></div>
+        </article>
+        <article class="id-card id--alben">
+          <svg class="cube" viewBox="0 0 32 36" aria-hidden="true"><path d="M16 1.5 30.5 9.8 16 18.1 1.5 9.8Z" fill="currentColor" opacity=".9"/><path d="M1.5 12.1 14.8 19.7v14.8L1.5 26.9Z" fill="currentColor" opacity=".55"/><path d="M30.5 12.1 17.2 19.7v14.8l13.3-7.6Z" fill="currentColor" opacity=".3"/></svg>
+          <p class="id-kind">Gruppiert</p>
+          <div><p class="id-name">Alben</p><p class="id-count tnum">8 Sammlungen</p></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="band">
+      <div class="band-head"><p class="eyebrow">Quellen und Speicher</p><span class="caption tnum">412 / 600 GB</span></div>
+      <div class="meter"><i style="width:69%"></i></div>
+      <div class="table">
+        <div class="thead"><span>Quelle</span><span>Zustand</span><span>Belegt</span></div>
+        <div class="trow">
+          <span class="t-name"><svg class="ic ic-p ic-ph-regular" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-regular:cloud"><path d="M160,40A88.09,88.09,0,0,0,81.29,88.67,64,64,0,1,0,72,216h88a88,88,0,0,0,0-176Zm0,160H72a48,48,0,0,1,0-96c1.1,0,2.2,0,3.29.11A88,88,0,0,0,72,128a8,8,0,0,0,16,0,72,72,0,1,1,72,72Z"/></svg>Google Fotos</span>
+          <span class="t-state"><span class="dot dot--ok"></span>Aktuell</span>
+          <span class="t-size tnum">214 GB</span>
+        </div>
+        <div class="trow">
+          <span class="t-name"><svg class="ic ic-p ic-ph-regular" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-regular:hard-drives"><path d="M208,136H48a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V152A16,16,0,0,0,208,136Zm0,64H48V152H208v48Zm0-160H48A16,16,0,0,0,32,56v48a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V56A16,16,0,0,0,208,40Zm0,64H48V56H208v48ZM192,80a12,12,0,1,1-12-12A12,12,0,0,1,192,80Zm0,96a12,12,0,1,1-12-12A12,12,0,0,1,192,176Z"/></svg>NAS</span>
+          <span class="t-state"><span class="dot dot--sync"></span>Abgleich</span>
+          <span class="t-size tnum">186 GB</span>
+        </div>
+        <div class="trow">
+          <span class="t-name"><svg class="ic ic-p ic-ph-regular" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-regular:usb"><path d="M252.44,121.34l-48-32A8,8,0,0,0,192,96v24H72V72h33a32,32,0,1,0,0-16H72A16,16,0,0,0,56,72v48H8a8,8,0,0,0,0,16H56v48a16,16,0,0,0,16,16h32v8a16,16,0,0,0,16,16h32a16,16,0,0,0,16-16V176a16,16,0,0,0-16-16H120a16,16,0,0,0-16,16v8H72V136H192v24a8,8,0,0,0,12.44,6.66l48-32a8,8,0,0,0,0-13.32ZM136,48a16,16,0,1,1-16,16A16,16,0,0,1,136,48ZM120,176h32v32H120Zm88-30.95V111l25.58,17Z"/></svg>USB-Stick</span>
+          <span class="t-state"><span class="dot dot--off"></span>Getrennt</span>
+          <span class="t-size tnum">12 GB</span>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="fade"></div>
+  <nav class="tabbar" aria-label="Navigation">
+    <button class="tab is-on" type="button"><svg class="ic ic-p ic-ph-bold" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-bold:house"><path d="M222.14,105.85l-80-80a20,20,0,0,0-28.28,0l-80,80A19.86,19.86,0,0,0,28,120v96a12,12,0,0,0,12,12h64a12,12,0,0,0,12-12V164h24v52a12,12,0,0,0,12,12h64a12,12,0,0,0,12-12V120A19.86,19.86,0,0,0,222.14,105.85ZM204,204H164V152a12,12,0,0,0-12-12H104a12,12,0,0,0-12,12v52H52V121.65l76-76,76,76Z"/></svg>Start</button>
+    <button class="tab" type="button"><svg class="ic ic-p ic-ph-regular" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-regular:stack"><path d="M230.91,172A8,8,0,0,1,228,182.91l-96,56a8,8,0,0,1-8.06,0l-96-56A8,8,0,0,1,36,169.09l92,53.65,92-53.65A8,8,0,0,1,230.91,172ZM220,121.09l-92,53.65L36,121.09A8,8,0,0,0,28,134.91l96,56a8,8,0,0,0,8.06,0l96-56A8,8,0,1,0,220,121.09ZM24,80a8,8,0,0,1,4-6.91l96-56a8,8,0,0,1,8.06,0l96,56a8,8,0,0,1,0,13.82l-96,56a8,8,0,0,1-8.06,0l-96-56A8,8,0,0,1,24,80Zm23.88,0L128,126.74,208.12,80,128,33.26Z"/></svg>Bibliothek</button>
+    <button class="tab" type="button"><svg class="ic ic-p ic-ph-regular" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-regular:magnifying-glass"><path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"/></svg>Suche</button>
+    <button class="tab" type="button"><span class="tab-avatar scene-person"></span>Profil</button>
+  </nav>
+  <div class="hi"></div>
+</section></figure>
+
+<!-- ============================= BIBLIOTHEK ============================== -->
+<figure class="shot"><figcaption>Bibliothek</figcaption><section class="phone" id="bibliothek">
+  <div class="sb"><span>9:41</span><span class="sb-icons"><svg class="ic ic-p ic-ph-fill" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-fill:cell-signal-full"><path d="M208,40V200a16,16,0,0,1-16,16H32A16,16,0,0,1,20.7,188.68l160-160A16,16,0,0,1,208,40Z"/></svg><svg class="ic ic-p ic-ph-fill" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-fill:wifi-high"><path d="M244.35,92.8l-104,125.43A15.93,15.93,0,0,1,128,224h0a15.93,15.93,0,0,1-12.31-5.77L11.65,92.8A15.65,15.65,0,0,1,8.11,80.91,15.93,15.93,0,0,1,14.28,70.1,186.67,186.67,0,0,1,128,32,186.67,186.67,0,0,1,241.72,70.1a15.93,15.93,0,0,1,6.17,10.81A15.65,15.65,0,0,1,244.35,92.8Z"/></svg><svg class="ic ic-p ic-ph-fill" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-fill:battery-full"><path d="M200,56H32A24,24,0,0,0,8,80v96a24,24,0,0,0,24,24H200a24,24,0,0,0,24-24V80A24,24,0,0,0,200,56Zm8,120a8,8,0,0,1-8,8H32a8,8,0,0,1-8-8V80a8,8,0,0,1,8-8H200a8,8,0,0,1,8,8ZM192,96v64a8,8,0,0,1-8,8H48a8,8,0,0,1-8-8V96a8,8,0,0,1,8-8H184A8,8,0,0,1,192,96Zm64,0v64a8,8,0,0,1-16,0V96a8,8,0,0,1,16,0Z"/></svg></span></div>
+
+  <header class="top-nav">
+    <h1 class="card-title">Bibliothek</h1>
+    <div class="nav-actions">
+      <button class="icon-btn icon-btn--bare" type="button" aria-label="Anzeige"><svg class="ic ic-p ic-ph-regular" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-regular:sliders-horizontal"><path d="M40,88H73a32,32,0,0,0,62,0h81a8,8,0,0,0,0-16H135a32,32,0,0,0-62,0H40a8,8,0,0,0,0,16Zm64-24A16,16,0,1,1,88,80,16,16,0,0,1,104,64ZM216,168H199a32,32,0,0,0-62,0H40a8,8,0,0,0,0,16h97a32,32,0,0,0,62,0h17a8,8,0,0,0,0-16Zm-48,24a16,16,0,1,1,16-16A16,16,0,0,1,168,192Z"/></svg></button>
+      <button class="icon-btn" type="button" aria-label="Hinzufügen"><svg class="ic ic-p ic-ph-bold" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-bold:plus"><path d="M228,128a12,12,0,0,1-12,12H140v76a12,12,0,0,1-24,0V140H40a12,12,0,0,1,0-24h76V40a12,12,0,0,1,24,0v76h76A12,12,0,0,1,228,128Z"/></svg></button>
+    </div>
+  </header>
+
+  <div class="content">
+    <div class="search"><svg class="ic ic-p ic-ph-regular" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-regular:magnifying-glass"><path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"/></svg>Alben, Fotos und Titel suchen</div>
+    <div class="chips">
+      <button class="chip is-on" type="button">Alle</button>
+      <button class="chip" type="button">Fotos</button>
+      <button class="chip" type="button">Videos</button>
+      <button class="chip" type="button">Musik</button>
+      <button class="chip" type="button">Alben</button>
+    </div>
+
+    <div class="lib-head"><span>8 Einträge · neueste zuerst</span><span>Art</span></div>
+
+    <div class="lib-row">
+      <div class="lib-main"><span class="thumb scene-see"></span>
+        <div class="lib-text"><p class="title-sm">Sommer am See</p><p class="caption tnum">128 Fotos</p></div></div>
+      <div class="lib-side"><span class="tag tag--alben">Album</span><span class="lib-when tnum">Aug. 2025</span></div>
+    </div>
+    <div class="lib-row">
+      <div class="lib-main"><span class="thumb scene-lissabon"></span>
+        <div class="lib-text"><p class="title-sm">Lissabon</p><p class="caption tnum">342 Fotos · 18 Videos</p></div></div>
+      <div class="lib-side"><span class="tag tag--alben">Album</span><span class="lib-when tnum">Mai 2025</span></div>
+    </div>
+    <div class="lib-row">
+      <div class="lib-main"><span class="thumb scene-wien"></span>
+        <div class="lib-text"><p class="title-sm">Winter in Wien</p><p class="caption tnum">203 Fotos</p></div></div>
+      <div class="lib-side"><span class="tag tag--alben">Album</span><span class="lib-when tnum">Jan. 2025</span></div>
+    </div>
+    <div class="lib-row">
+      <div class="lib-main"><span class="thumb scene-konzert"></span>
+        <div class="lib-text"><p class="title-sm">Konzert im Park</p><p class="caption tnum">12 Videos · 1:04 Std.</p></div></div>
+      <div class="lib-side"><span class="tag tag--videos">Videos</span><span class="lib-when tnum">Juli 2025</span></div>
+    </div>
+    <div class="lib-row">
+      <div class="lib-main"><span class="thumb scene-nacht"></span>
+        <div class="lib-text"><p class="title-sm">Nachtfahrt</p><p class="caption tnum">24 Titel · 1 Std. 32 Min.</p></div></div>
+      <div class="lib-side"><span class="tag tag--musik">Playlist</span><span class="lib-when tnum">Juni 2025</span></div>
+    </div>
+    <div class="lib-row">
+      <div class="lib-main"><span class="thumb scene-herbst"></span>
+        <div class="lib-text"><p class="title-sm">Herbstwald</p><p class="caption tnum">86 Fotos</p></div></div>
+      <div class="lib-side"><span class="tag tag--alben">Album</span><span class="lib-when tnum">Okt. 2024</span></div>
+    </div>
+    <div class="lib-row">
+      <div class="lib-main"><span class="thumb scene-studio"></span>
+        <div class="lib-text"><p class="title-sm">Studio-Sessions</p><p class="caption tnum">11 Titel · 48 Min.</p></div></div>
+      <div class="lib-side"><span class="tag tag--musik">Musik</span><span class="lib-when tnum">Sept. 2024</span></div>
+    </div>
+    <div class="lib-row">
+      <div class="lib-main"><span class="thumb scene-film"></span>
+        <div class="lib-text"><p class="title-sm">Kurzfilme 2024</p><p class="caption tnum">7 Videos · 38 Min.</p></div></div>
+      <div class="lib-side"><span class="tag tag--videos">Videos</span><span class="lib-when tnum">Dez. 2024</span></div>
+    </div>
+  </div>
+
+  <div class="fade"></div>
+  <nav class="tabbar" aria-label="Navigation">
+    <button class="tab" type="button"><svg class="ic ic-p ic-ph-regular" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-regular:house"><path d="M219.31,108.68l-80-80a16,16,0,0,0-22.62,0l-80,80A15.87,15.87,0,0,0,32,120v96a8,8,0,0,0,8,8h64a8,8,0,0,0,8-8V160h32v56a8,8,0,0,0,8,8h64a8,8,0,0,0,8-8V120A15.87,15.87,0,0,0,219.31,108.68ZM208,208H160V152a8,8,0,0,0-8-8H104a8,8,0,0,0-8,8v56H48V120l80-80,80,80Z"/></svg>Start</button>
+    <button class="tab is-on" type="button"><svg class="ic ic-p ic-ph-bold" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-bold:stack"><path d="M234.36,170A12,12,0,0,1,230,186.37l-96,56a12,12,0,0,1-12.1,0l-96-56a12,12,0,0,1,12.09-20.74l90,52.48L218,165.63A12,12,0,0,1,234.36,170ZM218,117.63,128,170.11,38.05,117.63A12,12,0,0,0,26,138.37l96,56a12,12,0,0,0,12.1,0l96-56A12,12,0,0,0,218,117.63ZM20,80a12,12,0,0,1,6-10.37l96-56a12.06,12.06,0,0,1,12.1,0l96,56a12,12,0,0,1,0,20.74l-96,56a12,12,0,0,1-12.1,0l-96-56A12,12,0,0,1,20,80Zm35.82,0L128,122.11,200.18,80,128,37.89Z"/></svg>Bibliothek</button>
+    <button class="tab" type="button"><svg class="ic ic-p ic-ph-regular" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-regular:magnifying-glass"><path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"/></svg>Suche</button>
+    <button class="tab" type="button"><span class="tab-avatar scene-person"></span>Profil</button>
+  </nav>
+  <div class="hi"></div>
+</section></figure>
+
+<!-- =============================== DETAIL ================================ -->
+<figure class="shot"><figcaption>Detail</figcaption><section class="phone" id="detail">
+  <div class="sb"><span>9:41</span><span class="sb-icons"><svg class="ic ic-p ic-ph-fill" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-fill:cell-signal-full"><path d="M208,40V200a16,16,0,0,1-16,16H32A16,16,0,0,1,20.7,188.68l160-160A16,16,0,0,1,208,40Z"/></svg><svg class="ic ic-p ic-ph-fill" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-fill:wifi-high"><path d="M244.35,92.8l-104,125.43A15.93,15.93,0,0,1,128,224h0a15.93,15.93,0,0,1-12.31-5.77L11.65,92.8A15.65,15.65,0,0,1,8.11,80.91,15.93,15.93,0,0,1,14.28,70.1,186.67,186.67,0,0,1,128,32,186.67,186.67,0,0,1,241.72,70.1a15.93,15.93,0,0,1,6.17,10.81A15.65,15.65,0,0,1,244.35,92.8Z"/></svg><svg class="ic ic-p ic-ph-fill" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-fill:battery-full"><path d="M200,56H32A24,24,0,0,0,8,80v96a24,24,0,0,0,24,24H200a24,24,0,0,0,24-24V80A24,24,0,0,0,200,56Zm8,120a8,8,0,0,1-8,8H32a8,8,0,0,1-8-8V80a8,8,0,0,1,8-8H200a8,8,0,0,1,8,8ZM192,96v64a8,8,0,0,1-8,8H48a8,8,0,0,1-8-8V96a8,8,0,0,1,8-8H184A8,8,0,0,1,192,96Zm64,0v64a8,8,0,0,1-16,0V96a8,8,0,0,1,16,0Z"/></svg></span></div>
+
+  <header class="top-nav">
+    <nav class="crumbs" aria-label="Pfad">
+      <button class="back" type="button" aria-label="Zurück"><svg class="ic ic-p ic-ph-bold" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-bold:caret-left"><path d="M168.49,199.51a12,12,0,0,1-17,17l-80-80a12,12,0,0,1,0-17l80-80a12,12,0,0,1,17,17L97,128Z"/></svg></button>
+      <span>Alben</span><svg class="ic ic-p ic-ph-bold" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-bold:caret-right"><path d="M184.49,136.49l-80,80a12,12,0,0,1-17-17L159,128,87.51,56.49a12,12,0,1,1,17-17l80,80A12,12,0,0,1,184.49,136.49Z"/></svg><span class="here">Lissabon</span>
+    </nav>
+    <div class="nav-actions">
+      <button class="icon-btn icon-btn--bare" type="button" aria-label="Favorit"><svg class="ic ic-p ic-ph-regular" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-regular:star"><path d="M239.18,97.26A16.38,16.38,0,0,0,224.92,86l-59-4.76L143.14,26.15a16.36,16.36,0,0,0-30.27,0L90.11,81.23,31.08,86a16.46,16.46,0,0,0-9.37,28.86l45,38.83L53,211.75a16.38,16.38,0,0,0,24.5,17.82L128,198.49l50.53,31.08A16.4,16.4,0,0,0,203,211.75l-13.76-58.07,45-38.83A16.43,16.43,0,0,0,239.18,97.26Zm-15.34,5.47-48.7,42a8,8,0,0,0-2.56,7.91l14.88,62.8a.37.37,0,0,1-.17.48c-.18.14-.23.11-.38,0l-54.72-33.65a8,8,0,0,0-8.38,0L69.09,215.94c-.15.09-.19.12-.38,0a.37.37,0,0,1-.17-.48l14.88-62.8a8,8,0,0,0-2.56-7.91l-48.7-42c-.12-.1-.23-.19-.13-.5s.18-.27.33-.29l63.92-5.16A8,8,0,0,0,103,91.86l24.62-59.61c.08-.17.11-.25.35-.25s.27.08.35.25L153,91.86a8,8,0,0,0,6.75,4.92l63.92,5.16c.15,0,.24,0,.33.29S224,102.63,223.84,102.73Z"/></svg></button>
+      <button class="icon-btn icon-btn--bare" type="button" aria-label="Mehr"><svg class="ic ic-p ic-ph-regular" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-regular:dots-three"><path d="M140,128a12,12,0,1,1-12-12A12,12,0,0,1,140,128Zm56-12a12,12,0,1,0,12,12A12,12,0,0,0,196,116ZM60,116a12,12,0,1,0,12,12A12,12,0,0,0,60,116Z"/></svg></button>
+    </div>
+  </header>
+
+  <div class="content">
+    <section class="band">
+      <div class="detail-media scene-lissabon"></div>
+      <p class="eyebrow" style="margin-top:12px">Album · Mai 2025</p>
+      <h1 class="display hero-title">Lissabon</h1>
+      <p class="body hero-meta tnum">342 Fotos · 18 Videos · 1 Std. 12 Min. Diashow</p>
+      <div class="detail-actions">
+        <button class="btn btn--primary" type="button"><svg class="ic ic-p ic-ph-fill" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-fill:play"><path d="M240,128a15.74,15.74,0,0,1-7.6,13.51L88.32,229.65a16,16,0,0,1-16.2.3A15.86,15.86,0,0,1,64,216.13V39.87a15.86,15.86,0,0,1,8.12-13.82,16,16,0,0,1,16.2.3L232.4,114.49A15.74,15.74,0,0,1,240,128Z"/></svg>Diashow starten</button>
+        <button class="icon-btn" type="button" aria-label="Teilen"><svg class="ic ic-p ic-ph-regular" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-regular:share-network"><path d="M176,160a39.89,39.89,0,0,0-28.62,12.09l-46.1-29.63a39.8,39.8,0,0,0,0-28.92l46.1-29.63a40,40,0,1,0-8.66-13.45l-46.1,29.63a40,40,0,1,0,0,55.82l46.1,29.63A40,40,0,1,0,176,160Zm0-128a24,24,0,1,1-24,24A24,24,0,0,1,176,32ZM64,152a24,24,0,1,1,24-24A24,24,0,0,1,64,152Zm112,72a24,24,0,1,1,24-24A24,24,0,0,1,176,224Z"/></svg></button>
+        <button class="icon-btn" type="button" aria-label="Favorit"><svg class="ic ic-p ic-ph-regular" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-regular:heart"><path d="M178,40c-20.65,0-38.73,8.88-50,23.89C116.73,48.88,98.65,40,78,40a62.07,62.07,0,0,0-62,62c0,70,103.79,126.66,108.21,129a8,8,0,0,0,7.58,0C136.21,228.66,240,172,240,102A62.07,62.07,0,0,0,178,40ZM128,214.8C109.74,204.16,32,155.69,32,102A46.06,46.06,0,0,1,78,56c19.45,0,35.78,10.36,42.6,27a8,8,0,0,0,14.8,0c6.82-16.67,23.15-27,42.6-27a46.06,46.06,0,0,1,46,46C224,155.61,146.24,204.15,128,214.8Z"/></svg></button>
+      </div>
+      <div class="music-card">
+        <span class="thumb scene-nacht"></span>
+        <div class="grow">
+          <p class="eyebrow">Musik zur Diashow</p>
+          <p class="title-sm" style="margin-top:2px">Nachtfahrt · 24 Titel</p>
+        </div>
+        <button class="btn btn--secondary btn--sm" type="button">Ändern</button>
+      </div>
+      <div class="seg" role="tablist">
+        <button class="is-on" type="button">Fotos 342</button>
+        <button type="button">Videos 18</button>
+        <button type="button">Orte 6</button>
+      </div>
+      <div class="photo-grid">
+        <span class="photo scene-lissabon crop-1"></span>
+        <span class="photo scene-lissabon crop-4"></span>
+        <span class="photo scene-lissabon crop-9"></span>
+        <span class="photo scene-lissabon crop-7"></span>
+        <span class="photo scene-lissabon crop-11"></span>
+        <span class="photo scene-lissabon crop-2"></span>
+        <span class="photo scene-lissabon crop-5"></span>
+        <span class="photo scene-lissabon crop-7"></span>
+        <span class="photo scene-lissabon crop-3"></span>
+        <span class="photo scene-lissabon crop-10"></span>
+        <span class="photo scene-lissabon crop-12"></span>
+        <span class="photo scene-lissabon crop-8"></span>
+      </div>
+    </section>
+  </div>
+
+  <div class="fade"></div>
+  <nav class="tabbar" aria-label="Navigation">
+    <button class="tab" type="button"><svg class="ic ic-p ic-ph-regular" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-regular:house"><path d="M219.31,108.68l-80-80a16,16,0,0,0-22.62,0l-80,80A15.87,15.87,0,0,0,32,120v96a8,8,0,0,0,8,8h64a8,8,0,0,0,8-8V160h32v56a8,8,0,0,0,8,8h64a8,8,0,0,0,8-8V120A15.87,15.87,0,0,0,219.31,108.68ZM208,208H160V152a8,8,0,0,0-8-8H104a8,8,0,0,0-8,8v56H48V120l80-80,80,80Z"/></svg>Start</button>
+    <button class="tab is-on" type="button"><svg class="ic ic-p ic-ph-bold" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-bold:stack"><path d="M234.36,170A12,12,0,0,1,230,186.37l-96,56a12,12,0,0,1-12.1,0l-96-56a12,12,0,0,1,12.09-20.74l90,52.48L218,165.63A12,12,0,0,1,234.36,170ZM218,117.63,128,170.11,38.05,117.63A12,12,0,0,0,26,138.37l96,56a12,12,0,0,0,12.1,0l96-56A12,12,0,0,0,218,117.63ZM20,80a12,12,0,0,1,6-10.37l96-56a12.06,12.06,0,0,1,12.1,0l96,56a12,12,0,0,1,0,20.74l-96,56a12,12,0,0,1-12.1,0l-96-56A12,12,0,0,1,20,80Zm35.82,0L128,122.11,200.18,80,128,37.89Z"/></svg>Bibliothek</button>
+    <button class="tab" type="button"><svg class="ic ic-p ic-ph-regular" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-regular:magnifying-glass"><path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"/></svg>Suche</button>
+    <button class="tab" type="button"><span class="tab-avatar scene-person"></span>Profil</button>
+  </nav>
+  <div class="hi"></div>
+</section></figure>
+
+</main><footer class="ms-foot"><b>HashiCorp-Stil</b> · Ansatz: Daten und Zahlen + Präzises Werkzeug · eigene Musterscreens mit Beispielinhalten, keine Originalscreens der Marke</footer></div>
+</body></html>

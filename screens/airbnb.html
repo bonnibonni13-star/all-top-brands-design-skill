@@ -1,0 +1,591 @@
+<!doctype html>
+<html lang="de"><head><meta charset="utf-8"><style id="ms-base">
+/* Musterscreens – Basis. Wird vom Renderer vor die eigenen Stile gesetzt; eigene Regeln überschreiben sie.
+   Platzhalter der Form „{{scene:<name>}}“ ersetzt der Renderer durch das SVG aus scenes/<name>.svg. */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body { background: #e7e7eb; font-family: Inter, "DejaVu Sans", sans-serif; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+.ms-wrap { display: inline-block; background: #e7e7eb; }
+.stage { display: flex; gap: 40px; align-items: flex-start; padding: 48px 48px 20px; width: max-content; }
+.shot { margin: 0; display: flex; flex-direction: column; gap: 14px; }
+.shot > figcaption { font: 600 13px/1 Inter, "DejaVu Sans", sans-serif; letter-spacing: .08em; text-transform: uppercase; color: #6b6b74; padding-left: 8px; }
+.phone { position: relative; width: 390px; height: 844px; overflow: hidden; border-radius: 40px; isolation: isolate;
+  box-shadow: 0 0 0 1px rgba(0,0,0,.06), 0 18px 50px rgba(0,0,0,.14); }
+.ms-foot { font: 500 13px/1.4 Inter, "DejaVu Sans", sans-serif; color: #6b6b74; padding: 0 56px 30px; }
+.ms-foot b { color: #3a3a40; font-weight: 600; }
+
+/* Rücksetzungen ohne Spezifität: eigene Klassen gewinnen immer. Eigene Resets bitte ebenfalls mit :where(). */
+:where(.phone) :where(h1, h2, h3, h4, h5, h6, p, ul, ol, li, figure, blockquote, dl, dd) { margin: 0; padding: 0; }
+:where(.phone) :where(ul, ol) { list-style: none; }
+:where(.phone) :where(button, input, select, textarea) { font: inherit; color: inherit; background: none; border: 0; padding: 0; margin: 0; }
+
+/* Icons: <i data-icon="lucide:house"></i> oder <i data-icon="ph-bold:house"></i> → Inline-SVG mit Klasse .ic */
+.ic { width: 1em; height: 1em; display: inline-block; vertical-align: -0.125em; flex: none; }
+.ic-missing { outline: 2px dashed red; }
+
+/* Statusleiste und Gestenleiste */
+.sb { height: 46px; display: flex; align-items: center; justify-content: space-between; padding: 4px 26px 0 32px;
+  font: 600 15px/1 Inter, "DejaVu Sans", sans-serif; position: relative; z-index: 30; }
+.sb-icons { display: flex; gap: 6px; font-size: 16px; align-items: center; }
+.hi { position: absolute; left: 50%; bottom: 8px; width: 134px; height: 5px; border-radius: 3px; transform: translateX(-50%);
+  background: currentColor; opacity: .45; z-index: 40; }
+
+/* Bilder (abstrakte Motive, gleich für alle Marken). Ausschnitt per background-position/-size, Behandlung frei. */
+[class*="scene-"] { background-size: cover; background-position: center; background-repeat: no-repeat; }
+.scene-see { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300' preserveAspectRatio='xMidYMid slice'%3E%3Cdefs%3E%3ClinearGradient id='a' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%2386cdf6'/%3E%3Cstop offset='.64' stop-color='%23ffe4b5'/%3E%3C/linearGradient%3E%3ClinearGradient id='b' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%234fb3cc'/%3E%3Cstop offset='1' stop-color='%231c627d'/%3E%3C/linearGradient%3E%3CradialGradient id='g'%3E%3Cstop offset='0' stop-color='%23fff6dc'/%3E%3Cstop offset='1' stop-color='%23fff6dc' stop-opacity='0'/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect width='400' height='300' fill='url(%23a)'/%3E%3Ccircle cx='296' cy='138' r='70' fill='url(%23g)'/%3E%3Ccircle cx='296' cy='138' r='26' fill='%23fff4d2'/%3E%3Cpath d='M0 176C60 148 112 156 162 166S250 146 312 152 380 168 400 164V300H0Z' fill='%2386b596'/%3E%3Cpath d='M0 190C80 174 140 188 200 184S322 170 400 182V300H0Z' fill='%234c8764'/%3E%3Crect y='198' width='400' height='102' fill='url(%23b)'/%3E%3Cpath d='M262 212H330M30 230H150M210 248H372M80 268H190' stroke='%23c9eef6' stroke-width='3' stroke-linecap='round' opacity='.45'/%3E%3Cpath d='M120 199l18-12 4 12z' fill='%23fdfdfd'/%3E%3Cpath d='M137 186v14' stroke='%23fdfdfd' stroke-width='2'/%3E%3C/svg%3E"); }
+.scene-lissabon { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300' preserveAspectRatio='xMidYMid slice'%3E%3Cdefs%3E%3ClinearGradient id='a' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23ffd9a3'/%3E%3Cstop offset='1' stop-color='%23f39a63'/%3E%3C/linearGradient%3E%3Cpattern id='w' width='18' height='24' patternUnits='userSpaceOnUse'%3E%3Crect x='6' y='7' width='6' height='10' rx='1' fill='%235b3428' opacity='.38'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width='400' height='300' fill='url(%23a)'/%3E%3Ccircle cx='84' cy='80' r='26' fill='%23fff2d4'/%3E%3Cpath d='M0 168h64v132H0z' fill='%23f6e6c8'/%3E%3Cpath d='M-4 170l36-20 36 20z' fill='%23c5513a'/%3E%3Cpath d='M64 146h72v154H64z' fill='%23eaa7a1'/%3E%3Cpath d='M60 148l40-24 40 24z' fill='%23b2412c'/%3E%3Cpath d='M136 180h56v120h-56z' fill='%239fc6d8'/%3E%3Cpath d='M132 182l32-18 32 18z' fill='%23c5513a'/%3E%3Cpath d='M192 136h84v164h-84z' fill='%23e3a65a'/%3E%3Cpath d='M188 138l46-26 46 26z' fill='%23b2412c'/%3E%3Cpath d='M276 162h62v138h-62z' fill='%23f6e6c8'/%3E%3Cpath d='M272 164l35-19 35 19z' fill='%23c5513a'/%3E%3Cpath d='M338 150h66v150h-66z' fill='%23eaa7a1'/%3E%3Cpath d='M334 152l37-22 37 22z' fill='%23b2412c'/%3E%3Crect y='150' width='400' height='150' fill='url(%23w)'/%3E%3Cpath d='M0 262c90-18 210-18 400 0v38H0z' fill='%239b3d2a'/%3E%3Crect x='150' y='236' width='70' height='30' rx='6' fill='%23f2c94c'/%3E%3Crect x='156' y='241' width='16' height='12' rx='2' fill='%235b3428' opacity='.5'/%3E%3Crect x='178' y='241' width='16' height='12' rx='2' fill='%235b3428' opacity='.5'/%3E%3Crect x='200' y='241' width='14' height='12' rx='2' fill='%235b3428' opacity='.5'/%3E%3C/svg%3E"); }
+.scene-konzert { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300' preserveAspectRatio='xMidYMid slice'%3E%3Cdefs%3E%3CradialGradient id='a' cx='.5' cy='1' r='1'%3E%3Cstop offset='0' stop-color='%234a1670'/%3E%3Cstop offset='1' stop-color='%230c0619'/%3E%3C/radialGradient%3E%3ClinearGradient id='p' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23ff5fcf' stop-opacity='.85'/%3E%3Cstop offset='1' stop-color='%23ff5fcf' stop-opacity='0'/%3E%3C/linearGradient%3E%3ClinearGradient id='c' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%2352dcff' stop-opacity='.8'/%3E%3Cstop offset='1' stop-color='%2352dcff' stop-opacity='0'/%3E%3C/linearGradient%3E%3CradialGradient id='s'%3E%3Cstop offset='0' stop-color='%23ff9a5c' stop-opacity='.9'/%3E%3Cstop offset='1' stop-color='%23ff9a5c' stop-opacity='0'/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect width='400' height='300' fill='url(%23a)'/%3E%3Cpath d='M90 0h14l70 260H40z' fill='url(%23p)' opacity='.7'/%3E%3Cpath d='M300 0h14l66 260H230z' fill='url(%23c)' opacity='.7'/%3E%3Cpath d='M196 0h10l60 250H140z' fill='url(%23p)' opacity='.45'/%3E%3Cellipse cx='200' cy='232' rx='190' ry='60' fill='url(%23s)'/%3E%3Cg fill='%23fff' opacity='.8'%3E%3Ccircle cx='40' cy='40' r='1.4'/%3E%3Ccircle cx='150' cy='24' r='1.2'/%3E%3Ccircle cx='260' cy='52' r='1.3'/%3E%3Ccircle cx='360' cy='30' r='1.5'/%3E%3C/g%3E%3Cpath d='M0 300V262c12-10 22-12 30-4 8-14 22-16 30-4 10-12 24-12 32 0 8-16 24-16 32-2 10-10 22-10 30 2 8-14 24-14 32 0 10-10 22-10 30 0 8-16 24-14 32 0 10-10 22-10 30 2 8-12 22-12 30-2 10-8 20-6 32 4V300z' fill='%2307030f'/%3E%3Cpath d='M60 262l-6-26M182 258l8-30M300 262l-4-28' stroke='%2307030f' stroke-width='7' stroke-linecap='round'/%3E%3C/svg%3E"); }
+.scene-nacht { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300' preserveAspectRatio='xMidYMid slice'%3E%3Cdefs%3E%3ClinearGradient id='a' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%230a0f2e'/%3E%3Cstop offset='.45' stop-color='%232d1a5e'/%3E%3Cstop offset='.62' stop-color='%23ff4f7e'/%3E%3C/linearGradient%3E%3ClinearGradient id='s' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23ffd36b'/%3E%3Cstop offset='1' stop-color='%23ff4f7e'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='400' height='300' fill='url(%23a)'/%3E%3Ccircle cx='200' cy='168' r='62' fill='url(%23s)'/%3E%3Cg fill='%234a2a78'%3E%3Crect x='138' y='140' width='124' height='5'/%3E%3Crect x='138' y='152' width='124' height='6'/%3E%3Crect x='138' y='165' width='124' height='7'/%3E%3C/g%3E%3Cpath d='M0 186h22v-22h14v-12h16v34h18v-26h12v26h22v-40h16v40h40V186h120v-30h14v30h18v-22h16v22h14v-36h18v36h40v-24h14v24h18' fill='%231b1145'/%3E%3Crect y='186' width='400' height='114' fill='%23120b2b'/%3E%3Cpath d='M200 186L-60 300M200 186L460 300' stroke='%23ff4fd8' stroke-width='2.5' opacity='.9'/%3E%3Cpath d='M200 186l-30 114M200 186l30 114' stroke='%2352e5ff' stroke-width='2' opacity='.6'/%3E%3Cpath d='M200 186L118 300M200 186l82 114' stroke='%2352e5ff' stroke-width='1.2' opacity='.35'/%3E%3Cpath d='M-20 214H420M-20 238H420M-20 270H420' stroke='%23ff4fd8' stroke-width='1' opacity='.35'/%3E%3Cg fill='%23fff'%3E%3Ccircle cx='60' cy='40' r='1.2'/%3E%3Ccircle cx='330' cy='28' r='1.4'/%3E%3Ccircle cx='250' cy='70' r='1'/%3E%3Ccircle cx='110' cy='90' r='1.1'/%3E%3C/g%3E%3C/svg%3E"); }
+.scene-herbst { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300' preserveAspectRatio='xMidYMid slice'%3E%3Cdefs%3E%3ClinearGradient id='a' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23fbd38d'/%3E%3Cstop offset='1' stop-color='%23e7843f'/%3E%3C/linearGradient%3E%3ClinearGradient id='m' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23fff' stop-opacity='0'/%3E%3Cstop offset='.5' stop-color='%23fff' stop-opacity='.35'/%3E%3Cstop offset='1' stop-color='%23fff' stop-opacity='0'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='400' height='300' fill='url(%23a)'/%3E%3Cg opacity='.55'%3E%3Ccircle cx='40' cy='150' r='46' fill='%23d9663a'/%3E%3Ccircle cx='130' cy='130' r='54' fill='%23e89a3c'/%3E%3Ccircle cx='250' cy='140' r='50' fill='%23c8502f'/%3E%3Ccircle cx='350' cy='125' r='58' fill='%23e89a3c'/%3E%3C/g%3E%3Crect y='150' width='400' height='60' fill='url(%23m)'/%3E%3Cg fill='%234a2a1d'%3E%3Crect x='66' y='170' width='9' height='110'/%3E%3Crect x='186' y='160' width='10' height='120'/%3E%3Crect x='306' y='168' width='9' height='112'/%3E%3C/g%3E%3Ccircle cx='70' cy='160' r='44' fill='%23c2452d'/%3E%3Ccircle cx='96' cy='182' r='30' fill='%23e5862c'/%3E%3Ccircle cx='190' cy='148' r='52' fill='%23f0a93a'/%3E%3Ccircle cx='160' cy='176' r='28' fill='%23c2452d'/%3E%3Ccircle cx='310' cy='156' r='48' fill='%238f2d1f'/%3E%3Ccircle cx='338' cy='186' r='30' fill='%23e5862c'/%3E%3Cpath d='M0 262c80-14 160-10 240-2s120 4 160-6v46H0z' fill='%236b3a22'/%3E%3Cg fill='%23f2b44c'%3E%3Cellipse cx='120' cy='272' rx='6' ry='3'/%3E%3Cellipse cx='260' cy='282' rx='5' ry='2.5'/%3E%3Cellipse cx='340' cy='270' rx='6' ry='3'/%3E%3C/g%3E%3C/svg%3E"); }
+.scene-studio { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300' preserveAspectRatio='xMidYMid slice'%3E%3Cdefs%3E%3CradialGradient id='a' cx='.25' cy='.35' r='.9'%3E%3Cstop offset='0' stop-color='%236b3f12'/%3E%3Cstop offset='.55' stop-color='%231d1209'/%3E%3Cstop offset='1' stop-color='%230a0705'/%3E%3C/radialGradient%3E%3CradialGradient id='l'%3E%3Cstop offset='0' stop-color='%23ffb347' stop-opacity='.55'/%3E%3Cstop offset='1' stop-color='%23ffb347' stop-opacity='0'/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect width='400' height='300' fill='url(%23a)'/%3E%3Cellipse cx='90' cy='90' rx='150' ry='110' fill='url(%23l)'/%3E%3Ccircle cx='262' cy='160' r='116' fill='%23111'/%3E%3Cg fill='none' stroke='%232b2b2b' stroke-width='1.5'%3E%3Ccircle cx='262' cy='160' r='104'/%3E%3Ccircle cx='262' cy='160' r='92'/%3E%3Ccircle cx='262' cy='160' r='80'/%3E%3Ccircle cx='262' cy='160' r='68'/%3E%3Ccircle cx='262' cy='160' r='56'/%3E%3C/g%3E%3Cpath d='M190 84a104 104 0 0 1 120-14' stroke='%235a5a5a' stroke-width='3' fill='none' opacity='.6'/%3E%3Ccircle cx='262' cy='160' r='36' fill='%23e3a33b'/%3E%3Ccircle cx='262' cy='160' r='4' fill='%23111'/%3E%3Cpath d='M380 20l-60 110' stroke='%23c9c9c9' stroke-width='5' stroke-linecap='round'/%3E%3Crect x='306' y='124' width='22' height='12' rx='3' fill='%23d9d9d9' transform='rotate(-60 317 130)'/%3E%3C/svg%3E"); }
+.scene-wien { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300' preserveAspectRatio='xMidYMid slice'%3E%3Cdefs%3E%3ClinearGradient id='a' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23c9dcf2'/%3E%3Cstop offset='.7' stop-color='%23f6d6de'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='400' height='300' fill='url(%23a)'/%3E%3Cg fill='%23aebfd4'%3E%3Crect x='0' y='170' width='70' height='70'/%3E%3Crect x='300' y='160' width='100' height='80'/%3E%3Crect x='60' y='182' width='40' height='58'/%3E%3C/g%3E%3Cg fill='%238ea3bd'%3E%3Crect x='120' y='150' width='160' height='90'/%3E%3Cpath d='M150 150a50 50 0 0 1 100 0z'/%3E%3Crect x='196' y='72' width='8' height='30'/%3E%3Ccircle cx='200' cy='70' r='5'/%3E%3Crect x='104' y='96' width='14' height='144'/%3E%3Crect x='282' y='96' width='14' height='144'/%3E%3Cpath d='M100 96h22l-11-16zM278 96h22l-11-16z'/%3E%3Crect x='166' y='170' width='68' height='70' fill='%237a90ab'/%3E%3Cpath d='M166 170h68l-34-22z' fill='%239fb2c9'/%3E%3C/g%3E%3Cg fill='%237a90ab'%3E%3Crect x='176' y='186' width='6' height='54'/%3E%3Crect x='190' y='186' width='6' height='54'/%3E%3Crect x='204' y='186' width='6' height='54'/%3E%3Crect x='218' y='186' width='6' height='54'/%3E%3C/g%3E%3Cpath d='M0 236c100-10 300-10 400 0v64H0z' fill='%23f6f8fc'/%3E%3Cpath d='M0 262c120-8 280-6 400 4' stroke='%23dfe6f0' stroke-width='3' fill='none'/%3E%3Cg fill='%23fff' opacity='.85'%3E%3Ccircle cx='40' cy='60' r='2'/%3E%3Ccircle cx='90' cy='120' r='1.6'/%3E%3Ccircle cx='150' cy='40' r='2.2'/%3E%3Ccircle cx='250' cy='110' r='1.8'/%3E%3Ccircle cx='330' cy='50' r='2'/%3E%3Ccircle cx='370' cy='120' r='1.6'/%3E%3Ccircle cx='300' cy='200' r='1.8'/%3E%3Ccircle cx='60' cy='210' r='2'/%3E%3C/g%3E%3C/svg%3E"); }
+.scene-film { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300' preserveAspectRatio='xMidYMid slice'%3E%3Cdefs%3E%3ClinearGradient id='a' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%230f4c5c'/%3E%3Cstop offset='.45' stop-color='%231f7a77'/%3E%3Cstop offset='.7' stop-color='%23f4a259'/%3E%3Cstop offset='1' stop-color='%23e76f51'/%3E%3C/linearGradient%3E%3ClinearGradient id='r' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23ffd27a' stop-opacity='.9'/%3E%3Cstop offset='1' stop-color='%23ffd27a' stop-opacity='0'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='400' height='300' fill='url(%23a)'/%3E%3Ccircle cx='250' cy='196' r='44' fill='%23ffd166'/%3E%3Crect x='206' y='214' width='88' height='86' fill='url(%23r)' opacity='.7'/%3E%3Cpath d='M0 214h400v86H0z' fill='%230b2a33' opacity='.55'/%3E%3Cpath d='M0 214c40-6 70-30 96-28s40 20 70 22 70-8 100-4 90 8 134 4v8H0z' fill='%230b2a33'/%3E%3Cpath d='M70 214c-2-40 4-70 14-92' stroke='%230b2a33' stroke-width='5' fill='none'/%3E%3Cpath d='M84 122c-18-8-38-4-50 8M84 122c-6-16-22-24-38-22M84 122c14-12 34-14 48-4M84 122c18-2 32 8 38 22M84 122c4-16 16-26 30-28' stroke='%230b2a33' stroke-width='5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); }
+.scene-person { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='xMidYMid slice'%3E%3Cdefs%3E%3ClinearGradient id='a' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23f3d9c1'/%3E%3Cstop offset='1' stop-color='%23d8a98a'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' fill='url(%23a)'/%3E%3Cpath d='M14 104c4-22 18-32 36-32s32 10 36 32z' fill='%233d5a80'/%3E%3Ccircle cx='50' cy='44' r='19' fill='%239c6b52'/%3E%3Cpath d='M30 44c0-16 9-25 21-25 13 0 21 9 21 22-6-6-16-9-26-8-7 1-12 5-16 11z' fill='%233a2418'/%3E%3C/svg%3E"); }
+
+/* Erprobte Bildausschnitte für weitere „Fotos“ aus einem Motiv (z. B. Fotoraster): class="scene-lissabon crop-3" */
+.crop-1 { background-size: 260%; background-position: 8% 18%; }
+.crop-2 { background-size: 320%; background-position: 85% 60%; }
+.crop-3 { background-size: 360%; background-position: 50% 95%; }
+.crop-4 { background-size: 300%; background-position: 60% 35%; }
+.crop-5 { background-size: 280%; background-position: 0% 60%; }
+.crop-6 { background-size: 500%; background-position: 20% 20%; }
+.crop-7 { background-size: 240%; background-position: 100% 90%; }
+.crop-8 { background-size: 550%; background-position: 70% 55%; }
+.crop-9 { background-size: 220%; background-position: 35% 0%; }
+.crop-10 { background-size: 420%; background-position: 40% 62%; }
+.crop-11 { background-size: 340%; background-position: 95% 45%; }
+.crop-12 { background-size: 300%; background-position: 0% 100%; }
+
+/* Körnung als Überlagerung: Element bekommt .grain, Stärke per --grain (0–1). */
+.grain { position: relative; }
+.grain::after { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: var(--grain, .18); mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E"); background-size: 160px 160px; }
+
+/* Horizontale Reihen dürfen am Rand angeschnitten sein wie beim echten Scrollen. */
+.row-x { display: flex; overflow: hidden; }
+
+</style>
+<title>Musterscreens Airbnb</title>
+<style>
+/* =====================================================================
+   Musterscreens im Stil von Airbnb – heller, fotogetriebener Marktplatz.
+   Werte aus der Markendatei; App-Muster (Tab-Leiste, Blatt, Karten-Pille)
+   sind Empfehlungen. Eine Akzentfarbe, ein Schatten, alles rund.
+   ===================================================================== */
+:root {
+  /* Farben */
+  --rausch: #ff385c;            /* einzige Markenfarbe: Hauptbutton, Such-Kugel, Herz gespeichert, aktiver Tab */
+  --rausch-active: #e00b41;     /* gedrückt */
+  --rausch-disabled: #ffd1da;
+  --ink: #222222;               /* Text, Unterstriche, Kennzahlen – nie reines Schwarz */
+  --body: #3f3f3f;
+  --muted: #6a6a6a;
+  --hairline: #dddddd;
+  --hairline-soft: #ebebeb;
+  --canvas: #ffffff;
+  --surface-soft: #f7f7f7;
+  --surface-strong: #f2f2f2;
+  --on-photo: rgba(34, 34, 34, .6);      /* dunkle Pille auf Fotos (Zähler) */
+  --heart-fill: rgba(0, 0, 0, .5);       /* Herz ungespeichert: halbtransparent mit weißem Rand */
+
+  /* Schrift: Airbnb Cereal → Inter (laut Datei nächster freier Ersatz) */
+  --font: Inter, "DejaVu Sans", sans-serif;
+  --font-display: "Inter Display", Inter, sans-serif;
+
+  /* Radien */
+  --r-xs: 4px;
+  --r-sm: 8px;        /* Buttons, Felder */
+  --r-md: 14px;       /* Fotos, Karten */
+  --r-sheet: 24px;    /* Blatt über dem Detailfoto (Empfehlung) */
+  --r-full: 9999px;   /* Suche, Kugel, Herz, Badges */
+
+  /* Abstände (4er-Raster) */
+  --s-4: 4px; --s-8: 8px; --s-12: 12px; --s-16: 16px; --s-24: 24px; --s-32: 32px;
+  --gutter: 24px;
+
+  /* Die eine Schattenstufe des Systems */
+  --shadow: 0 0 0 1px rgba(0,0,0,.02), 0 2px 6px rgba(0,0,0,.04), 0 4px 8px rgba(0,0,0,.1);
+
+  /* Bewegung */
+  --dur-s: 200ms;
+  --dur-m: 350ms;
+  --ease: cubic-bezier(.2, 0, 0, 1);
+  --ease-pop: cubic-bezier(.34, 1.56, .64, 1);
+}
+
+/* ---------- Grundlagen ---------- */
+.phone { background: var(--canvas); color: var(--ink); font: 400 14px/1.43 var(--font); }
+/* Resets mit :where(), damit Komponenten-Klassen sie ohne Spezifitätskampf überschreiben */
+:where(.phone) :where(h1, h2, h3, p) { margin: 0; }
+:where(.phone) :where(button) { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+:where(.phone) :where(a) { color: inherit; text-decoration: none; }
+.sb, .hi { color: var(--ink); }
+.ic-l { stroke-width: 1.75; }
+
+/* ---------- Such-Pille (einteilig, mobil) ---------- */
+.home-head { padding: 6px var(--gutter) 0; }
+.search-pill {
+  width: 100%; height: 54px; display: flex; align-items: center; justify-content: center; gap: 10px;
+  background: var(--canvas); border: 1px solid var(--hairline); border-radius: var(--r-full); box-shadow: var(--shadow);
+  font: 600 14px/18px var(--font); color: var(--ink);
+  transition: box-shadow var(--dur-s) var(--ease);
+}
+.search-pill .ic { font-size: 17px; stroke-width: 2.75; }
+
+/* ---------- Bereichs-Tabs mit illustrierten Icons ---------- */
+.product-tabs {
+  display: flex; justify-content: center; gap: 40px;
+  margin: 10px calc(-1 * var(--gutter)) 0; border-bottom: 1px solid var(--hairline-soft);
+}
+.product-tab {
+  position: relative; display: flex; flex-direction: column; align-items: center; gap: 5px; padding-bottom: 10px;
+  font: 600 13px/16px var(--font); color: var(--muted);
+}
+.product-tab.is-active { color: var(--ink); }
+.product-tab.is-active::after {
+  content: ""; position: absolute; left: -4px; right: -4px; bottom: -1px; height: 2px; border-radius: 2px; background: var(--ink);
+}
+/* Illustrationen aus den Bildmotiven gebaut (Abzüge, Bildschirm, Platte) */
+.glyph { position: relative; display: block; width: 52px; height: 40px; }
+.glyph > span { position: absolute; display: block; }
+.glyph-shadow { box-shadow: 0 1px 2px rgba(0,0,0,.2), 0 3px 8px rgba(0,0,0,.14); }
+.print { width: 29px; height: 25px; border: 2.5px solid #fff; border-radius: 5px; }
+.print-back { left: 6px; top: 4px; transform: rotate(-12deg); background-size: 230%; background-position: 80% 30%; }
+.print-front { left: 18px; top: 13px; transform: rotate(8deg); background-size: 190%; background-position: 35% 75%; }
+.screen { left: 6px; top: 8px; width: 40px; height: 28px; border: 2.5px solid #fff; border-radius: 7px; background-size: 150%; background-position: 62% 62%; }
+.screen-play {
+  position: absolute; left: 50%; top: 50%; width: 15px; height: 15px; margin: -7.5px 0 0 -7.5px;
+  display: grid; place-items: center; border-radius: 50%; background: rgba(255,255,255,.94);
+}
+.screen-play .ic { font-size: 7.5px; fill: var(--ink); stroke: var(--ink); stroke-width: 3; margin-left: 1px; }
+.sleeve { left: 4px; top: 7px; width: 30px; height: 30px; border-radius: 4px; background-size: 210%; background-position: 50% 60%; }
+/* Platte = Ausschnitt der Schallplatte aus .scene-studio (Mitte 262/160, r 116 im 400×300-Motiv) */
+.vinyl { left: 19px; top: 7px; width: 30px; height: 30px; border-radius: 50%; background-size: 51.7px 38.8px; background-position: -18.9px -5.7px; }
+.new-tag {
+  position: absolute; right: -14px; top: -6px; z-index: 2; padding: 2px 6px; border-radius: var(--r-full);
+  background: var(--canvas); color: var(--ink); box-shadow: var(--shadow);
+  font: 700 8px/10px var(--font); letter-spacing: .32px; text-transform: uppercase;
+}
+
+/* ---------- Fotokarte (ohne Fläche, Angaben unter dem Foto) ---------- */
+.feed { padding: 18px var(--gutter) 0; }
+/* Begrüßung als bescheidene H1 unter der Suche – Fotos tragen die Hierarchie */
+.greeting { font: 600 22px/28px var(--font-display); letter-spacing: -.3px; color: var(--ink); }
+.listing-hero { margin-top: 12px; }
+.listing { display: block; }
+.photo {
+  position: relative; display: block; border-radius: var(--r-md); overflow: hidden; background-color: var(--surface-strong);
+  transition: box-shadow var(--dur-s) var(--ease);
+}
+.listing:hover .photo { box-shadow: var(--shadow); }
+.badge {
+  position: absolute; left: 12px; top: 12px; padding: 4px 10px; border-radius: var(--r-full);
+  background: var(--canvas); color: var(--ink); box-shadow: var(--shadow); font: 600 11px/13px var(--font);
+}
+.heart { position: absolute; right: 12px; top: 11px; display: grid; place-items: center; }
+.heart .ic { font-size: 24px; fill: var(--heart-fill); stroke: #fff; stroke-width: 2; }
+.heart.is-saved .ic { fill: var(--rausch); }
+.dots { position: absolute; left: 50%; bottom: 10px; transform: translateX(-50%); display: flex; align-items: center; gap: 4px; }
+.dots span { width: 6px; height: 6px; border-radius: 50%; background: #fff; opacity: .6; }
+.dots span:first-child { opacity: 1; }
+.dots span:last-child { width: 4px; height: 4px; }
+.meta { padding-top: 10px; }
+.meta-title { display: block; font: 600 15px/20px var(--font); color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.meta-line { display: block; font: 400 14px/20px var(--font); color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.meta-line b { font-weight: 600; color: var(--ink); }
+
+/* Highlight: große Karte (1-up) */
+.listing-hero .photo { height: 136px; background-size: 112%; background-position: 50% 74%; }
+.listing-hero .meta-title { font-size: 16px; }
+
+/* ---------- Abschnitte und Kartenreihen ---------- */
+.section { margin-top: 22px; }
+.section-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 12px; }
+.section-title { display: inline-flex; align-items: center; gap: 4px; font: 600 20px/24px var(--font-display); letter-spacing: -.18px; }
+.section-title .ic { font-size: 16px; stroke-width: 2.75; margin-top: 2px; }
+.section-aside { font: 400 14px/20px var(--font); color: var(--muted); }
+.cards-row { gap: 12px; margin-right: calc(-1 * var(--gutter)); }
+.listing-sm { flex: none; width: 142px; }
+.listing-sm .photo { height: 116px; }
+.listing-sm .heart { right: 8px; top: 8px; }
+.listing-sm .heart .ic { font-size: 20px; }
+.listing-sm .dots { bottom: 8px; }
+.listing-sm .meta { padding-top: 8px; }
+.listing-sm .meta-title { font-size: 14px; line-height: 18px; }
+.listing-sm .meta-line { font-size: 13px; line-height: 18px; }
+
+/* Weiße Pillen mit Haarlinie (Schnellzugriff, Filter) */
+.pill-row { gap: 8px; margin-right: calc(-1 * var(--gutter)); }
+.pill {
+  flex: none; display: inline-flex; align-items: center; gap: 7px; height: 40px; padding: 0 14px;
+  border: 1px solid var(--hairline); border-radius: var(--r-full); background: var(--canvas);
+  font: 500 13px/18px var(--font); color: var(--ink);
+}
+.pill .ic { font-size: 16px; stroke-width: 2; }
+
+/* ---------- Tab-Leiste (Empfehlung: aktiv in Rausch) ---------- */
+.tab-bar {
+  position: absolute; left: 0; right: 0; bottom: 0; z-index: 20; height: 84px; padding: 9px 12px 0;
+  display: flex; justify-content: space-around; background: var(--canvas); border-top: 1px solid var(--hairline-soft);
+}
+.tab { width: 80px; display: flex; flex-direction: column; align-items: center; gap: 4px; font: 500 11px/14px var(--font); color: var(--muted); }
+.tab .ic { font-size: 24px; stroke-width: 1.5; }
+/* aktiv: Rausch plus kräftigerer Strich und Label – bleibt auch ohne Farbe erkennbar */
+.tab.is-active { color: var(--rausch); font-weight: 600; }
+.tab.is-active .ic { stroke-width: 2.25; }
+
+/* ---------- Bibliothek: segmentierte Such-Pille mit Rausch-Kugel ---------- */
+.lib-head { padding: 8px var(--gutter) 0; }
+.search-bar {
+  display: flex; align-items: center; height: 62px; padding: 0 7px 0 20px;
+  background: var(--canvas); border: 1px solid var(--hairline); border-radius: var(--r-full); box-shadow: var(--shadow);
+}
+.seg { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+.seg-label { font: 600 12px/16px var(--font); color: var(--ink); }
+.seg-value { font: 400 13px/17px var(--font); color: var(--muted); white-space: nowrap; }
+.seg-divider { flex: none; width: 1px; height: 32px; margin: 0 10px; background: var(--hairline); }
+.search-orb {
+  flex: none; width: 46px; height: 46px; margin-left: 6px; display: grid; place-items: center;
+  border-radius: 50%; background: var(--rausch); color: #fff;
+  transition: background-color var(--dur-s) var(--ease);
+}
+.search-orb:active { background: var(--rausch-active); }
+.search-orb .ic { font-size: 18px; stroke-width: 3; }
+
+/* Kategorie-Leiste: Icon über Label, aktiv mit 2-px-Unterstrich */
+.category-strip {
+  display: flex; justify-content: space-between; margin: 16px calc(-1 * var(--gutter)) 0; padding: 0 30px;
+  border-bottom: 1px solid var(--hairline-soft);
+}
+.category {
+  position: relative; display: flex; flex-direction: column; align-items: center; gap: 6px; padding-bottom: 11px;
+  font: 500 13px/16px var(--font); color: var(--muted);
+}
+.category .ic { font-size: 24px; stroke-width: 1.75; }
+.category.is-active { color: var(--ink); font-weight: 600; }
+.category.is-active::after {
+  content: ""; position: absolute; left: -6px; right: -6px; bottom: -1px; height: 2px; border-radius: 2px; background: var(--ink);
+}
+
+/* Foto-Raster 2-spaltig */
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 14px; padding: 14px var(--gutter) 0; }
+.grid .photo { aspect-ratio: 1 / 1; }
+.grid .meta { padding-top: 8px; }
+
+/* Schwebende Tinten-Pille (Empfehlung) */
+.map-pill {
+  position: absolute; left: 50%; bottom: 98px; z-index: 15; transform: translateX(-50%);
+  display: inline-flex; align-items: center; gap: 8px; height: 44px; padding: 0 18px;
+  border-radius: var(--r-full); background: var(--ink); color: #fff; box-shadow: var(--shadow);
+  font: 600 14px/18px var(--font);
+}
+.map-pill .ic { font-size: 18px; stroke-width: 2; }
+
+/* ---------- Detail ---------- */
+.stage-photo { position: absolute; left: 0; right: 0; top: 0; height: 302px; background-size: 160%; background-position: 50% 95%; }
+.photo-actions { position: absolute; left: 0; right: 0; top: 54px; z-index: 5; display: flex; justify-content: space-between; padding: 0 16px; }
+.circle-group { display: flex; gap: 10px; }
+.circle-btn {
+  width: 36px; height: 36px; display: grid; place-items: center; border-radius: 50%;
+  background: var(--canvas); color: var(--ink); box-shadow: var(--shadow);
+}
+.circle-btn .ic { font-size: 16px; stroke-width: 2.5; }
+.circle-btn.is-saved .ic { fill: var(--rausch); stroke: var(--rausch); }
+.photo-count {
+  position: absolute; right: 16px; bottom: 38px; padding: 4px 10px; border-radius: var(--r-full);
+  background: var(--on-photo); color: #fff; font: 600 12px/16px var(--font);
+}
+.sheet {
+  position: absolute; left: 0; right: 0; top: 276px; bottom: 0; padding: 26px var(--gutter) 0;
+  background: var(--canvas); border-radius: var(--r-sheet) var(--r-sheet) 0 0;
+}
+.title-block { text-align: center; }
+.title-block h1 { font: 600 26px/32px var(--font-display); letter-spacing: -.4px; }
+.title-block p { margin-top: 4px; font: 400 15px/20px var(--font); color: var(--body); }
+
+/* Kennzahl-Karte mit Lorbeer (mobile Form der 64-px-Kennzahl) */
+.fav-card {
+  display: flex; align-items: center; height: 70px; margin-top: 22px;
+  border: 1px solid var(--hairline); border-radius: var(--r-md);
+}
+.fav-badge { flex: 1.35; display: flex; align-items: center; justify-content: center; gap: 3px; font: 600 14px/17px var(--font); text-align: center; }
+.svg-defs { position: absolute; width: 0; height: 0; overflow: hidden; }
+.laurel { width: 15px; height: 36px; color: var(--ink); flex: none; }
+.laurel-r { transform: scaleX(-1); }
+.fav-divider { flex: none; width: 1px; height: 36px; background: var(--hairline); }
+.fav-stat { flex: 1; display: flex; flex-direction: column; align-items: center; }
+.fav-stat b { font: 600 18px/22px var(--font); }
+.fav-stat span { font: 500 12px/16px var(--font); color: var(--ink); }
+
+/* Unterstrich-Tabs */
+.tabs { display: flex; gap: 28px; margin-top: 22px; border-bottom: 1px solid var(--hairline-soft); }
+.tabs a { position: relative; padding-bottom: 12px; font: 500 15px/20px var(--font); color: var(--muted); }
+.tabs a.is-active { color: var(--ink); font-weight: 600; }
+.tabs a.is-active::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; border-radius: 2px; background: var(--ink); }
+
+/* Collage: 1 groß + 4 klein, nur außen rund */
+.collage {
+  position: relative; display: grid; grid-template-columns: 2fr 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 4px;
+  height: 198px; margin-top: 16px; border-radius: var(--r-md); overflow: hidden;
+}
+.tile { display: block; }
+/* Weitere „Fotos“ als Ausschnitte desselben Motivs: Sonne, Straßenbahn, Dächer, Fenster, Gassen */
+.tile-big { grid-row: span 2; background-size: 220%; background-position: 5% 30%; }
+.crop-a { background-size: 400%; background-position: 45% 100%; }
+.crop-b { background-size: 300%; background-position: 100% 40%; }
+.crop-c { background-size: 350%; background-position: 60% 75%; }
+.crop-d { background-size: 320%; background-position: 20% 70%; }
+.all-photos {
+  position: absolute; right: 10px; bottom: 10px; display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px;
+  border: 1px solid var(--ink); border-radius: var(--r-sm); background: var(--canvas); font: 600 12px/16px var(--font);
+}
+.all-photos .ic { font-size: 14px; stroke-width: 2.5; }
+
+/* Feste Aktionsleiste (mobile Reservierungsleiste) */
+.action-bar {
+  position: absolute; left: 0; right: 0; bottom: 0; z-index: 20; height: 92px; padding: 14px var(--gutter) 0;
+  display: flex; align-items: flex-start; justify-content: space-between;
+  background: var(--canvas); border-top: 1px solid var(--hairline-soft);
+}
+.action-info { display: flex; flex-direction: column; gap: 2px; padding-top: 4px; }
+.action-info small { font: 400 13px/17px var(--font); color: var(--muted); }
+.action-info a { font: 600 16px/20px var(--font); text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+.btn-primary {
+  height: 48px; padding: 0 24px; border-radius: var(--r-sm); background: var(--rausch); color: #fff;
+  font: 500 16px/20px var(--font);
+  transition: background-color var(--dur-s) var(--ease);   /* gedrückt: nur Farbwechsel, kein Transform */
+}
+.btn-primary:active { background: var(--rausch-active); }
+
+/* Fokus: 2 px Tinte, kein Glow */
+.phone :focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+/* ---------- Bewegung: Einblenden und Herz-Pop ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  .feed > *, .grid > *, .sheet > * { animation: rise var(--dur-m) var(--ease) both; }
+  .feed > :nth-child(2), .grid > :nth-child(2), .sheet > :nth-child(2) { animation-delay: 40ms; }
+  .feed > :nth-child(3), .grid > :nth-child(3), .sheet > :nth-child(3) { animation-delay: 80ms; }
+  .feed > :nth-child(4), .grid > :nth-child(4), .sheet > :nth-child(4) { animation-delay: 120ms; }
+  .grid > :nth-child(n+5) { animation-delay: 160ms; }
+  .heart.is-saved .ic, .circle-btn.is-saved .ic { animation: heart-pop 400ms var(--ease-pop) 300ms both; }
+  @keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+  @keyframes heart-pop { 0% { transform: scale(1); } 45% { transform: scale(1.2); } 100% { transform: scale(1); } }
+}
+</style></head>
+<body>
+<div class="ms-wrap"><main class="stage">
+
+  <!-- ===================== 1. START ===================== -->
+  <figure class="shot"><figcaption>Start</figcaption><section class="phone" id="start">
+    <div class="sb"><span>9:41</span><span class="sb-icons"><svg class="ic ic-p ic-ph-fill" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-fill:cell-signal-full"><path d="M208,40V200a16,16,0,0,1-16,16H32A16,16,0,0,1,20.7,188.68l160-160A16,16,0,0,1,208,40Z"/></svg><svg class="ic ic-p ic-ph-fill" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-fill:wifi-high"><path d="M244.35,92.8l-104,125.43A15.93,15.93,0,0,1,128,224h0a15.93,15.93,0,0,1-12.31-5.77L11.65,92.8A15.65,15.65,0,0,1,8.11,80.91,15.93,15.93,0,0,1,14.28,70.1,186.67,186.67,0,0,1,128,32,186.67,186.67,0,0,1,241.72,70.1a15.93,15.93,0,0,1,6.17,10.81A15.65,15.65,0,0,1,244.35,92.8Z"/></svg><svg class="ic ic-p ic-ph-fill" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-fill:battery-full"><path d="M200,56H32A24,24,0,0,0,8,80v96a24,24,0,0,0,24,24H200a24,24,0,0,0,24-24V80A24,24,0,0,0,200,56Zm8,120a8,8,0,0,1-8,8H32a8,8,0,0,1-8-8V80a8,8,0,0,1,8-8H200a8,8,0,0,1,8,8ZM192,96v64a8,8,0,0,1-8,8H48a8,8,0,0,1-8-8V96a8,8,0,0,1,8-8H184A8,8,0,0,1,192,96Zm64,0v64a8,8,0,0,1-16,0V96a8,8,0,0,1,16,0Z"/></svg></span></div>
+
+    <header class="home-head">
+      <button class="search-pill" type="button"><svg class="ic ic-l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-i="lucide:search"><path d="m21 21-4.34-4.34" /><circle cx="11" cy="11" r="8" /></svg><span>Fotos, Videos und Musik suchen</span></button>
+      <nav class="product-tabs" aria-label="Bereiche">
+        <a class="product-tab is-active">
+          <span class="glyph" aria-hidden="true"><span class="print print-back glyph-shadow scene-see"></span><span class="print print-front glyph-shadow scene-lissabon"></span></span>
+          Fotos
+        </a>
+        <a class="product-tab">
+          <span class="glyph" aria-hidden="true"><span class="screen glyph-shadow scene-film"><span class="screen-play"><svg class="ic ic-l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-i="lucide:play"><path d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z" /></svg></span></span></span>
+          Videos
+        </a>
+        <a class="product-tab">
+          <span class="glyph" aria-hidden="true"><span class="sleeve glyph-shadow scene-nacht"></span><span class="vinyl glyph-shadow scene-studio"></span><span class="new-tag">Neu</span></span>
+          Musik
+        </a>
+      </nav>
+    </header>
+
+    <div class="feed">
+      <h1 class="greeting">Hallo Lena</h1>
+      <article class="listing listing-hero">
+        <span class="photo scene-herbst">
+          <span class="badge">Rückblick</span>
+          <button class="heart" type="button" aria-label="Favorit"><svg class="ic ic-l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-i="lucide:heart"><path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5" /></svg></button>
+          <span class="dots"><span></span><span></span><span></span><span></span><span></span></span>
+        </span>
+        <div class="meta">
+          <span class="meta-title">Vor einem Jahr: Herbstwald</span>
+          <span class="meta-line"><b>86 Fotos</b> · Okt. 2024</span>
+        </div>
+      </article>
+
+      <section class="section">
+        <div class="section-head"><h2 class="section-title">Zuletzt hinzugefügt <svg class="ic ic-l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-i="lucide:chevron-right"><path d="m9 18 6-6-6-6" /></svg></h2></div>
+        <div class="row-x cards-row">
+          <article class="listing listing-sm">
+            <span class="photo scene-see"><button class="heart" type="button" aria-label="Favorit"><svg class="ic ic-l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-i="lucide:heart"><path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5" /></svg></button><span class="dots"><span></span><span></span><span></span><span></span></span></span>
+            <div class="meta"><span class="meta-title">Sommer am See</span><span class="meta-line">128 Fotos · Aug. 2025</span></div>
+          </article>
+          <article class="listing listing-sm">
+            <span class="photo scene-lissabon"><button class="heart is-saved" type="button" aria-label="Favorit"><svg class="ic ic-l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-i="lucide:heart"><path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5" /></svg></button><span class="dots"><span></span><span></span><span></span><span></span></span></span>
+            <div class="meta"><span class="meta-title">Lissabon</span><span class="meta-line">342 Fotos · Mai 2025</span></div>
+          </article>
+          <article class="listing listing-sm">
+            <span class="photo scene-wien"><button class="heart" type="button" aria-label="Favorit"><svg class="ic ic-l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-i="lucide:heart"><path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5" /></svg></button><span class="dots"><span></span><span></span><span></span><span></span></span></span>
+            <div class="meta"><span class="meta-title">Winter in Wien</span><span class="meta-line">203 Fotos · Jan. 2025</span></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-head"><h2 class="section-title">Quellen</h2><span class="section-aside">412 GB von 600 GB</span></div>
+        <div class="row-x pill-row">
+          <a class="pill"><svg class="ic ic-l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-i="lucide:cloud"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z" /></svg>Google Fotos</a>
+          <a class="pill"><svg class="ic ic-l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-i="lucide:server"><rect width="20" height="8" x="2" y="2" rx="2" ry="2" /><rect width="20" height="8" x="2" y="14" rx="2" ry="2" /><line x1="6" x2="6.01" y1="6" y2="6" /><line x1="6" x2="6.01" y1="18" y2="18" /></svg>NAS</a>
+          <a class="pill"><svg class="ic ic-l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-i="lucide:usb"><circle cx="10" cy="7" r="1" /><circle cx="4" cy="20" r="1" /><path d="M4.7 19.3 19 5" /><path d="m21 3-3 1 2 2Z" /><path d="M9.26 7.68 5 12l2 5" /><path d="m10 14 5 2 3.5-3.5" /><path d="m18 12 1-1 1 1-1 1Z" /></svg>USB-Stick</a>
+        </div>
+      </section>
+    </div>
+
+    <nav class="tab-bar" aria-label="Navigation">
+      <a class="tab is-active"><svg class="ic ic-l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-i="lucide:house"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" /><path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /></svg>Start</a>
+      <a class="tab"><svg class="ic ic-l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-i="lucide:library"><path d="m16 6 4 14" /><path d="M12 6v14" /><path d="M8 8v12" /><path d="M4 4v16" /></svg>Bibliothek</a>
+      <a class="tab"><svg class="ic ic-l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-i="lucide:search"><path d="m21 21-4.34-4.34" /><circle cx="11" cy="11" r="8" /></svg>Suche</a>
+      <a class="tab"><svg class="ic ic-l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-i="lucide:circle-user-round"><path d="M17.925 20.056a6 6 0 0 0-11.851.001" /><circle cx="12" cy="11" r="4" /><circle cx="12" cy="12" r="10" /></svg>Profil</a>
+    </nav>
+    <div class="hi"></div>
+  </section></figure>
+
+  <!-- ===================== 2. BIBLIOTHEK ===================== -->
+  <figure class="shot"><figcaption>Bibliothek</figcaption><section class="phone" id="bibliothek">
+    <div class="sb"><span>9:41</span><span class="sb-icons"><svg class="ic ic-p ic-ph-fill" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-fill:cell-signal-full"><path d="M208,40V200a16,16,0,0,1-16,16H32A16,16,0,0,1,20.7,188.68l160-160A16,16,0,0,1,208,40Z"/></svg><svg class="ic ic-p ic-ph-fill" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-fill:wifi-high"><path d="M244.35,92.8l-104,125.43A15.93,15.93,0,0,1,128,224h0a15.93,15.93,0,0,1-12.31-5.77L11.65,92.8A15.65,15.65,0,0,1,8.11,80.91,15.93,15.93,0,0,1,14.28,70.1,186.67,186.67,0,0,1,128,32,186.67,186.67,0,0,1,241.72,70.1a15.93,15.93,0,0,1,6.17,10.81A15.65,15.65,0,0,1,244.35,92.8Z"/></svg><svg class="ic ic-p ic-ph-fill" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-fill:battery-full"><path d="M200,56H32A24,24,0,0,0,8,80v96a24,24,0,0,0,24,24H200a24,24,0,0,0,24-24V80A24,24,0,0,0,200,56Zm8,120a8,8,0,0,1-8,8H32a8,8,0,0,1-8-8V80a8,8,0,0,1,8-8H200a8,8,0,0,1,8,8ZM192,96v64a8,8,0,0,1-8,8H48a8,8,0,0,1-8-8V96a8,8,0,0,1,8-8H184A8,8,0,0,1,192,96Zm64,0v64a8,8,0,0,1-16,0V96a8,8,0,0,1,16,0Z"/></svg></span></div>
+
+    <header class="lib-head">
+      <div class="search-bar" role="search">
+        <div class="seg"><span class="seg-label">Was</span><span class="seg-value">Alle Medien</span></div>
+        <span class="seg-divider"></span>
+        <div class="seg"><span class="seg-label">Wann</span><span class="seg-value">Jederzeit</span></div>
+        <span class="seg-divider"></span>
+        <div class="seg"><span class="seg-label">Quelle</span><span class="seg-value">Alle Quellen</span></div>
+        <button class="search-orb" type="button" aria-label="Suchen"><svg class="ic ic-l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-i="lucide:search"><path d="m21 21-4.34-4.34" /><circle cx="11" cy="11" r="8" /></svg></button>
+      </div>
+      <nav class="category-strip" aria-label="Filter">
+        <a class="category is-active"><svg class="ic ic-l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-i="lucide:layout-grid"><rect width="7" height="7" x="3" y="3" rx="1" /><rect width="7" height="7" x="14" y="3" rx="1" /><rect width="7" height="7" x="14" y="14" rx="1" /><rect width="7" height="7" x="3" y="14" rx="1" /></svg>Alle</a>
+        <a class="category"><svg class="ic ic-l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-i="lucide:image"><rect width="18" height="18" x="3" y="3" rx="2" ry="2" /><circle cx="9" cy="9" r="2" /><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" /></svg>Fotos</a>
+        <a class="category"><svg class="ic ic-l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-i="lucide:clapperboard"><path d="m12.296 3.464 3.02 3.956" /><path d="M20.2 6 3 11l-.9-2.4c-.3-1.1.3-2.2 1.3-2.5l13.5-4c1.1-.3 2.2.3 2.5 1.3z" /><path d="M3 11h18v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><path d="m6.18 5.276 3.1 3.899" /></svg>Videos</a>
+        <a class="category"><svg class="ic ic-l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-i="lucide:music"><path d="M9 18V5l12-2v13" /><circle cx="6" cy="18" r="3" /><circle cx="18" cy="16" r="3" /></svg>Musik</a>
+        <a class="category"><svg class="ic ic-l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-i="lucide:book-image"><path d="m20 13.7-2.1-2.1a2 2 0 0 0-2.8 0L9.7 17" /><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20" /><circle cx="10" cy="8" r="2" /></svg>Alben</a>
+      </nav>
+    </header>
+
+    <div class="grid">
+      <article class="listing">
+        <span class="photo scene-lissabon"><button class="heart is-saved" type="button" aria-label="Favorit"><svg class="ic ic-l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-i="lucide:heart"><path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5" /></svg></button><span class="dots"><span></span><span></span><span></span><span></span><span></span></span></span>
+        <div class="meta"><span class="meta-title">Lissabon</span><span class="meta-line"><b>342 Fotos</b> · Mai 2025</span></div>
+      </article>
+      <article class="listing">
+        <span class="photo scene-see"><button class="heart" type="button" aria-label="Favorit"><svg class="ic ic-l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-i="lucide:heart"><path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5" /></svg></button><span class="dots"><span></span><span></span><span></span><span></span><span></span></span></span>
+        <div class="meta"><span class="meta-title">Sommer am See</span><span class="meta-line"><b>128 Fotos</b> · Aug. 2025</span></div>
+      </article>
+      <article class="listing">
+        <span class="photo scene-herbst"><span class="badge">Rückblick</span><button class="heart" type="button" aria-label="Favorit"><svg class="ic ic-l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-i="lucide:heart"><path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5" /></svg></button><span class="dots"><span></span><span></span><span></span><span></span><span></span></span></span>
+        <div class="meta"><span class="meta-title">Herbstwald</span><span class="meta-line"><b>86 Fotos</b> · Okt. 2024</span></div>
+      </article>
+      <article class="listing">
+        <span class="photo scene-konzert"><span class="badge">Neu</span><button class="heart" type="button" aria-label="Favorit"><svg class="ic ic-l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-i="lucide:heart"><path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5" /></svg></button><span class="dots"><span></span><span></span><span></span><span></span><span></span></span></span>
+        <div class="meta"><span class="meta-title">Konzert im Park</span><span class="meta-line"><b>12 Videos</b> · 1:04 Std.</span></div>
+      </article>
+      <article class="listing">
+        <span class="photo scene-wien"><button class="heart" type="button" aria-label="Favorit"><svg class="ic ic-l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-i="lucide:heart"><path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5" /></svg></button><span class="dots"><span></span><span></span><span></span><span></span><span></span></span></span>
+        <div class="meta"><span class="meta-title">Winter in Wien</span><span class="meta-line"><b>203 Fotos</b> · Jan. 2025</span></div>
+      </article>
+      <article class="listing">
+        <span class="photo scene-film"><button class="heart" type="button" aria-label="Favorit"><svg class="ic ic-l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-i="lucide:heart"><path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5" /></svg></button><span class="dots"><span></span><span></span><span></span><span></span><span></span></span></span>
+        <div class="meta"><span class="meta-title">Kurzfilme 2024</span><span class="meta-line"><b>7 Videos</b> · 38 Min.</span></div>
+      </article>
+      <article class="listing">
+        <span class="photo scene-nacht"><button class="heart" type="button" aria-label="Favorit"><svg class="ic ic-l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-i="lucide:heart"><path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5" /></svg></button></span>
+        <div class="meta"><span class="meta-title">Nachtfahrt</span><span class="meta-line"><b>24 Titel</b> · 1 Std. 32 Min.</span></div>
+      </article>
+      <article class="listing">
+        <span class="photo scene-studio"><button class="heart" type="button" aria-label="Favorit"><svg class="ic ic-l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-i="lucide:heart"><path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5" /></svg></button></span>
+        <div class="meta"><span class="meta-title">Studio-Sessions</span><span class="meta-line"><b>11 Titel</b> · 48 Min.</span></div>
+      </article>
+    </div>
+
+    <button class="map-pill" type="button">Karte <svg class="ic ic-l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-i="lucide:map"><path d="M14.106 5.553a2 2 0 0 0 1.788 0l3.659-1.83A1 1 0 0 1 21 4.619v12.764a1 1 0 0 1-.553.894l-4.553 2.277a2 2 0 0 1-1.788 0l-4.212-2.106a2 2 0 0 0-1.788 0l-3.659 1.83A1 1 0 0 1 3 19.381V6.618a1 1 0 0 1 .553-.894l4.553-2.277a2 2 0 0 1 1.788 0z" /><path d="M15 5.764v15" /><path d="M9 3.236v15" /></svg></button>
+
+    <nav class="tab-bar" aria-label="Navigation">
+      <a class="tab"><svg class="ic ic-l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-i="lucide:house"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" /><path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /></svg>Start</a>
+      <a class="tab is-active"><svg class="ic ic-l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-i="lucide:library"><path d="m16 6 4 14" /><path d="M12 6v14" /><path d="M8 8v12" /><path d="M4 4v16" /></svg>Bibliothek</a>
+      <a class="tab"><svg class="ic ic-l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-i="lucide:search"><path d="m21 21-4.34-4.34" /><circle cx="11" cy="11" r="8" /></svg>Suche</a>
+      <a class="tab"><svg class="ic ic-l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-i="lucide:circle-user-round"><path d="M17.925 20.056a6 6 0 0 0-11.851.001" /><circle cx="12" cy="11" r="4" /><circle cx="12" cy="12" r="10" /></svg>Profil</a>
+    </nav>
+    <div class="hi"></div>
+  </section></figure>
+
+  <!-- ===================== 3. DETAIL ===================== -->
+  <figure class="shot"><figcaption>Detail</figcaption><section class="phone" id="detail">
+    <div class="sb"><span>9:41</span><span class="sb-icons"><svg class="ic ic-p ic-ph-fill" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-fill:cell-signal-full"><path d="M208,40V200a16,16,0,0,1-16,16H32A16,16,0,0,1,20.7,188.68l160-160A16,16,0,0,1,208,40Z"/></svg><svg class="ic ic-p ic-ph-fill" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-fill:wifi-high"><path d="M244.35,92.8l-104,125.43A15.93,15.93,0,0,1,128,224h0a15.93,15.93,0,0,1-12.31-5.77L11.65,92.8A15.65,15.65,0,0,1,8.11,80.91,15.93,15.93,0,0,1,14.28,70.1,186.67,186.67,0,0,1,128,32,186.67,186.67,0,0,1,241.72,70.1a15.93,15.93,0,0,1,6.17,10.81A15.65,15.65,0,0,1,244.35,92.8Z"/></svg><svg class="ic ic-p ic-ph-fill" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-fill:battery-full"><path d="M200,56H32A24,24,0,0,0,8,80v96a24,24,0,0,0,24,24H200a24,24,0,0,0,24-24V80A24,24,0,0,0,200,56Zm8,120a8,8,0,0,1-8,8H32a8,8,0,0,1-8-8V80a8,8,0,0,1,8-8H200a8,8,0,0,1,8,8ZM192,96v64a8,8,0,0,1-8,8H48a8,8,0,0,1-8-8V96a8,8,0,0,1,8-8H184A8,8,0,0,1,192,96Zm64,0v64a8,8,0,0,1-16,0V96a8,8,0,0,1,16,0Z"/></svg></span></div>
+
+    <!-- Lorbeerzweig (eigene Form): links normal, rechts gespiegelt -->
+    <svg class="svg-defs" aria-hidden="true"><symbol id="laurel" viewBox="-3.5 -4.5 17 40.5">
+      <path d="M12 35C5 30 2.5 20 6.5 4" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+      <g fill="currentColor">
+        <path transform="translate(9.7 33) rotate(-75)" d="M0 0C-2.3-2.4-2.4-6 0-8.5C2.4-6 2.3-2.4 0 0Z"/>
+        <path transform="translate(7 29.1) rotate(-62)" d="M0 0C-2.3-2.4-2.4-6 0-8.5C2.4-6 2.3-2.4 0 0Z"/>
+        <path transform="translate(5.1 23.6) rotate(-48)" d="M0 0C-2.3-2.4-2.4-6 0-8.5C2.4-6 2.3-2.4 0 0Z"/>
+        <path transform="translate(4.6 16.8) rotate(-36)" d="M0 0C-2.3-2.4-2.4-6 0-8.5C2.4-6 2.3-2.4 0 0Z"/>
+        <path transform="translate(5.3 9.5) rotate(-28)" d="M0 0C-2.3-2.4-2.4-6 0-8.5C2.4-6 2.3-2.4 0 0Z"/>
+        <path transform="translate(6.5 4) rotate(14) scale(.85)" d="M0 0C-2.3-2.4-2.4-6 0-8.5C2.4-6 2.3-2.4 0 0Z"/>
+        <path transform="translate(5.9 26.5) rotate(16) scale(.8)" d="M0 0C-2.3-2.4-2.4-6 0-8.5C2.4-6 2.3-2.4 0 0Z"/>
+        <path transform="translate(4.7 20.4) rotate(31) scale(.8)" d="M0 0C-2.3-2.4-2.4-6 0-8.5C2.4-6 2.3-2.4 0 0Z"/>
+        <path transform="translate(4.9 12.9) rotate(41) scale(.8)" d="M0 0C-2.3-2.4-2.4-6 0-8.5C2.4-6 2.3-2.4 0 0Z"/>
+      </g>
+    </symbol></svg>
+
+    <div class="stage-photo scene-lissabon" role="img" aria-label="Lissabon">
+      <span class="photo-count">1 / 360</span>
+    </div>
+    <div class="photo-actions">
+      <button class="circle-btn" type="button" aria-label="Zurück"><svg class="ic ic-l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-i="lucide:chevron-left"><path d="m15 18-6-6 6-6" /></svg></button>
+      <div class="circle-group">
+        <button class="circle-btn" type="button" aria-label="Teilen"><svg class="ic ic-l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-i="lucide:share"><path d="M12 2v13" /><path d="m16 6-4-4-4 4" /><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" /></svg></button>
+        <button class="circle-btn is-saved" type="button" aria-label="Favorit"><svg class="ic ic-l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-i="lucide:heart"><path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5" /></svg></button>
+        <button class="circle-btn" type="button" aria-label="Mehr"><svg class="ic ic-l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-i="lucide:ellipsis"><circle cx="12" cy="12" r="1" /><circle cx="19" cy="12" r="1" /><circle cx="5" cy="12" r="1" /></svg></button>
+      </div>
+    </div>
+
+    <div class="sheet">
+      <header class="title-block">
+        <h1>Lissabon</h1>
+        <p>Album · Mai 2025</p>
+      </header>
+
+      <div class="fav-card">
+        <div class="fav-badge">
+          <svg class="laurel" aria-hidden="true"><use href="#laurel"/></svg>
+          <span>Lieblings-<br>album</span>
+          <svg class="laurel laurel-r" aria-hidden="true"><use href="#laurel"/></svg>
+        </div>
+        <span class="fav-divider"></span>
+        <div class="fav-stat"><b>342</b><span>Fotos</span></div>
+        <span class="fav-divider"></span>
+        <div class="fav-stat"><b>18</b><span>Videos</span></div>
+      </div>
+
+      <nav class="tabs" aria-label="Inhalt">
+        <a class="is-active">Fotos</a><a>Videos</a><a>Orte</a>
+      </nav>
+
+      <div class="collage">
+        <span class="tile tile-big scene-lissabon"></span>
+        <span class="tile crop-a scene-lissabon"></span>
+        <span class="tile crop-b scene-lissabon"></span>
+        <span class="tile crop-c scene-lissabon"></span>
+        <span class="tile crop-d scene-lissabon"></span>
+        <button class="all-photos" type="button"><svg class="ic ic-l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-i="lucide:grip"><circle cx="12" cy="5" r="1" /><circle cx="19" cy="5" r="1" /><circle cx="5" cy="5" r="1" /><circle cx="12" cy="12" r="1" /><circle cx="19" cy="12" r="1" /><circle cx="5" cy="12" r="1" /><circle cx="12" cy="19" r="1" /><circle cx="19" cy="19" r="1" /><circle cx="5" cy="19" r="1" /></svg>Alle Fotos</button>
+      </div>
+    </div>
+
+    <footer class="action-bar">
+      <div class="action-info"><small>Musik zur Diashow</small><a>Nachtfahrt</a></div>
+      <button class="btn-primary" type="button">Diashow starten</button>
+    </footer>
+    <div class="hi"></div>
+  </section></figure>
+
+</main><footer class="ms-foot"><b>Airbnb-Stil</b> · Ansatz: Bild-Karten · eigene Musterscreens mit Beispielinhalten, keine Originalscreens der Marke</footer></div>
+</body></html>

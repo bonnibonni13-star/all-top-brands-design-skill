@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="de"><head><meta charset="utf-8"><style id="ms-base">
+/* Musterscreens – Basis. Wird vom Renderer vor die eigenen Stile gesetzt; eigene Regeln überschreiben sie.
+   Platzhalter der Form „{{scene:<name>}}“ ersetzt der Renderer durch das SVG aus scenes/<name>.svg. */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body { background: #e7e7eb; font-family: Inter, "DejaVu Sans", sans-serif; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+.ms-wrap { display: inline-block; background: #e7e7eb; }
+.stage { display: flex; gap: 40px; align-items: flex-start; padding: 48px 48px 20px; width: max-content; }
+.shot { margin: 0; display: flex; flex-direction: column; gap: 14px; }
+.shot > figcaption { font: 600 13px/1 Inter, "DejaVu Sans", sans-serif; letter-spacing: .08em; text-transform: uppercase; color: #6b6b74; padding-left: 8px; }
+.phone { position: relative; width: 390px; height: 844px; overflow: hidden; border-radius: 40px; isolation: isolate;
+  box-shadow: 0 0 0 1px rgba(0,0,0,.06), 0 18px 50px rgba(0,0,0,.14); }
+.ms-foot { font: 500 13px/1.4 Inter, "DejaVu Sans", sans-serif; color: #6b6b74; padding: 0 56px 30px; }
+.ms-foot b { color: #3a3a40; font-weight: 600; }
+
+/* Rücksetzungen ohne Spezifität: eigene Klassen gewinnen immer. Eigene Resets bitte ebenfalls mit :where(). */
+:where(.phone) :where(h1, h2, h3, h4, h5, h6, p, ul, ol, li, figure, blockquote, dl, dd) { margin: 0; padding: 0; }
+:where(.phone) :where(ul, ol) { list-style: none; }
+:where(.phone) :where(button, input, select, textarea) { font: inherit; color: inherit; background: none; border: 0; padding: 0; margin: 0; }
+
+/* Icons: <i data-icon="lucide:house"></i> oder <i data-icon="ph-bold:house"></i> → Inline-SVG mit Klasse .ic */
+.ic { width: 1em; height: 1em; display: inline-block; vertical-align: -0.125em; flex: none; }
+.ic-missing { outline: 2px dashed red; }
+
+/* Statusleiste und Gestenleiste */
+.sb { height: 46px; display: flex; align-items: center; justify-content: space-between; padding: 4px 26px 0 32px;
+  font: 600 15px/1 Inter, "DejaVu Sans", sans-serif; position: relative; z-index: 30; }
+.sb-icons { display: flex; gap: 6px; font-size: 16px; align-items: center; }
+.hi { position: absolute; left: 50%; bottom: 8px; width: 134px; height: 5px; border-radius: 3px; transform: translateX(-50%);
+  background: currentColor; opacity: .45; z-index: 40; }
+
+/* Bilder (abstrakte Motive, gleich für alle Marken). Ausschnitt per background-position/-size, Behandlung frei. */
+[class*="scene-"] { background-size: cover; background-position: center; background-repeat: no-repeat; }
+.scene-see { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300' preserveAspectRatio='xMidYMid slice'%3E%3Cdefs%3E%3ClinearGradient id='a' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%2386cdf6'/%3E%3Cstop offset='.64' stop-color='%23ffe4b5'/%3E%3C/linearGradient%3E%3ClinearGradient id='b' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%234fb3cc'/%3E%3Cstop offset='1' stop-color='%231c627d'/%3E%3C/linearGradient%3E%3CradialGradient id='g'%3E%3Cstop offset='0' stop-color='%23fff6dc'/%3E%3Cstop offset='1' stop-color='%23fff6dc' stop-opacity='0'/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect width='400' height='300' fill='url(%23a)'/%3E%3Ccircle cx='296' cy='138' r='70' fill='url(%23g)'/%3E%3Ccircle cx='296' cy='138' r='26' fill='%23fff4d2'/%3E%3Cpath d='M0 176C60 148 112 156 162 166S250 146 312 152 380 168 400 164V300H0Z' fill='%2386b596'/%3E%3Cpath d='M0 190C80 174 140 188 200 184S322 170 400 182V300H0Z' fill='%234c8764'/%3E%3Crect y='198' width='400' height='102' fill='url(%23b)'/%3E%3Cpath d='M262 212H330M30 230H150M210 248H372M80 268H190' stroke='%23c9eef6' stroke-width='3' stroke-linecap='round' opacity='.45'/%3E%3Cpath d='M120 199l18-12 4 12z' fill='%23fdfdfd'/%3E%3Cpath d='M137 186v14' stroke='%23fdfdfd' stroke-width='2'/%3E%3C/svg%3E"); }
+.scene-lissabon { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300' preserveAspectRatio='xMidYMid slice'%3E%3Cdefs%3E%3ClinearGradient id='a' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23ffd9a3'/%3E%3Cstop offset='1' stop-color='%23f39a63'/%3E%3C/linearGradient%3E%3Cpattern id='w' width='18' height='24' patternUnits='userSpaceOnUse'%3E%3Crect x='6' y='7' width='6' height='10' rx='1' fill='%235b3428' opacity='.38'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width='400' height='300' fill='url(%23a)'/%3E%3Ccircle cx='84' cy='80' r='26' fill='%23fff2d4'/%3E%3Cpath d='M0 168h64v132H0z' fill='%23f6e6c8'/%3E%3Cpath d='M-4 170l36-20 36 20z' fill='%23c5513a'/%3E%3Cpath d='M64 146h72v154H64z' fill='%23eaa7a1'/%3E%3Cpath d='M60 148l40-24 40 24z' fill='%23b2412c'/%3E%3Cpath d='M136 180h56v120h-56z' fill='%239fc6d8'/%3E%3Cpath d='M132 182l32-18 32 18z' fill='%23c5513a'/%3E%3Cpath d='M192 136h84v164h-84z' fill='%23e3a65a'/%3E%3Cpath d='M188 138l46-26 46 26z' fill='%23b2412c'/%3E%3Cpath d='M276 162h62v138h-62z' fill='%23f6e6c8'/%3E%3Cpath d='M272 164l35-19 35 19z' fill='%23c5513a'/%3E%3Cpath d='M338 150h66v150h-66z' fill='%23eaa7a1'/%3E%3Cpath d='M334 152l37-22 37 22z' fill='%23b2412c'/%3E%3Crect y='150' width='400' height='150' fill='url(%23w)'/%3E%3Cpath d='M0 262c90-18 210-18 400 0v38H0z' fill='%239b3d2a'/%3E%3Crect x='150' y='236' width='70' height='30' rx='6' fill='%23f2c94c'/%3E%3Crect x='156' y='241' width='16' height='12' rx='2' fill='%235b3428' opacity='.5'/%3E%3Crect x='178' y='241' width='16' height='12' rx='2' fill='%235b3428' opacity='.5'/%3E%3Crect x='200' y='241' width='14' height='12' rx='2' fill='%235b3428' opacity='.5'/%3E%3C/svg%3E"); }
+.scene-konzert { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300' preserveAspectRatio='xMidYMid slice'%3E%3Cdefs%3E%3CradialGradient id='a' cx='.5' cy='1' r='1'%3E%3Cstop offset='0' stop-color='%234a1670'/%3E%3Cstop offset='1' stop-color='%230c0619'/%3E%3C/radialGradient%3E%3ClinearGradient id='p' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23ff5fcf' stop-opacity='.85'/%3E%3Cstop offset='1' stop-color='%23ff5fcf' stop-opacity='0'/%3E%3C/linearGradient%3E%3ClinearGradient id='c' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%2352dcff' stop-opacity='.8'/%3E%3Cstop offset='1' stop-color='%2352dcff' stop-opacity='0'/%3E%3C/linearGradient%3E%3CradialGradient id='s'%3E%3Cstop offset='0' stop-color='%23ff9a5c' stop-opacity='.9'/%3E%3Cstop offset='1' stop-color='%23ff9a5c' stop-opacity='0'/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect width='400' height='300' fill='url(%23a)'/%3E%3Cpath d='M90 0h14l70 260H40z' fill='url(%23p)' opacity='.7'/%3E%3Cpath d='M300 0h14l66 260H230z' fill='url(%23c)' opacity='.7'/%3E%3Cpath d='M196 0h10l60 250H140z' fill='url(%23p)' opacity='.45'/%3E%3Cellipse cx='200' cy='232' rx='190' ry='60' fill='url(%23s)'/%3E%3Cg fill='%23fff' opacity='.8'%3E%3Ccircle cx='40' cy='40' r='1.4'/%3E%3Ccircle cx='150' cy='24' r='1.2'/%3E%3Ccircle cx='260' cy='52' r='1.3'/%3E%3Ccircle cx='360' cy='30' r='1.5'/%3E%3C/g%3E%3Cpath d='M0 300V262c12-10 22-12 30-4 8-14 22-16 30-4 10-12 24-12 32 0 8-16 24-16 32-2 10-10 22-10 30 2 8-14 24-14 32 0 10-10 22-10 30 0 8-16 24-14 32 0 10-10 22-10 30 2 8-12 22-12 30-2 10-8 20-6 32 4V300z' fill='%2307030f'/%3E%3Cpath d='M60 262l-6-26M182 258l8-30M300 262l-4-28' stroke='%2307030f' stroke-width='7' stroke-linecap='round'/%3E%3C/svg%3E"); }
+.scene-nacht { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300' preserveAspectRatio='xMidYMid slice'%3E%3Cdefs%3E%3ClinearGradient id='a' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%230a0f2e'/%3E%3Cstop offset='.45' stop-color='%232d1a5e'/%3E%3Cstop offset='.62' stop-color='%23ff4f7e'/%3E%3C/linearGradient%3E%3ClinearGradient id='s' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23ffd36b'/%3E%3Cstop offset='1' stop-color='%23ff4f7e'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='400' height='300' fill='url(%23a)'/%3E%3Ccircle cx='200' cy='168' r='62' fill='url(%23s)'/%3E%3Cg fill='%234a2a78'%3E%3Crect x='138' y='140' width='124' height='5'/%3E%3Crect x='138' y='152' width='124' height='6'/%3E%3Crect x='138' y='165' width='124' height='7'/%3E%3C/g%3E%3Cpath d='M0 186h22v-22h14v-12h16v34h18v-26h12v26h22v-40h16v40h40V186h120v-30h14v30h18v-22h16v22h14v-36h18v36h40v-24h14v24h18' fill='%231b1145'/%3E%3Crect y='186' width='400' height='114' fill='%23120b2b'/%3E%3Cpath d='M200 186L-60 300M200 186L460 300' stroke='%23ff4fd8' stroke-width='2.5' opacity='.9'/%3E%3Cpath d='M200 186l-30 114M200 186l30 114' stroke='%2352e5ff' stroke-width='2' opacity='.6'/%3E%3Cpath d='M200 186L118 300M200 186l82 114' stroke='%2352e5ff' stroke-width='1.2' opacity='.35'/%3E%3Cpath d='M-20 214H420M-20 238H420M-20 270H420' stroke='%23ff4fd8' stroke-width='1' opacity='.35'/%3E%3Cg fill='%23fff'%3E%3Ccircle cx='60' cy='40' r='1.2'/%3E%3Ccircle cx='330' cy='28' r='1.4'/%3E%3Ccircle cx='250' cy='70' r='1'/%3E%3Ccircle cx='110' cy='90' r='1.1'/%3E%3C/g%3E%3C/svg%3E"); }
+.scene-herbst { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300' preserveAspectRatio='xMidYMid slice'%3E%3Cdefs%3E%3ClinearGradient id='a' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23fbd38d'/%3E%3Cstop offset='1' stop-color='%23e7843f'/%3E%3C/linearGradient%3E%3ClinearGradient id='m' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23fff' stop-opacity='0'/%3E%3Cstop offset='.5' stop-color='%23fff' stop-opacity='.35'/%3E%3Cstop offset='1' stop-color='%23fff' stop-opacity='0'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='400' height='300' fill='url(%23a)'/%3E%3Cg opacity='.55'%3E%3Ccircle cx='40' cy='150' r='46' fill='%23d9663a'/%3E%3Ccircle cx='130' cy='130' r='54' fill='%23e89a3c'/%3E%3Ccircle cx='250' cy='140' r='50' fill='%23c8502f'/%3E%3Ccircle cx='350' cy='125' r='58' fill='%23e89a3c'/%3E%3C/g%3E%3Crect y='150' width='400' height='60' fill='url(%23m)'/%3E%3Cg fill='%234a2a1d'%3E%3Crect x='66' y='170' width='9' height='110'/%3E%3Crect x='186' y='160' width='10' height='120'/%3E%3Crect x='306' y='168' width='9' height='112'/%3E%3C/g%3E%3Ccircle cx='70' cy='160' r='44' fill='%23c2452d'/%3E%3Ccircle cx='96' cy='182' r='30' fill='%23e5862c'/%3E%3Ccircle cx='190' cy='148' r='52' fill='%23f0a93a'/%3E%3Ccircle cx='160' cy='176' r='28' fill='%23c2452d'/%3E%3Ccircle cx='310' cy='156' r='48' fill='%238f2d1f'/%3E%3Ccircle cx='338' cy='186' r='30' fill='%23e5862c'/%3E%3Cpath d='M0 262c80-14 160-10 240-2s120 4 160-6v46H0z' fill='%236b3a22'/%3E%3Cg fill='%23f2b44c'%3E%3Cellipse cx='120' cy='272' rx='6' ry='3'/%3E%3Cellipse cx='260' cy='282' rx='5' ry='2.5'/%3E%3Cellipse cx='340' cy='270' rx='6' ry='3'/%3E%3C/g%3E%3C/svg%3E"); }
+.scene-studio { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300' preserveAspectRatio='xMidYMid slice'%3E%3Cdefs%3E%3CradialGradient id='a' cx='.25' cy='.35' r='.9'%3E%3Cstop offset='0' stop-color='%236b3f12'/%3E%3Cstop offset='.55' stop-color='%231d1209'/%3E%3Cstop offset='1' stop-color='%230a0705'/%3E%3C/radialGradient%3E%3CradialGradient id='l'%3E%3Cstop offset='0' stop-color='%23ffb347' stop-opacity='.55'/%3E%3Cstop offset='1' stop-color='%23ffb347' stop-opacity='0'/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect width='400' height='300' fill='url(%23a)'/%3E%3Cellipse cx='90' cy='90' rx='150' ry='110' fill='url(%23l)'/%3E%3Ccircle cx='262' cy='160' r='116' fill='%23111'/%3E%3Cg fill='none' stroke='%232b2b2b' stroke-width='1.5'%3E%3Ccircle cx='262' cy='160' r='104'/%3E%3Ccircle cx='262' cy='160' r='92'/%3E%3Ccircle cx='262' cy='160' r='80'/%3E%3Ccircle cx='262' cy='160' r='68'/%3E%3Ccircle cx='262' cy='160' r='56'/%3E%3C/g%3E%3Cpath d='M190 84a104 104 0 0 1 120-14' stroke='%235a5a5a' stroke-width='3' fill='none' opacity='.6'/%3E%3Ccircle cx='262' cy='160' r='36' fill='%23e3a33b'/%3E%3Ccircle cx='262' cy='160' r='4' fill='%23111'/%3E%3Cpath d='M380 20l-60 110' stroke='%23c9c9c9' stroke-width='5' stroke-linecap='round'/%3E%3Crect x='306' y='124' width='22' height='12' rx='3' fill='%23d9d9d9' transform='rotate(-60 317 130)'/%3E%3C/svg%3E"); }
+.scene-wien { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300' preserveAspectRatio='xMidYMid slice'%3E%3Cdefs%3E%3ClinearGradient id='a' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23c9dcf2'/%3E%3Cstop offset='.7' stop-color='%23f6d6de'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='400' height='300' fill='url(%23a)'/%3E%3Cg fill='%23aebfd4'%3E%3Crect x='0' y='170' width='70' height='70'/%3E%3Crect x='300' y='160' width='100' height='80'/%3E%3Crect x='60' y='182' width='40' height='58'/%3E%3C/g%3E%3Cg fill='%238ea3bd'%3E%3Crect x='120' y='150' width='160' height='90'/%3E%3Cpath d='M150 150a50 50 0 0 1 100 0z'/%3E%3Crect x='196' y='72' width='8' height='30'/%3E%3Ccircle cx='200' cy='70' r='5'/%3E%3Crect x='104' y='96' width='14' height='144'/%3E%3Crect x='282' y='96' width='14' height='144'/%3E%3Cpath d='M100 96h22l-11-16zM278 96h22l-11-16z'/%3E%3Crect x='166' y='170' width='68' height='70' fill='%237a90ab'/%3E%3Cpath d='M166 170h68l-34-22z' fill='%239fb2c9'/%3E%3C/g%3E%3Cg fill='%237a90ab'%3E%3Crect x='176' y='186' width='6' height='54'/%3E%3Crect x='190' y='186' width='6' height='54'/%3E%3Crect x='204' y='186' width='6' height='54'/%3E%3Crect x='218' y='186' width='6' height='54'/%3E%3C/g%3E%3Cpath d='M0 236c100-10 300-10 400 0v64H0z' fill='%23f6f8fc'/%3E%3Cpath d='M0 262c120-8 280-6 400 4' stroke='%23dfe6f0' stroke-width='3' fill='none'/%3E%3Cg fill='%23fff' opacity='.85'%3E%3Ccircle cx='40' cy='60' r='2'/%3E%3Ccircle cx='90' cy='120' r='1.6'/%3E%3Ccircle cx='150' cy='40' r='2.2'/%3E%3Ccircle cx='250' cy='110' r='1.8'/%3E%3Ccircle cx='330' cy='50' r='2'/%3E%3Ccircle cx='370' cy='120' r='1.6'/%3E%3Ccircle cx='300' cy='200' r='1.8'/%3E%3Ccircle cx='60' cy='210' r='2'/%3E%3C/g%3E%3C/svg%3E"); }
+.scene-film { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300' preserveAspectRatio='xMidYMid slice'%3E%3Cdefs%3E%3ClinearGradient id='a' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%230f4c5c'/%3E%3Cstop offset='.45' stop-color='%231f7a77'/%3E%3Cstop offset='.7' stop-color='%23f4a259'/%3E%3Cstop offset='1' stop-color='%23e76f51'/%3E%3C/linearGradient%3E%3ClinearGradient id='r' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23ffd27a' stop-opacity='.9'/%3E%3Cstop offset='1' stop-color='%23ffd27a' stop-opacity='0'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='400' height='300' fill='url(%23a)'/%3E%3Ccircle cx='250' cy='196' r='44' fill='%23ffd166'/%3E%3Crect x='206' y='214' width='88' height='86' fill='url(%23r)' opacity='.7'/%3E%3Cpath d='M0 214h400v86H0z' fill='%230b2a33' opacity='.55'/%3E%3Cpath d='M0 214c40-6 70-30 96-28s40 20 70 22 70-8 100-4 90 8 134 4v8H0z' fill='%230b2a33'/%3E%3Cpath d='M70 214c-2-40 4-70 14-92' stroke='%230b2a33' stroke-width='5' fill='none'/%3E%3Cpath d='M84 122c-18-8-38-4-50 8M84 122c-6-16-22-24-38-22M84 122c14-12 34-14 48-4M84 122c18-2 32 8 38 22M84 122c4-16 16-26 30-28' stroke='%230b2a33' stroke-width='5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); }
+.scene-person { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='xMidYMid slice'%3E%3Cdefs%3E%3ClinearGradient id='a' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23f3d9c1'/%3E%3Cstop offset='1' stop-color='%23d8a98a'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' fill='url(%23a)'/%3E%3Cpath d='M14 104c4-22 18-32 36-32s32 10 36 32z' fill='%233d5a80'/%3E%3Ccircle cx='50' cy='44' r='19' fill='%239c6b52'/%3E%3Cpath d='M30 44c0-16 9-25 21-25 13 0 21 9 21 22-6-6-16-9-26-8-7 1-12 5-16 11z' fill='%233a2418'/%3E%3C/svg%3E"); }
+
+/* Erprobte Bildausschnitte für weitere „Fotos“ aus einem Motiv (z. B. Fotoraster): class="scene-lissabon crop-3" */
+.crop-1 { background-size: 260%; background-position: 8% 18%; }
+.crop-2 { background-size: 320%; background-position: 85% 60%; }
+.crop-3 { background-size: 360%; background-position: 50% 95%; }
+.crop-4 { background-size: 300%; background-position: 60% 35%; }
+.crop-5 { background-size: 280%; background-position: 0% 60%; }
+.crop-6 { background-size: 500%; background-position: 20% 20%; }
+.crop-7 { background-size: 240%; background-position: 100% 90%; }
+.crop-8 { background-size: 550%; background-position: 70% 55%; }
+.crop-9 { background-size: 220%; background-position: 35% 0%; }
+.crop-10 { background-size: 420%; background-position: 40% 62%; }
+.crop-11 { background-size: 340%; background-position: 95% 45%; }
+.crop-12 { background-size: 300%; background-position: 0% 100%; }
+
+/* Körnung als Überlagerung: Element bekommt .grain, Stärke per --grain (0–1). */
+.grain { position: relative; }
+.grain::after { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: var(--grain, .18); mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E"); background-size: 160px 160px; }
+
+/* Horizontale Reihen dürfen am Rand angeschnitten sein wie beim echten Scrollen. */
+.row-x { display: flex; overflow: hidden; }
+
+</style>
+<title>Musterscreens Superhuman</title>
+<style>
+:root{
+  /* Drei Leinwände: Indigo – Weiß – Petrol */
+  --indigo:#1b1938; --indigo-deep:#0e0c1f; --violet:#c9b4fa;
+  --teal:#0e3030; --teal-mid:#155555;
+  --canvas:#ffffff; --canvas-soft:#fafaf8;
+  --ink:#292827; --ink-mute:#73706d; --ink-faint:#9a9794;
+  --hair:#e8e4dd; --hair-dark:#3f3a52;
+  --on-dark:#ffffff; --on-dark-mute:#bcbac9; --on-dark-faint:#5a5772;
+  /* Form */
+  --r-xs:4px; --r-sm:6px; --r-md:8px; --r-lg:12px; --r-xl:16px; --r-full:9999px;
+  /* Raster */
+  --s-xxs:2px; --s-xs:4px; --s-sm:8px; --s-md:12px; --s-lg:16px; --s-xl:24px; --s-xxl:32px;
+  --pad:24px;
+  /* Schrift: eine Familie, Zwischen-Gewichte, dichtes Display */
+  --font:"Inter","DejaVu Sans",sans-serif;
+  --font-display:"Inter Display","Inter",sans-serif;
+  /* Bewegung: bewusst langsam */
+  --dur-s:180ms; --dur-m:320ms; --ease:cubic-bezier(.22,1,.36,1);
+}
+
+.phone{ font-family:var(--font); background:var(--canvas); color:var(--ink); }
+
+/* ---------- Typografie: Display dicht gestapelt ---------- */
+.display{ font-family:var(--font-display); font-size:32px; font-weight:500; line-height:.96;
+  letter-spacing:-1.1px; }
+.display-lg{ font-family:var(--font-display); font-size:40px; font-weight:500; line-height:.98;
+  letter-spacing:-1.3px; }
+.display-sm{ font-family:var(--font-display); font-size:22px; font-weight:500; line-height:1.14;
+  letter-spacing:-.45px; }
+.heading{ font-size:20px; font-weight:500; line-height:1.2; letter-spacing:-.4px; }
+.body{ font-size:16px; font-weight:400; line-height:1.5; }
+.caption{ font-size:14px; font-weight:400; line-height:1.4; color:var(--ink-mute); }
+.micro{ font-size:12px; font-weight:600; line-height:1.4; letter-spacing:.02em; }
+
+/* ---------- Icons: sehr fein, nie gefüllt ---------- */
+.ic{ font-size:21px; }
+
+/* ---------- Knöpfe: 8-px-Rechteck; Pille nur auf der dunklen Bühne ---------- */
+.btn{ display:inline-flex; align-items:center; justify-content:center; gap:8px; height:44px; padding:0 20px;
+  border-radius:var(--r-md); font-size:15px; font-weight:700; line-height:1;
+  transition:background-color var(--dur-s) var(--ease); }
+.btn .ic{ font-size:18px; }
+.btn-dark{ background:var(--indigo); color:var(--on-dark); }
+.btn-dark:active{ background:var(--indigo-deep); }
+.btn-on-teal{ background:var(--canvas); color:var(--teal); }
+.btn-outline{ background:var(--canvas); color:var(--ink); box-shadow:inset 0 0 0 1px var(--hair); }
+.pill-cta{ display:inline-flex; align-items:center; justify-content:center; gap:9px; height:46px; padding:0 22px;
+  border-radius:var(--r-full); background:var(--violet); color:var(--indigo);
+  font-size:15px; font-weight:700; line-height:1; }
+.pill-cta .ic{ font-size:18px; }
+.icon-btn{ width:38px; height:38px; flex:none; display:inline-flex; align-items:center; justify-content:center;
+  border-radius:var(--r-md); color:var(--on-dark); }
+
+/* ---------- Dunkle Bühne mit Violett-Himmel und halb angeschnittenem Bild ---------- */
+.hero{ position:relative; overflow:hidden; color:var(--on-dark);
+  background:
+    radial-gradient(86% 64% at 70% 4%, rgba(201,180,250,.58) 0%, rgba(132,112,208,.3) 34%, rgba(27,25,56,0) 72%),
+    linear-gradient(180deg, #221f45 0%, var(--indigo) 46%, var(--indigo-deep) 100%); }
+/* Das Bild blendet links weich in die Leinwand aus – Maske statt harter Kante */
+.portrait{ position:absolute; inset:0 0 0 44%; background-size:cover; background-position:50% 24%;
+  -webkit-mask-image:linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,.3) 24%, rgba(0,0,0,.9) 62%, #000 100%);
+  mask-image:linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,.3) 24%, rgba(0,0,0,.9) 62%, #000 100%); }
+.portrait::after{ content:""; position:absolute; inset:0;
+  background:linear-gradient(90deg, rgba(27,25,56,.72) 0%, rgba(27,25,56,.3) 52%, rgba(27,25,56,.16) 100%); }
+.hero .inner{ position:relative; z-index:2; }
+.portrait.tint::after{ background:linear-gradient(90deg, rgba(27,25,56,.8) 0%, rgba(27,25,56,.5) 52%, rgba(27,25,56,.4) 100%); }
+
+/* ---------- Leiste oben: Textziele mit Unterstrich ---------- */
+.topnav{ display:flex; align-items:center; gap:20px; height:50px; padding:0 var(--pad); }
+.topnav a{ font-size:15px; font-weight:500; letter-spacing:-.1px; color:var(--on-dark-mute);
+  padding-bottom:4px; border-bottom:2px solid transparent; }
+.topnav a.on{ color:var(--on-dark); border-bottom-color:var(--violet); }
+.topnav .avatar{ margin-left:auto; }
+.topnav.light a{ color:var(--ink-mute); }
+.topnav.light a.on{ color:var(--ink); border-bottom-color:var(--indigo); }
+.topnav.light{ border-bottom:1px solid var(--hair); }
+.avatar{ width:32px; height:32px; flex:none; border-radius:var(--r-full); background-color:var(--canvas-soft);
+  background-size:cover; background-position:50% 22%; }
+
+.hero .copy{ padding:28px var(--pad) 26px; max-width:248px; }
+.hero .micro{ color:var(--on-dark-mute); }
+.hero .caption{ color:var(--on-dark-mute); }
+
+/* ---------- Heller Mittelteil ---------- */
+.mid{ padding:22px var(--pad) 0; }
+.mid-head{ display:flex; align-items:baseline; gap:10px; margin-bottom:12px; }
+.mid-head .link{ margin-left:auto; font-size:14px; font-weight:500; color:var(--ink);
+  text-decoration:underline; text-underline-offset:3px; }
+
+/* Wechselzeilen auf #fafaf8 mit 8-px-Ecken */
+.alt{ display:flex; align-items:center; gap:14px; height:62px; padding:0 12px; border-radius:var(--r-md); }
+.alt:nth-child(odd){ background:var(--canvas-soft); }
+.alt .thumb{ width:42px; height:42px; flex:none; border-radius:var(--r-md); }
+.alt .txt{ min-width:0; flex:1; }
+.alt .txt b{ display:block; font-size:16px; font-weight:500; letter-spacing:-.2px; }
+.alt .txt span{ display:block; font-size:13px; color:var(--ink-mute); margin-top:2px; }
+.alt .ic{ font-size:16px; color:var(--ink-faint); flex:none; }
+
+/* ---------- Petrol-Abschlussband ---------- */
+.teal{ position:absolute; left:0; right:0; bottom:0; background:var(--teal); color:var(--on-dark);
+  padding:20px var(--pad) 26px; }
+.teal .micro{ color:rgba(255,255,255,.62); }
+.teal .track{ height:3px; border-radius:var(--r-full); background:var(--teal-mid); margin-top:14px;
+  overflow:hidden; }
+.teal .track i{ display:block; height:100%; width:69%; background:var(--on-dark); }
+.teal .foot{ display:flex; align-items:center; gap:12px; margin-top:14px; }
+.teal .foot .caption{ color:rgba(255,255,255,.62); flex:1; }
+
+/* ---------- Suche und Pillen-Filter ---------- */
+.search{ display:flex; align-items:center; gap:10px; height:46px; padding:0 14px; border-radius:var(--r-sm);
+  background:var(--canvas); box-shadow:inset 0 0 0 1px var(--hair); color:var(--ink-faint); font-size:16px; }
+.search .ic{ font-size:19px; color:var(--ink-mute); }
+.pills{ display:flex; gap:7px; }
+.pills button{ height:34px; padding:0 13px; border-radius:var(--r-full); font-size:12.5px; font-weight:600;
+  color:var(--ink); background:var(--canvas); box-shadow:inset 0 0 0 1px var(--hair);
+  transition:background-color var(--dur-s) var(--ease); }
+.pills button.on{ background:var(--indigo); color:var(--on-dark); box-shadow:none; }
+
+/* ---------- Editoriale Zeilen: viel Luft, Haarlinie als Trenner ---------- */
+.ed{ display:flex; align-items:center; gap:16px; padding:14px 0; border-top:1px solid var(--hair); }
+.ed:first-of-type{ border-top:0; }
+.ed .thumb{ width:56px; height:56px; flex:none; border-radius:var(--r-md); }
+.ed .txt{ min-width:0; flex:1; }
+.ed .txt .t{ display:block; font-size:20px; font-weight:500; letter-spacing:-.4px; line-height:1.2; }
+.ed .txt .m{ display:block; font-size:14px; color:var(--ink-mute); margin-top:4px; }
+.ed .ic{ font-size:17px; color:var(--ink-faint); flex:none; }
+
+/* ---------- Detail ---------- */
+.grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:16px; }
+.grid .photo{ aspect-ratio:1/1; border-radius:var(--r-md); }
+.hero .acts{ position:absolute; top:46px; right:calc(var(--pad) - 9px); height:50px; display:flex; align-items:center; gap:4px;
+  z-index:3; }
+
+/* ---------- Bewegung: 10 px herauf, 70 ms Staffelung ---------- */
+@media (prefers-reduced-motion: no-preference){
+  .hero .copy > *, .mid > *{ animation:rise var(--dur-m) var(--ease) both; }
+  .hero .copy > *:nth-child(2){ animation-delay:70ms; }
+  .hero .copy > *:nth-child(3){ animation-delay:140ms; }
+  .hero .copy > *:nth-child(4){ animation-delay:210ms; }
+  .teal{ animation:fade var(--dur-m) var(--ease) 140ms both; }
+  @keyframes rise{ from{ opacity:0; transform:translateY(10px); } to{ opacity:1; transform:none; } }
+  @keyframes fade{ from{ opacity:0; } to{ opacity:1; } }
+}
+</style></head>
+<body>
+<div class="ms-wrap"><main class="stage">
+
+  <!-- ===================== START ===================== -->
+  <figure class="shot"><figcaption>Start</figcaption>
+  <section class="phone" id="start">
+    <div class="hero" style="height:388px">
+      <div class="portrait scene-person"></div>
+      <div class="inner">
+        <div class="sb" style="color:#ffffff"><span>9:41</span><span class="sb-icons"><svg class="ic ic-p ic-ph-fill" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-fill:cell-signal-full"><path d="M208,40V200a16,16,0,0,1-16,16H32A16,16,0,0,1,20.7,188.68l160-160A16,16,0,0,1,208,40Z"/></svg><svg class="ic ic-p ic-ph-fill" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-fill:wifi-high"><path d="M244.35,92.8l-104,125.43A15.93,15.93,0,0,1,128,224h0a15.93,15.93,0,0,1-12.31-5.77L11.65,92.8A15.65,15.65,0,0,1,8.11,80.91,15.93,15.93,0,0,1,14.28,70.1,186.67,186.67,0,0,1,128,32,186.67,186.67,0,0,1,241.72,70.1a15.93,15.93,0,0,1,6.17,10.81A15.65,15.65,0,0,1,244.35,92.8Z"/></svg><svg class="ic ic-p ic-ph-fill" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-fill:battery-full"><path d="M200,56H32A24,24,0,0,0,8,80v96a24,24,0,0,0,24,24H200a24,24,0,0,0,24-24V80A24,24,0,0,0,200,56Zm8,120a8,8,0,0,1-8,8H32a8,8,0,0,1-8-8V80a8,8,0,0,1,8-8H200a8,8,0,0,1,8,8ZM192,96v64a8,8,0,0,1-8,8H48a8,8,0,0,1-8-8V96a8,8,0,0,1,8-8H184A8,8,0,0,1,192,96Zm64,0v64a8,8,0,0,1-16,0V96a8,8,0,0,1,16,0Z"/></svg></span></div>
+        <nav class="topnav">
+          <a class="on">Start</a><a>Bibliothek</a><a>Suche</a>
+          <span class="avatar scene-person"></span>
+        </nav>
+        <div class="copy">
+          <p class="micro">Rückblick · vor einem Jahr</p>
+          <h1 class="display" style="margin-top:12px">Vor einem<br>Jahr:<br>Herbstwald</h1>
+          <p class="caption" style="margin-top:12px">86 Fotos · Okt. 2024</p>
+          <button class="pill-cta" style="margin-top:18px"><svg class="ic ic-p ic-ph-light ic" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-light:play"><path d="M231.36,116.19,87.28,28.06a14,14,0,0,0-14.18-.27A13.69,13.69,0,0,0,66,39.87V216.13a13.69,13.69,0,0,0,7.1,12.08,14,14,0,0,0,14.18-.27l144.08-88.13a13.82,13.82,0,0,0,0-23.62Zm-6.26,13.38L81,217.7a2,2,0,0,1-2.06,0,1.78,1.78,0,0,1-1-1.61V39.87a1.78,1.78,0,0,1,1-1.61A2.06,2.06,0,0,1,80,38a2,2,0,0,1,1,.31L225.1,126.43a1.82,1.82,0,0,1,0,3.14Z"/></svg>Ansehen</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="mid">
+      <div class="mid-head">
+        <h2 class="heading">Zuletzt hinzugefügt</h2>
+        <span class="link">Alle</span>
+      </div>
+      <div class="alt">
+        <span class="thumb scene-see"></span>
+        <span class="txt"><b>Sommer am See</b><span>128 Fotos · Aug. 2025</span></span>
+        <svg class="ic ic-p ic-ph-light ic" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-light:caret-right"><path d="M180.24,132.24l-80,80a6,6,0,0,1-8.48-8.48L167.51,128,91.76,52.24a6,6,0,0,1,8.48-8.48l80,80A6,6,0,0,1,180.24,132.24Z"/></svg>
+      </div>
+      <div class="alt">
+        <span class="thumb scene-konzert"></span>
+        <span class="txt"><b>Konzert im Park</b><span>12 Videos · 1:04 Std.</span></span>
+        <svg class="ic ic-p ic-ph-light ic" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-light:caret-right"><path d="M180.24,132.24l-80,80a6,6,0,0,1-8.48-8.48L167.51,128,91.76,52.24a6,6,0,0,1,8.48-8.48l80,80A6,6,0,0,1,180.24,132.24Z"/></svg>
+      </div>
+      <div class="alt">
+        <span class="thumb scene-nacht"></span>
+        <span class="txt"><b>Nachtfahrt</b><span>24 Titel · 1 Std. 32 Min.</span></span>
+        <svg class="ic ic-p ic-ph-light ic" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-light:caret-right"><path d="M180.24,132.24l-80,80a6,6,0,0,1-8.48-8.48L167.51,128,91.76,52.24a6,6,0,0,1,8.48-8.48l80,80A6,6,0,0,1,180.24,132.24Z"/></svg>
+      </div>
+      <div class="alt">
+        <span class="thumb scene-studio"></span>
+        <span class="txt"><b>Studio-Sessions</b><span>11 Titel · 48 Min.</span></span>
+        <svg class="ic ic-p ic-ph-light ic" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-light:caret-right"><path d="M180.24,132.24l-80,80a6,6,0,0,1-8.48-8.48L167.51,128,91.76,52.24a6,6,0,0,1,8.48-8.48l80,80A6,6,0,0,1,180.24,132.24Z"/></svg>
+      </div>
+    </div>
+
+    <div class="teal">
+      <p class="micro">Speicher</p>
+      <p class="display-sm" style="margin-top:8px">412 GB von 600 GB</p>
+      <div class="track"><i></i></div>
+      <div class="foot">
+        <span class="caption">1.248 Fotos · 96 Videos · 312 Titel</span>
+        <button class="btn btn-on-teal">Quellen</button>
+      </div>
+    </div>
+    <div class="hi" style="color:#ffffff"></div>
+  </section></figure>
+
+  <!-- ===================== BIBLIOTHEK ===================== -->
+  <figure class="shot"><figcaption>Bibliothek</figcaption>
+  <section class="phone" id="bibliothek">
+    <div class="sb" style="color:#292827"><span>9:41</span><span class="sb-icons"><svg class="ic ic-p ic-ph-fill" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-fill:cell-signal-full"><path d="M208,40V200a16,16,0,0,1-16,16H32A16,16,0,0,1,20.7,188.68l160-160A16,16,0,0,1,208,40Z"/></svg><svg class="ic ic-p ic-ph-fill" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-fill:wifi-high"><path d="M244.35,92.8l-104,125.43A15.93,15.93,0,0,1,128,224h0a15.93,15.93,0,0,1-12.31-5.77L11.65,92.8A15.65,15.65,0,0,1,8.11,80.91,15.93,15.93,0,0,1,14.28,70.1,186.67,186.67,0,0,1,128,32,186.67,186.67,0,0,1,241.72,70.1a15.93,15.93,0,0,1,6.17,10.81A15.65,15.65,0,0,1,244.35,92.8Z"/></svg><svg class="ic ic-p ic-ph-fill" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-fill:battery-full"><path d="M200,56H32A24,24,0,0,0,8,80v96a24,24,0,0,0,24,24H200a24,24,0,0,0,24-24V80A24,24,0,0,0,200,56Zm8,120a8,8,0,0,1-8,8H32a8,8,0,0,1-8-8V80a8,8,0,0,1,8-8H200a8,8,0,0,1,8,8ZM192,96v64a8,8,0,0,1-8,8H48a8,8,0,0,1-8-8V96a8,8,0,0,1,8-8H184A8,8,0,0,1,192,96Zm64,0v64a8,8,0,0,1-16,0V96a8,8,0,0,1,16,0Z"/></svg></span></div>
+    <nav class="topnav light">
+      <a>Start</a><a class="on">Bibliothek</a><a>Suche</a>
+      <span class="avatar scene-person"></span>
+    </nav>
+
+    <div class="mid" style="padding-top:20px">
+      <h1 class="display-lg">Bibliothek</h1>
+      <div class="search" style="margin-top:18px">
+        <svg class="ic ic-p ic-ph-light ic" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-light:magnifying-glass"><path d="M228.24,219.76l-51.38-51.38a86.15,86.15,0,1,0-8.48,8.48l51.38,51.38a6,6,0,0,0,8.48-8.48ZM38,112a74,74,0,1,1,74,74A74.09,74.09,0,0,1,38,112Z"/></svg><span>Alben, Fotos und Titel</span>
+      </div>
+      <div class="pills" style="margin-top:14px">
+        <button class="on">Alle</button><button>Fotos</button><button>Videos</button><button>Musik</button><button>Alben</button>
+      </div>
+
+      <div style="margin-top:14px">
+        <div class="ed">
+          <span class="thumb scene-lissabon"></span>
+          <span class="txt"><span class="t">Lissabon</span><span class="m">Album · 342 Fotos · 18 Videos</span></span>
+          <svg class="ic ic-p ic-ph-light ic" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-light:caret-right"><path d="M180.24,132.24l-80,80a6,6,0,0,1-8.48-8.48L167.51,128,91.76,52.24a6,6,0,0,1,8.48-8.48l80,80A6,6,0,0,1,180.24,132.24Z"/></svg>
+        </div>
+        <div class="ed">
+          <span class="thumb scene-see"></span>
+          <span class="txt"><span class="t">Sommer am See</span><span class="m">Album · 128 Fotos · Aug. 2025</span></span>
+          <svg class="ic ic-p ic-ph-light ic" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-light:caret-right"><path d="M180.24,132.24l-80,80a6,6,0,0,1-8.48-8.48L167.51,128,91.76,52.24a6,6,0,0,1,8.48-8.48l80,80A6,6,0,0,1,180.24,132.24Z"/></svg>
+        </div>
+        <div class="ed">
+          <span class="thumb scene-herbst"></span>
+          <span class="txt"><span class="t">Herbstwald</span><span class="m">Album · 86 Fotos · Okt. 2024</span></span>
+          <svg class="ic ic-p ic-ph-light ic" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-light:caret-right"><path d="M180.24,132.24l-80,80a6,6,0,0,1-8.48-8.48L167.51,128,91.76,52.24a6,6,0,0,1,8.48-8.48l80,80A6,6,0,0,1,180.24,132.24Z"/></svg>
+        </div>
+        <div class="ed">
+          <span class="thumb scene-wien"></span>
+          <span class="txt"><span class="t">Winter in Wien</span><span class="m">Album · 203 Fotos · Jan. 2025</span></span>
+          <svg class="ic ic-p ic-ph-light ic" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-light:caret-right"><path d="M180.24,132.24l-80,80a6,6,0,0,1-8.48-8.48L167.51,128,91.76,52.24a6,6,0,0,1,8.48-8.48l80,80A6,6,0,0,1,180.24,132.24Z"/></svg>
+        </div>
+        <div class="ed">
+          <span class="thumb scene-konzert"></span>
+          <span class="txt"><span class="t">Konzert im Park</span><span class="m">Videos · 12 Videos · 1:04 Std.</span></span>
+          <svg class="ic ic-p ic-ph-light ic" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-light:caret-right"><path d="M180.24,132.24l-80,80a6,6,0,0,1-8.48-8.48L167.51,128,91.76,52.24a6,6,0,0,1,8.48-8.48l80,80A6,6,0,0,1,180.24,132.24Z"/></svg>
+        </div>
+        <div class="ed">
+          <span class="thumb scene-film"></span>
+          <span class="txt"><span class="t">Kurzfilme 2024</span><span class="m">Videos · 7 Videos · 38 Min.</span></span>
+          <svg class="ic ic-p ic-ph-light ic" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-light:caret-right"><path d="M180.24,132.24l-80,80a6,6,0,0,1-8.48-8.48L167.51,128,91.76,52.24a6,6,0,0,1,8.48-8.48l80,80A6,6,0,0,1,180.24,132.24Z"/></svg>
+        </div>
+        <div class="ed">
+          <span class="thumb scene-nacht"></span>
+          <span class="txt"><span class="t">Nachtfahrt</span><span class="m">Playlist · 24 Titel · 1 Std. 32 Min.</span></span>
+          <svg class="ic ic-p ic-ph-light ic" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-light:caret-right"><path d="M180.24,132.24l-80,80a6,6,0,0,1-8.48-8.48L167.51,128,91.76,52.24a6,6,0,0,1,8.48-8.48l80,80A6,6,0,0,1,180.24,132.24Z"/></svg>
+        </div>
+      </div>
+    </div>
+    <div class="hi" style="color:#292827"></div>
+  </section></figure>
+
+  <!-- ===================== DETAIL ===================== -->
+  <figure class="shot"><figcaption>Detail</figcaption>
+  <section class="phone" id="detail">
+    <div class="hero" style="height:352px">
+      <div class="portrait scene-lissabon tint" style="background-position:58% 46%"></div>
+      <div class="inner">
+        <div class="sb" style="color:#ffffff"><span>9:41</span><span class="sb-icons"><svg class="ic ic-p ic-ph-fill" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-fill:cell-signal-full"><path d="M208,40V200a16,16,0,0,1-16,16H32A16,16,0,0,1,20.7,188.68l160-160A16,16,0,0,1,208,40Z"/></svg><svg class="ic ic-p ic-ph-fill" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-fill:wifi-high"><path d="M244.35,92.8l-104,125.43A15.93,15.93,0,0,1,128,224h0a15.93,15.93,0,0,1-12.31-5.77L11.65,92.8A15.65,15.65,0,0,1,8.11,80.91,15.93,15.93,0,0,1,14.28,70.1,186.67,186.67,0,0,1,128,32,186.67,186.67,0,0,1,241.72,70.1a15.93,15.93,0,0,1,6.17,10.81A15.65,15.65,0,0,1,244.35,92.8Z"/></svg><svg class="ic ic-p ic-ph-fill" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-fill:battery-full"><path d="M200,56H32A24,24,0,0,0,8,80v96a24,24,0,0,0,24,24H200a24,24,0,0,0,24-24V80A24,24,0,0,0,200,56Zm8,120a8,8,0,0,1-8,8H32a8,8,0,0,1-8-8V80a8,8,0,0,1,8-8H200a8,8,0,0,1,8,8ZM192,96v64a8,8,0,0,1-8,8H48a8,8,0,0,1-8-8V96a8,8,0,0,1,8-8H184A8,8,0,0,1,192,96Zm64,0v64a8,8,0,0,1-16,0V96a8,8,0,0,1,16,0Z"/></svg></span></div>
+        <nav class="topnav">
+          <span class="icon-btn" style="margin-left:-9px"><svg class="ic ic-p ic-ph-light ic" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-light:arrow-left"><path d="M222,128a6,6,0,0,1-6,6H54.49l61.75,61.76a6,6,0,1,1-8.48,8.48l-72-72a6,6,0,0,1,0-8.48l72-72a6,6,0,0,1,8.48,8.48L54.49,122H216A6,6,0,0,1,222,128Z"/></svg></span>
+        </nav>
+        <div class="copy">
+          <p class="micro">Album · Mai 2025</p>
+          <h1 class="display" style="margin-top:12px">Lissabon</h1>
+          <p class="caption" style="margin-top:10px">342 Fotos · 18 Videos</p>
+          <button class="pill-cta" style="margin-top:18px"><svg class="ic ic-p ic-ph-light ic" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-light:play"><path d="M231.36,116.19,87.28,28.06a14,14,0,0,0-14.18-.27A13.69,13.69,0,0,0,66,39.87V216.13a13.69,13.69,0,0,0,7.1,12.08,14,14,0,0,0,14.18-.27l144.08-88.13a13.82,13.82,0,0,0,0-23.62Zm-6.26,13.38L81,217.7a2,2,0,0,1-2.06,0,1.78,1.78,0,0,1-1-1.61V39.87a1.78,1.78,0,0,1,1-1.61A2.06,2.06,0,0,1,80,38a2,2,0,0,1,1,.31L225.1,126.43a1.82,1.82,0,0,1,0,3.14Z"/></svg>Diashow starten</button>
+        </div>
+      </div>
+      <div class="acts">
+        <span class="icon-btn"><svg class="ic ic-p ic-ph-light ic" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-light:heart"><path d="M178,42c-21,0-39.26,9.47-50,25.34C117.26,51.47,99,42,78,42a60.07,60.07,0,0,0-60,60c0,29.2,18.2,59.59,54.1,90.31a334.68,334.68,0,0,0,53.06,37,6,6,0,0,0,5.68,0,334.68,334.68,0,0,0,53.06-37C219.8,161.59,238,131.2,238,102A60.07,60.07,0,0,0,178,42ZM128,217.11C111.59,207.64,30,157.72,30,102A48.05,48.05,0,0,1,78,54c20.28,0,37.31,10.83,44.45,28.27a6,6,0,0,0,11.1,0C140.69,64.83,157.72,54,178,54a48.05,48.05,0,0,1,48,48C226,157.72,144.41,207.64,128,217.11Z"/></svg></span>
+        <span class="icon-btn"><svg class="ic ic-p ic-ph-light ic" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-light:share-network"><path d="M176,162a37.91,37.91,0,0,0-28.3,12.67L98.8,143.24a37.89,37.89,0,0,0,0-30.48l48.9-31.43a38,38,0,1,0-6.5-10.09L92.3,102.67a38,38,0,1,0,0,50.66l48.9,31.43A38,38,0,1,0,176,162Zm0-132a26,26,0,1,1-26,26A26,26,0,0,1,176,30ZM64,154a26,26,0,1,1,26-26A26,26,0,0,1,64,154Zm112,72a26,26,0,1,1,26-26A26,26,0,0,1,176,226Z"/></svg></span>
+        <span class="icon-btn"><svg class="ic ic-p ic-ph-light ic" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-light:dots-three"><path d="M138,128a10,10,0,1,1-10-10A10,10,0,0,1,138,128ZM60,118a10,10,0,1,0,10,10A10,10,0,0,0,60,118Zm136,0a10,10,0,1,0,10,10A10,10,0,0,0,196,118Z"/></svg></span>
+      </div>
+    </div>
+
+    <div class="mid" style="padding-top:18px">
+      <div class="pills">
+        <button class="on">Fotos</button><button>Videos</button><button>Orte</button>
+      </div>
+      <div class="grid">
+        <span class="photo scene-lissabon crop-1"></span>
+        <span class="photo scene-lissabon crop-4"></span>
+        <span class="photo scene-lissabon crop-9"></span>
+        <span class="photo scene-lissabon crop-11"></span>
+        <span class="photo scene-lissabon crop-6"></span>
+        <span class="photo scene-lissabon crop-2"></span>
+        <span class="photo scene-lissabon crop-5"></span>
+        <span class="photo scene-lissabon crop-7"></span>
+        <span class="photo scene-lissabon crop-3"></span>
+      </div>
+    </div>
+
+    <div class="teal">
+      <p class="micro">Musik zur Diashow</p>
+      <div class="foot" style="margin-top:8px">
+        <span class="display-sm" style="flex:1">Nachtfahrt<span class="caption" style="display:block; margin-top:5px; color:rgba(255,255,255,.62)">24 Titel · 1 Std. 32 Min.</span></span>
+        <button class="btn btn-on-teal">Ändern</button>
+      </div>
+    </div>
+    <div class="hi" style="color:#ffffff"></div>
+  </section></figure>
+
+</main><footer class="ms-foot"><b>Superhuman-Stil</b> · Ansatz: Editorial + Große Bühne · eigene Musterscreens mit Beispielinhalten, keine Originalscreens der Marke</footer></div>
+</body></html>

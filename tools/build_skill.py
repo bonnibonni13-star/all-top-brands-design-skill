@@ -1,15 +1,52 @@
-"""Build the design-md skill folder from a clone of VoltAgent/awesome-design-md.
+"""Skill-Ordner aus einem Klon von VoltAgent/awesome-design-md bauen.
 
-Usage: python3 -I build_skill.py <repo_dir> <template> <out_dir>
+Aufruf: python3 -I build_skill.py <repo_dir> <template> <out_dir>
+                                  [--sprache DIR] [--screens DIR]
+
+Erneuert SKILL.md, LICENSE und references/. Mit --sprache bzw. --screens werden
+zusätzlich die Designsprache-Profile (designsprache/<slug>.md) und die
+Musterscreens (screens/<slug>.png und .html) übernommen, mit --tools der Ordner
+tools/; ohne diese Angaben bleiben die vorhandenen Ordner unverändert. Der Index
+nennt je Marke zusätzlich Ansatz und Aufbau aus den Kopfdaten des Profils.
 """
+import argparse
 import pathlib
 import re
 import shutil
 import sys
 
-repo = pathlib.Path(sys.argv[1])
-template = pathlib.Path(sys.argv[2])
-out = pathlib.Path(sys.argv[3])
+_ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+_ap.add_argument("repo_dir")
+_ap.add_argument("template")
+_ap.add_argument("out_dir")
+_ap.add_argument("--sprache", help="Ordner mit <slug>.md Profilen, die übernommen werden")
+_ap.add_argument("--screens", help="Ordner mit <slug>.png und <slug>.html Musterscreens")
+_ap.add_argument("--tools", help="Ordner, aus dem tools/ im Skill erneuert wird (üblich: der eigene Ordner)")
+_ap.add_argument("--animationen", help="Ordner mit dem Animations-Katalog (KATALOG.md, animationen.html, LIZENZEN.md)")
+_args = _ap.parse_args()
+
+repo = pathlib.Path(_args.repo_dir)
+template = pathlib.Path(_args.template)
+out = pathlib.Path(_args.out_dir)
+
+ANSAETZE = {
+    "buehne": "Große Bühne", "regale": "Medien-Regale", "galerie": "Bild-Karten",
+    "werkzeug": "Präzises Werkzeug", "editorial": "Editorial", "daten": "Daten und Zahlen",
+    "verspielt": "Verspielt", "plakativ": "Plakativ", "minimal": "Stilles Minimal",
+    "leuchten": "Verlauf und Leuchten", "retro": "Retro",
+}
+
+
+def kopfdaten(path):
+    """Kopfdaten eines Profils als dict; Werte dürfen ':' und '#' enthalten."""
+    m = re.match(r"---\n(.*?)\n---", path.read_text(encoding="utf-8"), re.S)
+    data = {}
+    if m:
+        for line in m.group(1).splitlines():
+            k, sep, v = line.partition(":")
+            if sep:
+                data[k.strip()] = v.strip()
+    return data
 
 CAT_DE = {
     "AI & LLM Platforms": "KI & LLM-Plattformen",
@@ -131,6 +168,20 @@ problems = dict(
     missing_blurbs=sorted(set(slugs) - set(BLURB_DE)),
     stale_blurbs=sorted(set(BLURB_DE) - set(slugs)),
 )
+
+# Profile einlesen (aus --sprache, sonst aus dem Zielordner).
+sprache_dir = pathlib.Path(_args.sprache) if _args.sprache else out / "designsprache"
+profile = {}
+if sprache_dir.is_dir():
+    for slug in slugs:
+        f = sprache_dir / f"{slug}.md"
+        if f.exists():
+            profile[slug] = kopfdaten(f)
+    problems["missing_profiles"] = sorted(set(slugs) - set(profile))
+    problems["unknown_ansatz"] = sorted(
+        {a for p in profile.values() for a in (p.get("ansatz"), p.get("ansatz2")) if a} - set(ANSAETZE))
+    problems["incomplete_profiles"] = sorted(
+        s for s, p in profile.items() if not p.get("aufbau") or not p.get("marke"))
 if any(problems.values()):
     sys.exit(f"mismatch: {problems}")
 
@@ -143,7 +194,12 @@ lines = []
 for c in order:
     lines.append(f"### {CAT_DE[c]}")
     for e in sorted((e for e in entries if e["cat"] == c), key=lambda e: e["name"].lower()):
-        lines.append(f"- `{e['slug']}` — **{e['name']}**: {BLURB_DE[e['slug']]}")
+        line = f"- `{e['slug']}` — **{e['name']}**: {BLURB_DE[e['slug']]}"
+        p = profile.get(e["slug"])
+        if p:
+            ansatz = " + ".join(ANSAETZE[a] for a in (p.get("ansatz"), p.get("ansatz2")) if a)
+            line += f" Ansatz: {ansatz} · Aufbau: {p['aufbau'].rstrip('.')}"
+        lines.append(line)
     lines.append("")
 index = "\n".join(lines).rstrip() + "\n"
 
@@ -156,8 +212,68 @@ for e in entries:
     shutil.copyfile(repo / "design-md" / e["slug"] / "DESIGN.md", out / "references" / f"{e['slug']}.md")
 shutil.copyfile(repo / "LICENSE", out / "LICENSE")
 
+if _args.sprache:
+    dst = out / "designsprache"
+    shutil.rmtree(dst, ignore_errors=True)
+    dst.mkdir()
+    for slug in slugs:
+        shutil.copyfile(sprache_dir / f"{slug}.md", dst / f"{slug}.md")
+
+if _args.screens:
+    src = pathlib.Path(_args.screens)
+    missing = sorted(s for s in slugs for e in ("png", "html") if not (src / f"{s}.{e}").exists())
+    if missing:
+        sys.exit(f"Musterscreens fehlen: {missing}")
+    dst = out / "screens"
+    klein = dst / "klein"
+    if dst.exists():
+        for f in list(dst.glob("*.png")) + list(dst.glob("*.html")):
+            f.unlink()
+    dst.mkdir(parents=True, exist_ok=True)
+    for slug in slugs:
+        for e in ("png", "html"):
+            shutil.copyfile(src / f"{slug}.{e}", dst / f"{slug}.{e}")
+    if klein.is_dir():
+        for f in klein.glob("*.webp"):
+            if f.stem not in slugs:
+                f.unlink()
+
+if _args.animationen:
+    src = pathlib.Path(_args.animationen)
+    noetig = ["KATALOG.md", "animationen.html", "LIZENZEN.md"]
+    fehlt = [f for f in noetig if not (src / f).exists()]
+    if fehlt:
+        sys.exit(f"Animations-Katalog unvollständig in {src}: {fehlt}")
+    dst = out / "animationen"
+    shutil.rmtree(dst, ignore_errors=True)
+    dst.mkdir()
+    for f in noetig:
+        shutil.copyfile(src / f, dst / f)
+
+# tools/ im Skill erneuern: nur die Dateien, die der Skill selbst braucht.
+TOOL_FILES = [
+    "SKILL.template.md", "build_skill.py", "extract_tokens.py", "build_catalog.py",
+    "katalog.template.html", "render_screens.py", "live_screens.py", "build_vorschau.py",
+    "screens/ANLEITUNG.md", "screens/base.css", "vorschau/vorlage.html", "vorschau/icons.js",
+]
+if _args.tools:
+    src = pathlib.Path(_args.tools)
+    fehlt = [f for f in TOOL_FILES if not (src / f).exists()] + ([] if (src / "screens/scenes").is_dir() else ["screens/scenes/"])
+    if fehlt:
+        sys.exit(f"Werkzeuge fehlen in {src}: {fehlt}")
+    dst = out / "tools"
+    shutil.rmtree(dst, ignore_errors=True)
+    for f in TOOL_FILES:
+        (dst / f).parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(src / f, dst / f)
+    shutil.copytree(src / "screens" / "scenes", dst / "screens" / "scenes")
+
 tpl = template.read_text(encoding="utf-8")
 assert tpl.count("<!-- INDEX -->") == 1
 (out / "SKILL.md").write_text(tpl.replace("<!-- INDEX -->", index), encoding="utf-8")
 
-print(f"brands: {len(entries)}, categories: {len(order)}, reference files: {len(list((out / 'references').iterdir()))}")
+gezaehlt = {d: len(list((out / d).glob(p))) for d, p in
+            (("references", "*.md"), ("designsprache", "*.md"), ("screens", "*.png"), ("animationen", "*"))
+            if (out / d).is_dir()}
+print(f"Marken: {len(entries)}, Kategorien: {len(order)}, Profile im Index: {len(profile)}")
+print("Dateien: " + ", ".join(f"{d}: {n}" for d, n in gezaehlt.items()))

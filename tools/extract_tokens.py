@@ -123,7 +123,10 @@ def index_entries(text):
             continue
         m = re.match(r"^- `([^`]+)` — \*\*([^*]+)\*\*: (.+)$", line)
         if m:
-            entries.append(dict(slug=m.group(1), name=m.group(2), cat=cat, blurb=m.group(3)))
+            # Ansatz und Aufbau stehen im Katalog in eigenen Feldern (aus dem Profil),
+            # darum hier nur die Kurzbeschreibung bis zum Zusatz "Ansatz: …".
+            blurb = re.split(r"\s+Ansatz:\s", m.group(3))[0].rstrip(" ;,")
+            entries.append(dict(slug=m.group(1), name=m.group(2), cat=cat, blurb=blurb))
     return entries
 
 

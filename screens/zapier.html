@@ -1,0 +1,453 @@
+<!doctype html>
+<html lang="de"><head><meta charset="utf-8"><style id="ms-base">
+/* Musterscreens – Basis. Wird vom Renderer vor die eigenen Stile gesetzt; eigene Regeln überschreiben sie.
+   Platzhalter der Form „{{scene:<name>}}“ ersetzt der Renderer durch das SVG aus scenes/<name>.svg. */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body { background: #e7e7eb; font-family: Inter, "DejaVu Sans", sans-serif; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+.ms-wrap { display: inline-block; background: #e7e7eb; }
+.stage { display: flex; gap: 40px; align-items: flex-start; padding: 48px 48px 20px; width: max-content; }
+.shot { margin: 0; display: flex; flex-direction: column; gap: 14px; }
+.shot > figcaption { font: 600 13px/1 Inter, "DejaVu Sans", sans-serif; letter-spacing: .08em; text-transform: uppercase; color: #6b6b74; padding-left: 8px; }
+.phone { position: relative; width: 390px; height: 844px; overflow: hidden; border-radius: 40px; isolation: isolate;
+  box-shadow: 0 0 0 1px rgba(0,0,0,.06), 0 18px 50px rgba(0,0,0,.14); }
+.ms-foot { font: 500 13px/1.4 Inter, "DejaVu Sans", sans-serif; color: #6b6b74; padding: 0 56px 30px; }
+.ms-foot b { color: #3a3a40; font-weight: 600; }
+
+/* Rücksetzungen ohne Spezifität: eigene Klassen gewinnen immer. Eigene Resets bitte ebenfalls mit :where(). */
+:where(.phone) :where(h1, h2, h3, h4, h5, h6, p, ul, ol, li, figure, blockquote, dl, dd) { margin: 0; padding: 0; }
+:where(.phone) :where(ul, ol) { list-style: none; }
+:where(.phone) :where(button, input, select, textarea) { font: inherit; color: inherit; background: none; border: 0; padding: 0; margin: 0; }
+
+/* Icons: <i data-icon="lucide:house"></i> oder <i data-icon="ph-bold:house"></i> → Inline-SVG mit Klasse .ic */
+.ic { width: 1em; height: 1em; display: inline-block; vertical-align: -0.125em; flex: none; }
+.ic-missing { outline: 2px dashed red; }
+
+/* Statusleiste und Gestenleiste */
+.sb { height: 46px; display: flex; align-items: center; justify-content: space-between; padding: 4px 26px 0 32px;
+  font: 600 15px/1 Inter, "DejaVu Sans", sans-serif; position: relative; z-index: 30; }
+.sb-icons { display: flex; gap: 6px; font-size: 16px; align-items: center; }
+.hi { position: absolute; left: 50%; bottom: 8px; width: 134px; height: 5px; border-radius: 3px; transform: translateX(-50%);
+  background: currentColor; opacity: .45; z-index: 40; }
+
+/* Bilder (abstrakte Motive, gleich für alle Marken). Ausschnitt per background-position/-size, Behandlung frei. */
+[class*="scene-"] { background-size: cover; background-position: center; background-repeat: no-repeat; }
+.scene-see { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300' preserveAspectRatio='xMidYMid slice'%3E%3Cdefs%3E%3ClinearGradient id='a' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%2386cdf6'/%3E%3Cstop offset='.64' stop-color='%23ffe4b5'/%3E%3C/linearGradient%3E%3ClinearGradient id='b' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%234fb3cc'/%3E%3Cstop offset='1' stop-color='%231c627d'/%3E%3C/linearGradient%3E%3CradialGradient id='g'%3E%3Cstop offset='0' stop-color='%23fff6dc'/%3E%3Cstop offset='1' stop-color='%23fff6dc' stop-opacity='0'/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect width='400' height='300' fill='url(%23a)'/%3E%3Ccircle cx='296' cy='138' r='70' fill='url(%23g)'/%3E%3Ccircle cx='296' cy='138' r='26' fill='%23fff4d2'/%3E%3Cpath d='M0 176C60 148 112 156 162 166S250 146 312 152 380 168 400 164V300H0Z' fill='%2386b596'/%3E%3Cpath d='M0 190C80 174 140 188 200 184S322 170 400 182V300H0Z' fill='%234c8764'/%3E%3Crect y='198' width='400' height='102' fill='url(%23b)'/%3E%3Cpath d='M262 212H330M30 230H150M210 248H372M80 268H190' stroke='%23c9eef6' stroke-width='3' stroke-linecap='round' opacity='.45'/%3E%3Cpath d='M120 199l18-12 4 12z' fill='%23fdfdfd'/%3E%3Cpath d='M137 186v14' stroke='%23fdfdfd' stroke-width='2'/%3E%3C/svg%3E"); }
+.scene-lissabon { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300' preserveAspectRatio='xMidYMid slice'%3E%3Cdefs%3E%3ClinearGradient id='a' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23ffd9a3'/%3E%3Cstop offset='1' stop-color='%23f39a63'/%3E%3C/linearGradient%3E%3Cpattern id='w' width='18' height='24' patternUnits='userSpaceOnUse'%3E%3Crect x='6' y='7' width='6' height='10' rx='1' fill='%235b3428' opacity='.38'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width='400' height='300' fill='url(%23a)'/%3E%3Ccircle cx='84' cy='80' r='26' fill='%23fff2d4'/%3E%3Cpath d='M0 168h64v132H0z' fill='%23f6e6c8'/%3E%3Cpath d='M-4 170l36-20 36 20z' fill='%23c5513a'/%3E%3Cpath d='M64 146h72v154H64z' fill='%23eaa7a1'/%3E%3Cpath d='M60 148l40-24 40 24z' fill='%23b2412c'/%3E%3Cpath d='M136 180h56v120h-56z' fill='%239fc6d8'/%3E%3Cpath d='M132 182l32-18 32 18z' fill='%23c5513a'/%3E%3Cpath d='M192 136h84v164h-84z' fill='%23e3a65a'/%3E%3Cpath d='M188 138l46-26 46 26z' fill='%23b2412c'/%3E%3Cpath d='M276 162h62v138h-62z' fill='%23f6e6c8'/%3E%3Cpath d='M272 164l35-19 35 19z' fill='%23c5513a'/%3E%3Cpath d='M338 150h66v150h-66z' fill='%23eaa7a1'/%3E%3Cpath d='M334 152l37-22 37 22z' fill='%23b2412c'/%3E%3Crect y='150' width='400' height='150' fill='url(%23w)'/%3E%3Cpath d='M0 262c90-18 210-18 400 0v38H0z' fill='%239b3d2a'/%3E%3Crect x='150' y='236' width='70' height='30' rx='6' fill='%23f2c94c'/%3E%3Crect x='156' y='241' width='16' height='12' rx='2' fill='%235b3428' opacity='.5'/%3E%3Crect x='178' y='241' width='16' height='12' rx='2' fill='%235b3428' opacity='.5'/%3E%3Crect x='200' y='241' width='14' height='12' rx='2' fill='%235b3428' opacity='.5'/%3E%3C/svg%3E"); }
+.scene-konzert { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300' preserveAspectRatio='xMidYMid slice'%3E%3Cdefs%3E%3CradialGradient id='a' cx='.5' cy='1' r='1'%3E%3Cstop offset='0' stop-color='%234a1670'/%3E%3Cstop offset='1' stop-color='%230c0619'/%3E%3C/radialGradient%3E%3ClinearGradient id='p' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23ff5fcf' stop-opacity='.85'/%3E%3Cstop offset='1' stop-color='%23ff5fcf' stop-opacity='0'/%3E%3C/linearGradient%3E%3ClinearGradient id='c' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%2352dcff' stop-opacity='.8'/%3E%3Cstop offset='1' stop-color='%2352dcff' stop-opacity='0'/%3E%3C/linearGradient%3E%3CradialGradient id='s'%3E%3Cstop offset='0' stop-color='%23ff9a5c' stop-opacity='.9'/%3E%3Cstop offset='1' stop-color='%23ff9a5c' stop-opacity='0'/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect width='400' height='300' fill='url(%23a)'/%3E%3Cpath d='M90 0h14l70 260H40z' fill='url(%23p)' opacity='.7'/%3E%3Cpath d='M300 0h14l66 260H230z' fill='url(%23c)' opacity='.7'/%3E%3Cpath d='M196 0h10l60 250H140z' fill='url(%23p)' opacity='.45'/%3E%3Cellipse cx='200' cy='232' rx='190' ry='60' fill='url(%23s)'/%3E%3Cg fill='%23fff' opacity='.8'%3E%3Ccircle cx='40' cy='40' r='1.4'/%3E%3Ccircle cx='150' cy='24' r='1.2'/%3E%3Ccircle cx='260' cy='52' r='1.3'/%3E%3Ccircle cx='360' cy='30' r='1.5'/%3E%3C/g%3E%3Cpath d='M0 300V262c12-10 22-12 30-4 8-14 22-16 30-4 10-12 24-12 32 0 8-16 24-16 32-2 10-10 22-10 30 2 8-14 24-14 32 0 10-10 22-10 30 0 8-16 24-14 32 0 10-10 22-10 30 2 8-12 22-12 30-2 10-8 20-6 32 4V300z' fill='%2307030f'/%3E%3Cpath d='M60 262l-6-26M182 258l8-30M300 262l-4-28' stroke='%2307030f' stroke-width='7' stroke-linecap='round'/%3E%3C/svg%3E"); }
+.scene-nacht { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300' preserveAspectRatio='xMidYMid slice'%3E%3Cdefs%3E%3ClinearGradient id='a' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%230a0f2e'/%3E%3Cstop offset='.45' stop-color='%232d1a5e'/%3E%3Cstop offset='.62' stop-color='%23ff4f7e'/%3E%3C/linearGradient%3E%3ClinearGradient id='s' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23ffd36b'/%3E%3Cstop offset='1' stop-color='%23ff4f7e'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='400' height='300' fill='url(%23a)'/%3E%3Ccircle cx='200' cy='168' r='62' fill='url(%23s)'/%3E%3Cg fill='%234a2a78'%3E%3Crect x='138' y='140' width='124' height='5'/%3E%3Crect x='138' y='152' width='124' height='6'/%3E%3Crect x='138' y='165' width='124' height='7'/%3E%3C/g%3E%3Cpath d='M0 186h22v-22h14v-12h16v34h18v-26h12v26h22v-40h16v40h40V186h120v-30h14v30h18v-22h16v22h14v-36h18v36h40v-24h14v24h18' fill='%231b1145'/%3E%3Crect y='186' width='400' height='114' fill='%23120b2b'/%3E%3Cpath d='M200 186L-60 300M200 186L460 300' stroke='%23ff4fd8' stroke-width='2.5' opacity='.9'/%3E%3Cpath d='M200 186l-30 114M200 186l30 114' stroke='%2352e5ff' stroke-width='2' opacity='.6'/%3E%3Cpath d='M200 186L118 300M200 186l82 114' stroke='%2352e5ff' stroke-width='1.2' opacity='.35'/%3E%3Cpath d='M-20 214H420M-20 238H420M-20 270H420' stroke='%23ff4fd8' stroke-width='1' opacity='.35'/%3E%3Cg fill='%23fff'%3E%3Ccircle cx='60' cy='40' r='1.2'/%3E%3Ccircle cx='330' cy='28' r='1.4'/%3E%3Ccircle cx='250' cy='70' r='1'/%3E%3Ccircle cx='110' cy='90' r='1.1'/%3E%3C/g%3E%3C/svg%3E"); }
+.scene-herbst { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300' preserveAspectRatio='xMidYMid slice'%3E%3Cdefs%3E%3ClinearGradient id='a' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23fbd38d'/%3E%3Cstop offset='1' stop-color='%23e7843f'/%3E%3C/linearGradient%3E%3ClinearGradient id='m' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23fff' stop-opacity='0'/%3E%3Cstop offset='.5' stop-color='%23fff' stop-opacity='.35'/%3E%3Cstop offset='1' stop-color='%23fff' stop-opacity='0'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='400' height='300' fill='url(%23a)'/%3E%3Cg opacity='.55'%3E%3Ccircle cx='40' cy='150' r='46' fill='%23d9663a'/%3E%3Ccircle cx='130' cy='130' r='54' fill='%23e89a3c'/%3E%3Ccircle cx='250' cy='140' r='50' fill='%23c8502f'/%3E%3Ccircle cx='350' cy='125' r='58' fill='%23e89a3c'/%3E%3C/g%3E%3Crect y='150' width='400' height='60' fill='url(%23m)'/%3E%3Cg fill='%234a2a1d'%3E%3Crect x='66' y='170' width='9' height='110'/%3E%3Crect x='186' y='160' width='10' height='120'/%3E%3Crect x='306' y='168' width='9' height='112'/%3E%3C/g%3E%3Ccircle cx='70' cy='160' r='44' fill='%23c2452d'/%3E%3Ccircle cx='96' cy='182' r='30' fill='%23e5862c'/%3E%3Ccircle cx='190' cy='148' r='52' fill='%23f0a93a'/%3E%3Ccircle cx='160' cy='176' r='28' fill='%23c2452d'/%3E%3Ccircle cx='310' cy='156' r='48' fill='%238f2d1f'/%3E%3Ccircle cx='338' cy='186' r='30' fill='%23e5862c'/%3E%3Cpath d='M0 262c80-14 160-10 240-2s120 4 160-6v46H0z' fill='%236b3a22'/%3E%3Cg fill='%23f2b44c'%3E%3Cellipse cx='120' cy='272' rx='6' ry='3'/%3E%3Cellipse cx='260' cy='282' rx='5' ry='2.5'/%3E%3Cellipse cx='340' cy='270' rx='6' ry='3'/%3E%3C/g%3E%3C/svg%3E"); }
+.scene-studio { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300' preserveAspectRatio='xMidYMid slice'%3E%3Cdefs%3E%3CradialGradient id='a' cx='.25' cy='.35' r='.9'%3E%3Cstop offset='0' stop-color='%236b3f12'/%3E%3Cstop offset='.55' stop-color='%231d1209'/%3E%3Cstop offset='1' stop-color='%230a0705'/%3E%3C/radialGradient%3E%3CradialGradient id='l'%3E%3Cstop offset='0' stop-color='%23ffb347' stop-opacity='.55'/%3E%3Cstop offset='1' stop-color='%23ffb347' stop-opacity='0'/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect width='400' height='300' fill='url(%23a)'/%3E%3Cellipse cx='90' cy='90' rx='150' ry='110' fill='url(%23l)'/%3E%3Ccircle cx='262' cy='160' r='116' fill='%23111'/%3E%3Cg fill='none' stroke='%232b2b2b' stroke-width='1.5'%3E%3Ccircle cx='262' cy='160' r='104'/%3E%3Ccircle cx='262' cy='160' r='92'/%3E%3Ccircle cx='262' cy='160' r='80'/%3E%3Ccircle cx='262' cy='160' r='68'/%3E%3Ccircle cx='262' cy='160' r='56'/%3E%3C/g%3E%3Cpath d='M190 84a104 104 0 0 1 120-14' stroke='%235a5a5a' stroke-width='3' fill='none' opacity='.6'/%3E%3Ccircle cx='262' cy='160' r='36' fill='%23e3a33b'/%3E%3Ccircle cx='262' cy='160' r='4' fill='%23111'/%3E%3Cpath d='M380 20l-60 110' stroke='%23c9c9c9' stroke-width='5' stroke-linecap='round'/%3E%3Crect x='306' y='124' width='22' height='12' rx='3' fill='%23d9d9d9' transform='rotate(-60 317 130)'/%3E%3C/svg%3E"); }
+.scene-wien { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300' preserveAspectRatio='xMidYMid slice'%3E%3Cdefs%3E%3ClinearGradient id='a' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23c9dcf2'/%3E%3Cstop offset='.7' stop-color='%23f6d6de'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='400' height='300' fill='url(%23a)'/%3E%3Cg fill='%23aebfd4'%3E%3Crect x='0' y='170' width='70' height='70'/%3E%3Crect x='300' y='160' width='100' height='80'/%3E%3Crect x='60' y='182' width='40' height='58'/%3E%3C/g%3E%3Cg fill='%238ea3bd'%3E%3Crect x='120' y='150' width='160' height='90'/%3E%3Cpath d='M150 150a50 50 0 0 1 100 0z'/%3E%3Crect x='196' y='72' width='8' height='30'/%3E%3Ccircle cx='200' cy='70' r='5'/%3E%3Crect x='104' y='96' width='14' height='144'/%3E%3Crect x='282' y='96' width='14' height='144'/%3E%3Cpath d='M100 96h22l-11-16zM278 96h22l-11-16z'/%3E%3Crect x='166' y='170' width='68' height='70' fill='%237a90ab'/%3E%3Cpath d='M166 170h68l-34-22z' fill='%239fb2c9'/%3E%3C/g%3E%3Cg fill='%237a90ab'%3E%3Crect x='176' y='186' width='6' height='54'/%3E%3Crect x='190' y='186' width='6' height='54'/%3E%3Crect x='204' y='186' width='6' height='54'/%3E%3Crect x='218' y='186' width='6' height='54'/%3E%3C/g%3E%3Cpath d='M0 236c100-10 300-10 400 0v64H0z' fill='%23f6f8fc'/%3E%3Cpath d='M0 262c120-8 280-6 400 4' stroke='%23dfe6f0' stroke-width='3' fill='none'/%3E%3Cg fill='%23fff' opacity='.85'%3E%3Ccircle cx='40' cy='60' r='2'/%3E%3Ccircle cx='90' cy='120' r='1.6'/%3E%3Ccircle cx='150' cy='40' r='2.2'/%3E%3Ccircle cx='250' cy='110' r='1.8'/%3E%3Ccircle cx='330' cy='50' r='2'/%3E%3Ccircle cx='370' cy='120' r='1.6'/%3E%3Ccircle cx='300' cy='200' r='1.8'/%3E%3Ccircle cx='60' cy='210' r='2'/%3E%3C/g%3E%3C/svg%3E"); }
+.scene-film { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300' preserveAspectRatio='xMidYMid slice'%3E%3Cdefs%3E%3ClinearGradient id='a' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%230f4c5c'/%3E%3Cstop offset='.45' stop-color='%231f7a77'/%3E%3Cstop offset='.7' stop-color='%23f4a259'/%3E%3Cstop offset='1' stop-color='%23e76f51'/%3E%3C/linearGradient%3E%3ClinearGradient id='r' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23ffd27a' stop-opacity='.9'/%3E%3Cstop offset='1' stop-color='%23ffd27a' stop-opacity='0'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='400' height='300' fill='url(%23a)'/%3E%3Ccircle cx='250' cy='196' r='44' fill='%23ffd166'/%3E%3Crect x='206' y='214' width='88' height='86' fill='url(%23r)' opacity='.7'/%3E%3Cpath d='M0 214h400v86H0z' fill='%230b2a33' opacity='.55'/%3E%3Cpath d='M0 214c40-6 70-30 96-28s40 20 70 22 70-8 100-4 90 8 134 4v8H0z' fill='%230b2a33'/%3E%3Cpath d='M70 214c-2-40 4-70 14-92' stroke='%230b2a33' stroke-width='5' fill='none'/%3E%3Cpath d='M84 122c-18-8-38-4-50 8M84 122c-6-16-22-24-38-22M84 122c14-12 34-14 48-4M84 122c18-2 32 8 38 22M84 122c4-16 16-26 30-28' stroke='%230b2a33' stroke-width='5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); }
+.scene-person { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='xMidYMid slice'%3E%3Cdefs%3E%3ClinearGradient id='a' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23f3d9c1'/%3E%3Cstop offset='1' stop-color='%23d8a98a'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' fill='url(%23a)'/%3E%3Cpath d='M14 104c4-22 18-32 36-32s32 10 36 32z' fill='%233d5a80'/%3E%3Ccircle cx='50' cy='44' r='19' fill='%239c6b52'/%3E%3Cpath d='M30 44c0-16 9-25 21-25 13 0 21 9 21 22-6-6-16-9-26-8-7 1-12 5-16 11z' fill='%233a2418'/%3E%3C/svg%3E"); }
+
+/* Erprobte Bildausschnitte für weitere „Fotos“ aus einem Motiv (z. B. Fotoraster): class="scene-lissabon crop-3" */
+.crop-1 { background-size: 260%; background-position: 8% 18%; }
+.crop-2 { background-size: 320%; background-position: 85% 60%; }
+.crop-3 { background-size: 360%; background-position: 50% 95%; }
+.crop-4 { background-size: 300%; background-position: 60% 35%; }
+.crop-5 { background-size: 280%; background-position: 0% 60%; }
+.crop-6 { background-size: 500%; background-position: 20% 20%; }
+.crop-7 { background-size: 240%; background-position: 100% 90%; }
+.crop-8 { background-size: 550%; background-position: 70% 55%; }
+.crop-9 { background-size: 220%; background-position: 35% 0%; }
+.crop-10 { background-size: 420%; background-position: 40% 62%; }
+.crop-11 { background-size: 340%; background-position: 95% 45%; }
+.crop-12 { background-size: 300%; background-position: 0% 100%; }
+
+/* Körnung als Überlagerung: Element bekommt .grain, Stärke per --grain (0–1). */
+.grain { position: relative; }
+.grain::after { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: var(--grain, .18); mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E"); background-size: 160px 160px; }
+
+/* Horizontale Reihen dürfen am Rand angeschnitten sein wie beim echten Scrollen. */
+.row-x { display: flex; overflow: hidden; }
+
+</style>
+<title>Musterscreens Zapier</title>
+<style>
+:root{
+  /* Farben – jeder Neutralton trägt Wärme */
+  --canvas:#fffefb; --soft:#f8f4f0; --soft-press:#efe9e2;
+  --ink:#201515; --ink-soft:#2f2a26; --body:#605d52; --body-mid:#939084; --mute:#c5c0b1;
+  --orange:#ff4f00; --orange-press:#e64700; --on-ink:#fffefb;
+  /* Form – ein Radius trägt fast alles */
+  --r-sm:6px; --r-md:12px; --r-pill:9999px;
+  /* Raster */
+  --s-xxs:2px; --s-xs:4px; --s-sm:8px; --s-md:12px; --s-lg:16px; --s-xl:24px; --s-2xl:32px;
+  --pad:20px;
+  /* Schrift: Display = Degular-Ersatz, Text = Inter */
+  --font:"Inter","DejaVu Sans",sans-serif;
+  --font-display:"Inter Display","Inter",sans-serif;
+  /* Bewegung */
+  --dur-s:140ms; --dur-m:260ms; --ease:cubic-bezier(.2,.8,.2,1);
+}
+
+.phone{ font-family:var(--font); background:var(--canvas); color:var(--ink); }
+
+/* ---------- Typografie ---------- */
+.eyebrow{ font-family:var(--font-display); font-size:12.5px; font-weight:600; line-height:1;
+  letter-spacing:1px; text-transform:uppercase; color:var(--ink); }
+.eyebrow.sub{ color:var(--body-mid); }
+.display{ font-family:var(--font-display); font-size:32px; font-weight:500; line-height:1.06;
+  letter-spacing:-.4px; color:var(--ink); }
+.title{ font-size:16px; font-weight:600; line-height:1.3; letter-spacing:-.2px; }
+.body-md{ font-size:15px; font-weight:400; line-height:1.5; color:var(--body); }
+.meta{ font-size:13px; font-weight:400; line-height:1.4; color:var(--body-mid); }
+
+/* ---------- Icons: kräftige Phosphor-Bold-Linien ---------- */
+.ic{ font-size:20px; }
+
+/* ---------- Knöpfe: ein Radius, nie Pille, nie eckig ---------- */
+.btn{ display:inline-flex; align-items:center; justify-content:center; gap:8px; height:46px; padding:0 20px;
+  border-radius:var(--r-md); font-size:15px; font-weight:600; line-height:1; letter-spacing:-.1px;
+  transition:background-color var(--dur-s) var(--ease); }
+.btn .ic{ font-size:18px; }
+.btn-primary{ background:var(--orange); color:var(--on-ink); }
+.btn-primary:active{ background:var(--orange-press); }
+.btn-dark{ background:var(--ink); color:var(--on-ink); }
+.btn-outline{ background:var(--canvas); color:var(--ink); box-shadow:inset 0 0 0 1px var(--ink); }
+.icon-btn{ width:44px; height:44px; flex:none; display:inline-flex; align-items:center; justify-content:center;
+  border-radius:var(--r-md); background:var(--canvas); color:var(--ink); box-shadow:inset 0 0 0 1px var(--ink);
+  transition:background-color var(--dur-s) var(--ease); }
+.icon-btn:active{ background:var(--soft); }
+.icon-btn.sm{ width:38px; height:38px; }
+.icon-btn.sm .ic{ font-size:18px; }
+
+/* ---------- Kopfleiste ---------- */
+.topbar{ height:56px; display:flex; align-items:center; gap:10px; padding:0 var(--pad); }
+.topbar .right{ margin-left:auto; display:flex; align-items:center; gap:8px; }
+.mark{ width:30px; height:30px; flex:none; border-radius:var(--r-md); background:var(--ink);
+  display:flex; align-items:center; justify-content:center; }
+.mark i{ display:block; width:11px; height:11px; border-radius:50%;
+  box-shadow:inset 0 0 0 3px var(--on-ink); }
+.hello{ font-size:15px; font-weight:600; letter-spacing:-.2px; }
+.hello span{ color:var(--body-mid); font-weight:400; }
+.avatar{ width:34px; height:34px; flex:none; border-radius:var(--r-md); background-color:var(--soft);
+  background-size:cover; background-position:50% 22%; box-shadow:inset 0 0 0 1px var(--mute); }
+
+/* ---------- Inhaltsfläche ---------- */
+.content{ padding:4px var(--pad) 0; }
+
+/* ---------- Flächenkarte: cremeweich auf Creme, kein Schatten ---------- */
+.card{ background:var(--soft); border-radius:var(--r-md); padding:12px; }
+.card .pic{ height:116px; border-radius:var(--r-md); }
+.card .foot{ display:flex; align-items:center; gap:12px; margin-top:12px; }
+.card .foot .txt{ min-width:0; }
+.card .foot .btn{ margin-left:auto; flex:none; }
+
+/* ---------- Kaffee-Block: der Gegenpol ---------- */
+.ink-band{ margin:14px calc(var(--pad) * -1) 0; background:var(--ink); color:var(--on-ink);
+  padding:16px var(--pad) 16px; }
+.ink-band .eyebrow{ color:rgba(255,254,251,.55); }
+.stats{ display:flex; gap:10px; margin-top:12px; }
+.stats div{ flex:1; }
+.stats b{ display:block; font-family:var(--font-display); font-size:25px; font-weight:500; line-height:1.1;
+  letter-spacing:-.6px; }
+.stats span{ display:block; margin-top:3px; font-size:12px; color:rgba(255,254,251,.6); }
+.bar{ height:4px; border-radius:var(--r-pill); background:rgba(255,254,251,.22); margin-top:12px; overflow:hidden; }
+.bar i{ display:block; height:100%; width:69%; border-radius:var(--r-pill); background:var(--orange); }
+.bar-note{ display:flex; justify-content:space-between; margin-top:8px; font-size:12px;
+  color:rgba(255,254,251,.6); }
+
+/* ---------- Ablaufkette: Schiene links, Knoten, Schritt-Blöcke rechts ---------- */
+.chain{ position:relative; margin-top:10px; }
+.chain::before{ content:""; position:absolute; left:13px; top:29px; bottom:29px; width:2px; background:var(--mute); }
+.step{ display:flex; align-items:center; gap:10px; margin-bottom:8px; }
+.step:last-child{ margin-bottom:0; }
+.rail{ width:28px; flex:none; display:flex; align-items:center; justify-content:center; }
+.node{ width:12px; height:12px; border-radius:50%; background:var(--canvas);
+  box-shadow:inset 0 0 0 2.5px var(--ink); }
+.step.off .node{ box-shadow:inset 0 0 0 2.5px var(--mute); }
+.box{ flex:1; min-width:0; display:flex; align-items:center; gap:10px; height:58px; padding:0 10px;
+  background:var(--soft); border-radius:var(--r-md); }
+.tile{ width:36px; height:36px; flex:none; border-radius:var(--r-md); background:var(--canvas);
+  display:flex; align-items:center; justify-content:center; color:var(--ink);
+  box-shadow:inset 0 0 0 1px var(--mute); }
+.tile .ic{ font-size:19px; }
+.step .txt{ min-width:0; flex:1; }
+.step .txt b{ display:block; font-size:14.5px; font-weight:600; letter-spacing:-.1px; }
+.step .txt span{ display:block; font-size:12.5px; color:var(--body-mid); margin-top:2px; }
+.switch{ width:44px; height:26px; flex:none; border-radius:var(--r-pill); background:var(--mute);
+  position:relative; transition:background-color var(--dur-s) var(--ease); }
+.switch i{ position:absolute; top:3px; left:3px; width:20px; height:20px; border-radius:50%;
+  background:var(--canvas); transition:left var(--dur-s) var(--ease); }
+.switch.on{ background:var(--orange); }
+.switch.on i{ left:21px; }
+
+/* ---------- Suchfeld: harter 1-px-Ink-Umriss, 6 px ---------- */
+.search{ display:flex; align-items:center; gap:10px; height:48px; padding:0 14px; border-radius:var(--r-sm);
+  background:var(--canvas); box-shadow:inset 0 0 0 1px var(--ink); color:var(--body-mid); font-size:15px; }
+.search .ic{ font-size:19px; color:var(--ink); }
+
+/* ---------- Segment-Umschalter: Umriss, aktiv kippt auf Kaffee ---------- */
+.segment{ display:flex; height:38px; border-radius:var(--r-md); box-shadow:inset 0 0 0 1px var(--ink);
+  overflow:hidden; }
+.segment button{ flex:1; font-size:12.5px; font-weight:600; letter-spacing:-.1px; color:var(--ink);
+  border-left:1px solid var(--ink); transition:background-color var(--dur-s) var(--ease); }
+.segment button:first-child{ border-left:0; }
+.segment button.on{ background:var(--ink); color:var(--on-ink); }
+
+/* ---------- Liste: einzelne flache Blöcke, keine Trennlinien ---------- */
+.group{ display:flex; align-items:baseline; gap:8px; margin:16px 0 10px; }
+.group .n{ font-size:12px; font-weight:600; color:var(--body-mid); }
+.row{ display:flex; align-items:center; gap:12px; padding:8px; background:var(--soft);
+  border-radius:var(--r-md); margin-bottom:8px; }
+.row .thumb{ width:52px; height:52px; flex:none; border-radius:var(--r-md); }
+.row .txt{ min-width:0; flex:1; }
+.row .txt b{ display:block; font-size:15px; font-weight:600; letter-spacing:-.2px; }
+.row .txt span{ display:block; font-size:12.5px; color:var(--body-mid); margin-top:3px; }
+.row .ic{ font-size:16px; color:var(--mute); flex:none; }
+.pill{ flex:none; padding:4px 10px; border-radius:var(--r-pill); background:var(--canvas); color:var(--ink);
+  font-size:11px; font-weight:700; letter-spacing:.2px; box-shadow:inset 0 0 0 1px var(--mute); }
+
+/* ---------- Detail ---------- */
+.hero-shot{ height:176px; border-radius:var(--r-md); margin-top:14px; }
+.actions{ display:flex; gap:8px; margin-top:14px; }
+.actions .btn-primary{ flex:1; }
+.grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:14px; }
+.grid .photo{ aspect-ratio:1/1; border-radius:var(--r-md); }
+
+/* ---------- Kaffee-Leiste unten (Detail) ---------- */
+.music-bar{ position:absolute; left:0; right:0; bottom:0; height:92px; background:var(--ink); color:var(--on-ink);
+  display:flex; align-items:center; gap:12px; padding:0 var(--pad) 18px; }
+.music-bar .eyebrow{ color:rgba(255,254,251,.55); }
+.music-bar .txt{ flex:1; min-width:0; }
+.music-bar .txt b{ display:block; margin-top:6px; font-size:15px; font-weight:600; letter-spacing:-.2px; }
+.wave{ display:block; flex:none; opacity:.8; }
+.play{ width:44px; height:44px; flex:none; border-radius:var(--r-md); background:var(--orange);
+  color:var(--on-ink); display:flex; align-items:center; justify-content:center; }
+
+/* ---------- Leiste unten: aktiv = Kaffee-Block ---------- */
+.nav{ position:absolute; left:0; right:0; bottom:0; height:76px; background:var(--canvas);
+  border-top:1px solid var(--mute); display:flex; align-items:flex-start; justify-content:space-between;
+  padding:9px 16px 0; }
+.nav a{ width:72px; height:50px; border-radius:var(--r-md); display:flex; flex-direction:column;
+  align-items:center; justify-content:center; gap:4px; color:var(--body-mid);
+  transition:background-color var(--dur-s) var(--ease); }
+.nav a .ic{ font-size:20px; }
+.nav a span{ font-size:11px; font-weight:600; letter-spacing:-.1px; }
+.nav a.on{ background:var(--ink); color:var(--on-ink); }
+
+/* ---------- Bewegung ---------- */
+@media (prefers-reduced-motion: no-preference){
+  .content > *, .nav{ animation:rise var(--dur-m) var(--ease) both; }
+  .step{ animation:rise var(--dur-s) var(--ease) both; }
+  .step:nth-child(2){ animation-delay:60ms; }
+  .step:nth-child(3){ animation-delay:120ms; }
+  @keyframes rise{ from{ opacity:0; transform:translateY(8px); } to{ opacity:1; transform:none; } }
+}
+</style></head>
+<body>
+<div class="ms-wrap"><main class="stage">
+
+  <!-- ===================== START ===================== -->
+  <figure class="shot"><figcaption>Start</figcaption>
+  <section class="phone" id="start" style="color:#201515">
+    <div class="sb"><span>9:41</span><span class="sb-icons"><svg class="ic ic-p ic-ph-fill" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-fill:cell-signal-full"><path d="M208,40V200a16,16,0,0,1-16,16H32A16,16,0,0,1,20.7,188.68l160-160A16,16,0,0,1,208,40Z"/></svg><svg class="ic ic-p ic-ph-fill" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-fill:wifi-high"><path d="M244.35,92.8l-104,125.43A15.93,15.93,0,0,1,128,224h0a15.93,15.93,0,0,1-12.31-5.77L11.65,92.8A15.65,15.65,0,0,1,8.11,80.91,15.93,15.93,0,0,1,14.28,70.1,186.67,186.67,0,0,1,128,32,186.67,186.67,0,0,1,241.72,70.1a15.93,15.93,0,0,1,6.17,10.81A15.65,15.65,0,0,1,244.35,92.8Z"/></svg><svg class="ic ic-p ic-ph-fill" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-fill:battery-full"><path d="M200,56H32A24,24,0,0,0,8,80v96a24,24,0,0,0,24,24H200a24,24,0,0,0,24-24V80A24,24,0,0,0,200,56Zm8,120a8,8,0,0,1-8,8H32a8,8,0,0,1-8-8V80a8,8,0,0,1,8-8H200a8,8,0,0,1,8,8ZM192,96v64a8,8,0,0,1-8,8H48a8,8,0,0,1-8-8V96a8,8,0,0,1,8-8H184A8,8,0,0,1,192,96Zm64,0v64a8,8,0,0,1-16,0V96a8,8,0,0,1,16,0Z"/></svg></span></div>
+
+    <header class="topbar">
+      <span class="mark"><i></i></span>
+      <span class="hello">Hallo, <span>Lena</span></span>
+      <span class="right">
+        <span class="icon-btn sm"><svg class="ic ic-p ic-ph-bold ic" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-bold:bell"><path d="M225.29,165.93C216.61,151,212,129.57,212,104a84,84,0,0,0-168,0c0,25.58-4.59,47-13.27,61.93A20.08,20.08,0,0,0,30.66,186,19.77,19.77,0,0,0,48,196H84.18a44,44,0,0,0,87.64,0H208a19.77,19.77,0,0,0,17.31-10A20.08,20.08,0,0,0,225.29,165.93ZM128,212a20,20,0,0,1-19.6-16h39.2A20,20,0,0,1,128,212ZM54.66,172C63.51,154,68,131.14,68,104a60,60,0,0,1,120,0c0,27.13,4.48,50,13.33,68Z"/></svg></span>
+        <span class="avatar scene-person"></span>
+      </span>
+    </header>
+
+    <div class="content">
+      <p class="eyebrow">Rückblick</p>
+      <h1 class="display" style="margin-top:8px">Vor einem Jahr:<br>Herbstwald</h1>
+
+      <div class="card" style="margin-top:14px">
+        <div class="pic scene-herbst"></div>
+        <div class="foot">
+          <div class="txt">
+            <p class="meta">Album · 86 Fotos · Okt. 2024</p>
+          </div>
+          <button class="btn btn-primary"><svg class="ic ic-p ic-ph-bold ic" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-bold:play"><path d="M234.49,111.07,90.41,22.94A20,20,0,0,0,60,39.87V216.13a20,20,0,0,0,30.41,16.93l144.08-88.13a19.82,19.82,0,0,0,0-33.86ZM84,208.85V47.15L216.16,128Z"/></svg>Ansehen</button>
+        </div>
+      </div>
+
+      <div class="ink-band">
+        <p class="eyebrow">Bibliothek</p>
+        <div class="stats">
+          <div><b>1.248</b><span>Fotos</span></div>
+          <div><b>96</b><span>Videos</span></div>
+          <div><b>312</b><span>Titel</span></div>
+        </div>
+        <div class="bar"><i></i></div>
+        <div class="bar-note"><span>412 GB von 600 GB</span><span>69 %</span></div>
+      </div>
+
+      <p class="eyebrow" style="margin-top:16px">Quellen</p>
+      <div class="chain">
+        <div class="step">
+          <span class="rail"><span class="node"></span></span>
+          <span class="box">
+            <span class="tile"><svg class="ic ic-p ic-ph-bold ic" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-bold:cloud"><path d="M160,36A92.09,92.09,0,0,0,79,84.36,68,68,0,1,0,72,220h88a92,92,0,0,0,0-184Zm0,160H72a44,44,0,0,1-1.82-88A91.86,91.86,0,0,0,68,128a12,12,0,0,0,24,0,68,68,0,1,1,68,68Z"/></svg></span>
+            <span class="txt"><b>Google Fotos</b><span>Aktuell · 1.012 Fotos</span></span>
+            <span class="switch on"><i></i></span>
+          </span>
+        </div>
+        <div class="step">
+          <span class="rail"><span class="node"></span></span>
+          <span class="box">
+            <span class="tile"><svg class="ic ic-p ic-ph-bold ic" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-bold:hard-drives"><path d="M208,36H48A20,20,0,0,0,28,56V200a20,20,0,0,0,20,20H208a20,20,0,0,0,20-20V56A20,20,0,0,0,208,36Zm-4,24v56H52V60ZM52,196V140H204v56ZM160,88a16,16,0,1,1,16,16A16,16,0,0,1,160,88Zm32,80a16,16,0,1,1-16-16A16,16,0,0,1,192,168Z"/></svg></span>
+            <span class="txt"><b>NAS</b><span>128 neu seit Montag</span></span>
+            <span class="switch on"><i></i></span>
+          </span>
+        </div>
+        <div class="step off">
+          <span class="rail"><span class="node"></span></span>
+          <span class="box">
+            <span class="tile"><svg class="ic ic-p ic-ph-bold ic" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-bold:usb"><path d="M251.2,118.4l-48-36A12,12,0,0,0,184,92v24H76V76H98.06a36,36,0,1,0,0-24H72A20,20,0,0,0,52,72v44H12a12,12,0,0,0,0,24H52v44a20,20,0,0,0,20,20H96v4a20,20,0,0,0,20,20h32a20,20,0,0,0,20-20V176a20,20,0,0,0-20-20H116a20,20,0,0,0-20,20v4H76V140H184v24a12,12,0,0,0,19.2,9.6l48-36a12,12,0,0,0,0-19.2ZM132,52a12,12,0,1,1-12,12A12,12,0,0,1,132,52ZM120,180h24v24H120Zm88-40V116l16,12Z"/></svg></span>
+            <span class="txt"><b>USB-Stick</b><span>Getrennt</span></span>
+            <span class="switch"><i></i></span>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <a class="on"><svg class="ic ic-p ic-ph-bold ic" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-bold:house"><path d="M222.14,105.85l-80-80a20,20,0,0,0-28.28,0l-80,80A19.86,19.86,0,0,0,28,120v96a12,12,0,0,0,12,12h64a12,12,0,0,0,12-12V164h24v52a12,12,0,0,0,12,12h64a12,12,0,0,0,12-12V120A19.86,19.86,0,0,0,222.14,105.85ZM204,204H164V152a12,12,0,0,0-12-12H104a12,12,0,0,0-12,12v52H52V121.65l76-76,76,76Z"/></svg><span>Start</span></a>
+      <a><svg class="ic ic-p ic-ph-bold ic" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-bold:books"><path d="M235.57,193.73,202.38,35.93a20,20,0,0,0-23.76-15.48L131.81,30.51a19.82,19.82,0,0,0-11,6.65A20,20,0,0,0,104,28H56A20,20,0,0,0,36,48V208a20,20,0,0,0,20,20h48a20,20,0,0,0,20-20V90.25l25.62,121.82A20,20,0,0,0,169.15,228a20.27,20.27,0,0,0,4.23-.45l46.81-10.06A20.1,20.1,0,0,0,235.57,193.73ZM148.19,88.65l39-8.38,2.53,12-39,8.38Zm7.46,35.5,39-8.38,9.16,43.58-39,8.38Zm24.06-79.39,2.53,12-39,8.38-2.53-12ZM60,88h40v80H60Zm40-36V64H60V52ZM60,204V192h40v12Zm112.29-.76-2.53-12,39-8.38,2.53,12Z"/></svg><span>Bibliothek</span></a>
+      <a><svg class="ic ic-p ic-ph-bold ic" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-bold:magnifying-glass"><path d="M232.49,215.51,185,168a92.12,92.12,0,1,0-17,17l47.53,47.54a12,12,0,0,0,17-17ZM44,112a68,68,0,1,1,68,68A68.07,68.07,0,0,1,44,112Z"/></svg><span>Suche</span></a>
+      <a><svg class="ic ic-p ic-ph-bold ic" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-bold:user"><path d="M234.38,210a123.36,123.36,0,0,0-60.78-53.23,76,76,0,1,0-91.2,0A123.36,123.36,0,0,0,21.62,210a12,12,0,1,0,20.77,12c18.12-31.32,50.12-50,85.61-50s67.49,18.69,85.61,50a12,12,0,0,0,20.77-12ZM76,96a52,52,0,1,1,52,52A52.06,52.06,0,0,1,76,96Z"/></svg><span>Profil</span></a>
+    </nav>
+    <div class="hi" style="color:#201515"></div>
+  </section></figure>
+
+  <!-- ===================== BIBLIOTHEK ===================== -->
+  <figure class="shot"><figcaption>Bibliothek</figcaption>
+  <section class="phone" id="bibliothek" style="color:#201515">
+    <div class="sb"><span>9:41</span><span class="sb-icons"><svg class="ic ic-p ic-ph-fill" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-fill:cell-signal-full"><path d="M208,40V200a16,16,0,0,1-16,16H32A16,16,0,0,1,20.7,188.68l160-160A16,16,0,0,1,208,40Z"/></svg><svg class="ic ic-p ic-ph-fill" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-fill:wifi-high"><path d="M244.35,92.8l-104,125.43A15.93,15.93,0,0,1,128,224h0a15.93,15.93,0,0,1-12.31-5.77L11.65,92.8A15.65,15.65,0,0,1,8.11,80.91,15.93,15.93,0,0,1,14.28,70.1,186.67,186.67,0,0,1,128,32,186.67,186.67,0,0,1,241.72,70.1a15.93,15.93,0,0,1,6.17,10.81A15.65,15.65,0,0,1,244.35,92.8Z"/></svg><svg class="ic ic-p ic-ph-fill" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-fill:battery-full"><path d="M200,56H32A24,24,0,0,0,8,80v96a24,24,0,0,0,24,24H200a24,24,0,0,0,24-24V80A24,24,0,0,0,200,56Zm8,120a8,8,0,0,1-8,8H32a8,8,0,0,1-8-8V80a8,8,0,0,1,8-8H200a8,8,0,0,1,8,8ZM192,96v64a8,8,0,0,1-8,8H48a8,8,0,0,1-8-8V96a8,8,0,0,1,8-8H184A8,8,0,0,1,192,96Zm64,0v64a8,8,0,0,1-16,0V96a8,8,0,0,1,16,0Z"/></svg></span></div>
+
+    <header class="topbar">
+      <span class="mark"><i></i></span>
+      <span class="right">
+        <span class="icon-btn sm"><svg class="ic ic-p ic-ph-bold ic" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-bold:sliders-horizontal"><path d="M40,92H70.06a36,36,0,0,0,67.88,0H216a12,12,0,0,0,0-24H137.94a36,36,0,0,0-67.88,0H40a12,12,0,0,0,0,24Zm64-24A12,12,0,1,1,92,80,12,12,0,0,1,104,68Zm112,96H201.94a36,36,0,0,0-67.88,0H40a12,12,0,0,0,0,24h94.06a36,36,0,0,0,67.88,0H216a12,12,0,0,0,0-24Zm-48,24a12,12,0,1,1,12-12A12,12,0,0,1,168,188Z"/></svg></span>
+        <span class="avatar scene-person"></span>
+      </span>
+    </header>
+
+    <div class="content">
+      <p class="eyebrow sub">1.248 Fotos · 96 Videos · 312 Titel</p>
+      <h1 class="display" style="margin-top:8px">Bibliothek</h1>
+
+      <div class="search" style="margin-top:14px">
+        <svg class="ic ic-p ic-ph-bold ic" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-bold:magnifying-glass"><path d="M232.49,215.51,185,168a92.12,92.12,0,1,0-17,17l47.53,47.54a12,12,0,0,0,17-17ZM44,112a68,68,0,1,1,68,68A68.07,68.07,0,0,1,44,112Z"/></svg><span>Alben, Fotos und Titel suchen</span>
+      </div>
+
+      <div class="segment" style="margin-top:10px">
+        <button class="on">Alle</button><button>Fotos</button><button>Videos</button><button>Musik</button><button>Alben</button>
+      </div>
+
+      <div class="group"><span class="eyebrow">Alben</span><span class="n">4</span></div>
+      <div class="row">
+        <span class="thumb scene-lissabon"></span>
+        <span class="txt"><b>Lissabon</b><span>342 Fotos · 18 Videos · Mai 2025</span></span>
+        <svg class="ic ic-p ic-ph-bold ic" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-bold:caret-right"><path d="M184.49,136.49l-80,80a12,12,0,0,1-17-17L159,128,87.51,56.49a12,12,0,1,1,17-17l80,80A12,12,0,0,1,184.49,136.49Z"/></svg>
+      </div>
+      <div class="row">
+        <span class="thumb scene-see"></span>
+        <span class="txt"><b>Sommer am See</b><span>128 Fotos · Aug. 2025</span></span>
+        <svg class="ic ic-p ic-ph-bold ic" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-bold:caret-right"><path d="M184.49,136.49l-80,80a12,12,0,0,1-17-17L159,128,87.51,56.49a12,12,0,1,1,17-17l80,80A12,12,0,0,1,184.49,136.49Z"/></svg>
+      </div>
+      <div class="row">
+        <span class="thumb scene-herbst"></span>
+        <span class="txt"><b>Herbstwald</b><span>86 Fotos · Okt. 2024</span></span>
+        <svg class="ic ic-p ic-ph-bold ic" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-bold:caret-right"><path d="M184.49,136.49l-80,80a12,12,0,0,1-17-17L159,128,87.51,56.49a12,12,0,1,1,17-17l80,80A12,12,0,0,1,184.49,136.49Z"/></svg>
+      </div>
+      <div class="row">
+        <span class="thumb scene-wien"></span>
+        <span class="txt"><b>Winter in Wien</b><span>203 Fotos · Jan. 2025</span></span>
+        <svg class="ic ic-p ic-ph-bold ic" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-bold:caret-right"><path d="M184.49,136.49l-80,80a12,12,0,0,1-17-17L159,128,87.51,56.49a12,12,0,1,1,17-17l80,80A12,12,0,0,1,184.49,136.49Z"/></svg>
+      </div>
+
+      <div class="group"><span class="eyebrow">Videos</span><span class="n">2</span></div>
+      <div class="row">
+        <span class="thumb scene-konzert"></span>
+        <span class="txt"><b>Konzert im Park</b><span>12 Videos · 1:04 Std.</span></span>
+        <svg class="ic ic-p ic-ph-bold ic" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-bold:caret-right"><path d="M184.49,136.49l-80,80a12,12,0,0,1-17-17L159,128,87.51,56.49a12,12,0,1,1,17-17l80,80A12,12,0,0,1,184.49,136.49Z"/></svg>
+      </div>
+      <div class="row">
+        <span class="thumb scene-film"></span>
+        <span class="txt"><b>Kurzfilme 2024</b><span>7 Videos · 38 Min.</span></span>
+        <span class="pill">Neu</span>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <a><svg class="ic ic-p ic-ph-bold ic" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-bold:house"><path d="M222.14,105.85l-80-80a20,20,0,0,0-28.28,0l-80,80A19.86,19.86,0,0,0,28,120v96a12,12,0,0,0,12,12h64a12,12,0,0,0,12-12V164h24v52a12,12,0,0,0,12,12h64a12,12,0,0,0,12-12V120A19.86,19.86,0,0,0,222.14,105.85ZM204,204H164V152a12,12,0,0,0-12-12H104a12,12,0,0,0-12,12v52H52V121.65l76-76,76,76Z"/></svg><span>Start</span></a>
+      <a class="on"><svg class="ic ic-p ic-ph-bold ic" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-bold:books"><path d="M235.57,193.73,202.38,35.93a20,20,0,0,0-23.76-15.48L131.81,30.51a19.82,19.82,0,0,0-11,6.65A20,20,0,0,0,104,28H56A20,20,0,0,0,36,48V208a20,20,0,0,0,20,20h48a20,20,0,0,0,20-20V90.25l25.62,121.82A20,20,0,0,0,169.15,228a20.27,20.27,0,0,0,4.23-.45l46.81-10.06A20.1,20.1,0,0,0,235.57,193.73ZM148.19,88.65l39-8.38,2.53,12-39,8.38Zm7.46,35.5,39-8.38,9.16,43.58-39,8.38Zm24.06-79.39,2.53,12-39,8.38-2.53-12ZM60,88h40v80H60Zm40-36V64H60V52ZM60,204V192h40v12Zm112.29-.76-2.53-12,39-8.38,2.53,12Z"/></svg><span>Bibliothek</span></a>
+      <a><svg class="ic ic-p ic-ph-bold ic" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-bold:magnifying-glass"><path d="M232.49,215.51,185,168a92.12,92.12,0,1,0-17,17l47.53,47.54a12,12,0,0,0,17-17ZM44,112a68,68,0,1,1,68,68A68.07,68.07,0,0,1,44,112Z"/></svg><span>Suche</span></a>
+      <a><svg class="ic ic-p ic-ph-bold ic" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-bold:user"><path d="M234.38,210a123.36,123.36,0,0,0-60.78-53.23,76,76,0,1,0-91.2,0A123.36,123.36,0,0,0,21.62,210a12,12,0,1,0,20.77,12c18.12-31.32,50.12-50,85.61-50s67.49,18.69,85.61,50a12,12,0,0,0,20.77-12ZM76,96a52,52,0,1,1,52,52A52.06,52.06,0,0,1,76,96Z"/></svg><span>Profil</span></a>
+    </nav>
+    <div class="hi" style="color:#201515"></div>
+  </section></figure>
+
+  <!-- ===================== DETAIL ===================== -->
+  <figure class="shot"><figcaption>Detail</figcaption>
+  <section class="phone" id="detail" style="color:#201515">
+    <div class="sb"><span>9:41</span><span class="sb-icons"><svg class="ic ic-p ic-ph-fill" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-fill:cell-signal-full"><path d="M208,40V200a16,16,0,0,1-16,16H32A16,16,0,0,1,20.7,188.68l160-160A16,16,0,0,1,208,40Z"/></svg><svg class="ic ic-p ic-ph-fill" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-fill:wifi-high"><path d="M244.35,92.8l-104,125.43A15.93,15.93,0,0,1,128,224h0a15.93,15.93,0,0,1-12.31-5.77L11.65,92.8A15.65,15.65,0,0,1,8.11,80.91,15.93,15.93,0,0,1,14.28,70.1,186.67,186.67,0,0,1,128,32,186.67,186.67,0,0,1,241.72,70.1a15.93,15.93,0,0,1,6.17,10.81A15.65,15.65,0,0,1,244.35,92.8Z"/></svg><svg class="ic ic-p ic-ph-fill" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-fill:battery-full"><path d="M200,56H32A24,24,0,0,0,8,80v96a24,24,0,0,0,24,24H200a24,24,0,0,0,24-24V80A24,24,0,0,0,200,56Zm8,120a8,8,0,0,1-8,8H32a8,8,0,0,1-8-8V80a8,8,0,0,1,8-8H200a8,8,0,0,1,8,8ZM192,96v64a8,8,0,0,1-8,8H48a8,8,0,0,1-8-8V96a8,8,0,0,1,8-8H184A8,8,0,0,1,192,96Zm64,0v64a8,8,0,0,1-16,0V96a8,8,0,0,1,16,0Z"/></svg></span></div>
+
+    <header class="topbar">
+      <span class="icon-btn sm"><svg class="ic ic-p ic-ph-bold ic" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-bold:arrow-left"><path d="M228,128a12,12,0,0,1-12,12H69l51.52,51.51a12,12,0,0,1-17,17l-72-72a12,12,0,0,1,0-17l72-72a12,12,0,0,1,17,17L69,116H216A12,12,0,0,1,228,128Z"/></svg></span>
+      <span class="right">
+        <span class="icon-btn sm"><svg class="ic ic-p ic-ph-bold ic" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-bold:share-network"><path d="M176,156a43.78,43.78,0,0,0-29.09,11L106.1,140.8a44.07,44.07,0,0,0,0-25.6L146.91,89a43.83,43.83,0,1,0-13-20.17L93.09,95a44,44,0,1,0,0,65.94L133.9,187.2A44,44,0,1,0,176,156Zm0-120a20,20,0,1,1-20,20A20,20,0,0,1,176,36ZM64,148a20,20,0,1,1,20-20A20,20,0,0,1,64,148Zm112,72a20,20,0,1,1,20-20A20,20,0,0,1,176,220Z"/></svg></span>
+        <span class="icon-btn sm"><svg class="ic ic-p ic-ph-bold ic" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-bold:dots-three"><path d="M144,128a16,16,0,1,1-16-16A16,16,0,0,1,144,128ZM60,112a16,16,0,1,0,16,16A16,16,0,0,0,60,112Zm136,0a16,16,0,1,0,16,16A16,16,0,0,0,196,112Z"/></svg></span>
+      </span>
+    </header>
+
+    <div class="content">
+      <p class="eyebrow sub">Album · Mai 2025</p>
+      <h1 class="display" style="margin-top:8px">Lissabon</h1>
+      <p class="body-md" style="margin-top:6px">342 Fotos · 18 Videos</p>
+
+      <div class="hero-shot scene-lissabon" style="background-position:50% 72%"></div>
+
+      <div class="actions">
+        <button class="btn btn-primary"><svg class="ic ic-p ic-ph-bold ic" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-bold:play"><path d="M234.49,111.07,90.41,22.94A20,20,0,0,0,60,39.87V216.13a20,20,0,0,0,30.41,16.93l144.08-88.13a19.82,19.82,0,0,0,0-33.86ZM84,208.85V47.15L216.16,128Z"/></svg>Diashow starten</button>
+        <span class="icon-btn"><svg class="ic ic-p ic-ph-bold ic" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-bold:heart"><path d="M178,36c-20.09,0-37.92,7.93-50,21.56C115.92,43.93,98.09,36,78,36a66.08,66.08,0,0,0-66,66c0,72.34,105.81,130.14,110.31,132.57a12,12,0,0,0,11.38,0C138.19,232.14,244,174.34,244,102A66.08,66.08,0,0,0,178,36Zm-5.49,142.36A328.69,328.69,0,0,1,128,210.16a328.69,328.69,0,0,1-44.51-31.8C61.82,159.77,36,131.42,36,102A42,42,0,0,1,78,60c17.8,0,32.7,9.4,38.89,24.54a12,12,0,0,0,22.22,0C145.3,69.4,160.2,60,178,60a42,42,0,0,1,42,42C220,131.42,194.18,159.77,172.51,178.36Z"/></svg></span>
+        <span class="icon-btn"><svg class="ic ic-p ic-ph-bold ic" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-bold:bookmark-simple"><path d="M184,28H72A20,20,0,0,0,52,48V224a12,12,0,0,0,18.36,10.18l57.63-36,57.65,36A12,12,0,0,0,204,224V48A20,20,0,0,0,184,28Zm-4,174.35-45.65-28.53a12,12,0,0,0-12.72,0L76,202.35V52H180Z"/></svg></span>
+      </div>
+
+      <div class="segment" style="margin-top:16px">
+        <button class="on">Fotos</button><button>Videos</button><button>Orte</button>
+      </div>
+
+      <div class="grid">
+        <span class="photo scene-lissabon crop-1"></span>
+        <span class="photo scene-lissabon crop-4"></span>
+        <span class="photo scene-lissabon crop-9"></span>
+        <span class="photo scene-lissabon crop-11"></span>
+        <span class="photo scene-lissabon crop-6"></span>
+        <span class="photo scene-lissabon crop-2"></span>
+        <span class="photo scene-lissabon crop-5"></span>
+        <span class="photo scene-lissabon crop-7"></span>
+        <span class="photo scene-lissabon crop-3"></span>
+      </div>
+    </div>
+
+    <div class="music-bar">
+      <span class="txt">
+        <span class="eyebrow">Musik zur Diashow</span>
+        <b>Nachtfahrt · 24 Titel</b>
+      </span>
+      <svg class="wave" width="46" height="24" viewBox="0 0 46 24" aria-hidden="true">
+        <g fill="#fffefb">
+          <rect x="0" y="9" width="3" height="6" rx="1.5"/><rect x="6" y="5" width="3" height="14" rx="1.5"/>
+          <rect x="12" y="1" width="3" height="22" rx="1.5"/><rect x="18" y="7" width="3" height="10" rx="1.5"/>
+          <rect x="24" y="3" width="3" height="18" rx="1.5"/><rect x="30" y="8" width="3" height="8" rx="1.5"/>
+          <rect x="36" y="4" width="3" height="16" rx="1.5"/><rect x="42" y="10" width="3" height="4" rx="1.5"/>
+        </g>
+      </svg>
+      <span class="play"><svg class="ic ic-p ic-ph-bold ic" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-bold:play"><path d="M234.49,111.07,90.41,22.94A20,20,0,0,0,60,39.87V216.13a20,20,0,0,0,30.41,16.93l144.08-88.13a19.82,19.82,0,0,0,0-33.86ZM84,208.85V47.15L216.16,128Z"/></svg></span>
+    </div>
+    <div class="hi" style="color:#fffefb"></div>
+  </section></figure>
+
+</main><footer class="ms-foot"><b>Zapier-Stil</b> · Ansatz: Präzises Werkzeug + Editorial · eigene Musterscreens mit Beispielinhalten, keine Originalscreens der Marke</footer></div>
+</body></html>

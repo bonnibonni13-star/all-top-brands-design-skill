@@ -1,0 +1,812 @@
+<!doctype html>
+<!-- ===========================================================================================
+     Designvorschau – Vorlage des All Top Brands Design Skills
+     Erzeugt von tools/build_vorschau.py. Nicht die Vorlage im Skill-Ordner bearbeiten, sondern
+     die Kopie im Projekt:
+         cp tools/vorschau/vorlage.html <Projekt>/design-vorschau/index.html
+         cp tools/vorschau/icons.js    <Projekt>/design-vorschau/icons.js
+
+     Die Seite ist eigenständig (Basis-CSS und Bildmotive sind eingebettet) und lädt nur ./icons.js.
+     Sie läuft offline direkt aus file:// – `open`/`xdg-open` genügt, kein Server.
+
+     Ohne Desktop (Sitzung ohne Bildschirm, kein `open`/`xdg-open`): die Seite mit Playwright
+     fotografieren (Chromium, file://-Adresse, einmal 1440 px und einmal 390 px breit, full_page)
+     und die Bilder SELBST ansehen, bevor die Seite dem Nutzer gezeigt wird. Dabei die Konsole
+     mitlesen (`page.on("console", …)`, `page.on("pageerror", …)`): Meldungen „Icon fehlt: …“
+     bedeuten einen falschen Icon-Namen – gültige Namen stehen im Kopf von icons.js –, und Fehler
+     darf es keine geben.
+
+     Wofür:
+       Schritt 3 – je Designvorschlag eine Karte mit dem Hauptscreen der eigenen App in der
+                   Designsprache einer Marke, jede Karte mit drei umschaltbaren Farbvarianten.
+       Schritt 7 – dieselbe Seite für kleine Vergleiche: zwei bis drei Ausschnitte nebeneinander
+                   (z. B. nur die Navigationsleiste) über <section class="phone ausschnitt">,
+                   immer INNERHALB der Karte #dN des Entwurfs (siehe „HIER 3“).
+
+     Zu tun sind genau drei Stellen, alle unten mit „HIER“ gekennzeichnet:
+       1. Style-Block mit der Id "entwuerfe" – Tokens, die drei Variantenblöcke, die Bausteine
+       2. App-Name in der Kopfzeile
+       3. Der <main>-Bereich mit der Klasse "vs-entwuerfe" – je Entwurf eine Karte
+
+     Alle Klassen und Variablen der Seite selbst beginnen mit „vs-“ bzw. „--vs-“. Übernommene
+     Bausteine aus screens/<slug>.html können daher nie versehentlich das Drumherum verändern.
+     Frei verwendbar bleiben: .phone, .sb, .sb-icons, .hi, .scene-*, .crop-N, .grain, .row-x, .ic.
+     =========================================================================================== -->
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Designvorschläge</title>
+
+<!-- Basis-CSS der Musterscreens (Phone 390×844, .sb, .hi, .scene-*, .crop-N, .grain, :where-Resets).
+     Eingebettet samt Bildmotiven als data-URI – dadurch ist die Seite offline vollständig. -->
+<style id="ms-base">
+/* Musterscreens – Basis. Wird vom Renderer vor die eigenen Stile gesetzt; eigene Regeln überschreiben sie.
+   Platzhalter der Form „{{scene:<name>}}“ ersetzt der Renderer durch das SVG aus scenes/<name>.svg. */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body { background: #e7e7eb; font-family: Inter, "DejaVu Sans", sans-serif; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+.ms-wrap { display: inline-block; background: #e7e7eb; }
+.stage { display: flex; gap: 40px; align-items: flex-start; padding: 48px 48px 20px; width: max-content; }
+.shot { margin: 0; display: flex; flex-direction: column; gap: 14px; }
+.shot > figcaption { font: 600 13px/1 Inter, "DejaVu Sans", sans-serif; letter-spacing: .08em; text-transform: uppercase; color: #6b6b74; padding-left: 8px; }
+.phone { position: relative; width: 390px; height: 844px; overflow: hidden; border-radius: 40px; isolation: isolate;
+  box-shadow: 0 0 0 1px rgba(0,0,0,.06), 0 18px 50px rgba(0,0,0,.14); }
+.ms-foot { font: 500 13px/1.4 Inter, "DejaVu Sans", sans-serif; color: #6b6b74; padding: 0 56px 30px; }
+.ms-foot b { color: #3a3a40; font-weight: 600; }
+
+/* Rücksetzungen ohne Spezifität: eigene Klassen gewinnen immer. Eigene Resets bitte ebenfalls mit :where(). */
+:where(.phone) :where(h1, h2, h3, h4, h5, h6, p, ul, ol, li, figure, blockquote, dl, dd) { margin: 0; padding: 0; }
+:where(.phone) :where(ul, ol) { list-style: none; }
+:where(.phone) :where(button, input, select, textarea) { font: inherit; color: inherit; background: none; border: 0; padding: 0; margin: 0; }
+
+/* Icons: <i data-icon="lucide:house"></i> oder <i data-icon="ph-bold:house"></i> → Inline-SVG mit Klasse .ic */
+.ic { width: 1em; height: 1em; display: inline-block; vertical-align: -0.125em; flex: none; }
+.ic-missing { outline: 2px dashed red; }
+
+/* Statusleiste und Gestenleiste */
+.sb { height: 46px; display: flex; align-items: center; justify-content: space-between; padding: 4px 26px 0 32px;
+  font: 600 15px/1 Inter, "DejaVu Sans", sans-serif; position: relative; z-index: 30; }
+.sb-icons { display: flex; gap: 6px; font-size: 16px; align-items: center; }
+.hi { position: absolute; left: 50%; bottom: 8px; width: 134px; height: 5px; border-radius: 3px; transform: translateX(-50%);
+  background: currentColor; opacity: .45; z-index: 40; }
+
+/* Bilder (abstrakte Motive, gleich für alle Marken). Ausschnitt per background-position/-size, Behandlung frei. */
+[class*="scene-"] { background-size: cover; background-position: center; background-repeat: no-repeat; }
+.scene-see { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300' preserveAspectRatio='xMidYMid slice'%3E%3Cdefs%3E%3ClinearGradient id='a' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%2386cdf6'/%3E%3Cstop offset='.64' stop-color='%23ffe4b5'/%3E%3C/linearGradient%3E%3ClinearGradient id='b' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%234fb3cc'/%3E%3Cstop offset='1' stop-color='%231c627d'/%3E%3C/linearGradient%3E%3CradialGradient id='g'%3E%3Cstop offset='0' stop-color='%23fff6dc'/%3E%3Cstop offset='1' stop-color='%23fff6dc' stop-opacity='0'/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect width='400' height='300' fill='url(%23a)'/%3E%3Ccircle cx='296' cy='138' r='70' fill='url(%23g)'/%3E%3Ccircle cx='296' cy='138' r='26' fill='%23fff4d2'/%3E%3Cpath d='M0 176C60 148 112 156 162 166S250 146 312 152 380 168 400 164V300H0Z' fill='%2386b596'/%3E%3Cpath d='M0 190C80 174 140 188 200 184S322 170 400 182V300H0Z' fill='%234c8764'/%3E%3Crect y='198' width='400' height='102' fill='url(%23b)'/%3E%3Cpath d='M262 212H330M30 230H150M210 248H372M80 268H190' stroke='%23c9eef6' stroke-width='3' stroke-linecap='round' opacity='.45'/%3E%3Cpath d='M120 199l18-12 4 12z' fill='%23fdfdfd'/%3E%3Cpath d='M137 186v14' stroke='%23fdfdfd' stroke-width='2'/%3E%3C/svg%3E"); }
+.scene-lissabon { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300' preserveAspectRatio='xMidYMid slice'%3E%3Cdefs%3E%3ClinearGradient id='a' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23ffd9a3'/%3E%3Cstop offset='1' stop-color='%23f39a63'/%3E%3C/linearGradient%3E%3Cpattern id='w' width='18' height='24' patternUnits='userSpaceOnUse'%3E%3Crect x='6' y='7' width='6' height='10' rx='1' fill='%235b3428' opacity='.38'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width='400' height='300' fill='url(%23a)'/%3E%3Ccircle cx='84' cy='80' r='26' fill='%23fff2d4'/%3E%3Cpath d='M0 168h64v132H0z' fill='%23f6e6c8'/%3E%3Cpath d='M-4 170l36-20 36 20z' fill='%23c5513a'/%3E%3Cpath d='M64 146h72v154H64z' fill='%23eaa7a1'/%3E%3Cpath d='M60 148l40-24 40 24z' fill='%23b2412c'/%3E%3Cpath d='M136 180h56v120h-56z' fill='%239fc6d8'/%3E%3Cpath d='M132 182l32-18 32 18z' fill='%23c5513a'/%3E%3Cpath d='M192 136h84v164h-84z' fill='%23e3a65a'/%3E%3Cpath d='M188 138l46-26 46 26z' fill='%23b2412c'/%3E%3Cpath d='M276 162h62v138h-62z' fill='%23f6e6c8'/%3E%3Cpath d='M272 164l35-19 35 19z' fill='%23c5513a'/%3E%3Cpath d='M338 150h66v150h-66z' fill='%23eaa7a1'/%3E%3Cpath d='M334 152l37-22 37 22z' fill='%23b2412c'/%3E%3Crect y='150' width='400' height='150' fill='url(%23w)'/%3E%3Cpath d='M0 262c90-18 210-18 400 0v38H0z' fill='%239b3d2a'/%3E%3Crect x='150' y='236' width='70' height='30' rx='6' fill='%23f2c94c'/%3E%3Crect x='156' y='241' width='16' height='12' rx='2' fill='%235b3428' opacity='.5'/%3E%3Crect x='178' y='241' width='16' height='12' rx='2' fill='%235b3428' opacity='.5'/%3E%3Crect x='200' y='241' width='14' height='12' rx='2' fill='%235b3428' opacity='.5'/%3E%3C/svg%3E"); }
+.scene-konzert { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300' preserveAspectRatio='xMidYMid slice'%3E%3Cdefs%3E%3CradialGradient id='a' cx='.5' cy='1' r='1'%3E%3Cstop offset='0' stop-color='%234a1670'/%3E%3Cstop offset='1' stop-color='%230c0619'/%3E%3C/radialGradient%3E%3ClinearGradient id='p' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23ff5fcf' stop-opacity='.85'/%3E%3Cstop offset='1' stop-color='%23ff5fcf' stop-opacity='0'/%3E%3C/linearGradient%3E%3ClinearGradient id='c' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%2352dcff' stop-opacity='.8'/%3E%3Cstop offset='1' stop-color='%2352dcff' stop-opacity='0'/%3E%3C/linearGradient%3E%3CradialGradient id='s'%3E%3Cstop offset='0' stop-color='%23ff9a5c' stop-opacity='.9'/%3E%3Cstop offset='1' stop-color='%23ff9a5c' stop-opacity='0'/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect width='400' height='300' fill='url(%23a)'/%3E%3Cpath d='M90 0h14l70 260H40z' fill='url(%23p)' opacity='.7'/%3E%3Cpath d='M300 0h14l66 260H230z' fill='url(%23c)' opacity='.7'/%3E%3Cpath d='M196 0h10l60 250H140z' fill='url(%23p)' opacity='.45'/%3E%3Cellipse cx='200' cy='232' rx='190' ry='60' fill='url(%23s)'/%3E%3Cg fill='%23fff' opacity='.8'%3E%3Ccircle cx='40' cy='40' r='1.4'/%3E%3Ccircle cx='150' cy='24' r='1.2'/%3E%3Ccircle cx='260' cy='52' r='1.3'/%3E%3Ccircle cx='360' cy='30' r='1.5'/%3E%3C/g%3E%3Cpath d='M0 300V262c12-10 22-12 30-4 8-14 22-16 30-4 10-12 24-12 32 0 8-16 24-16 32-2 10-10 22-10 30 2 8-14 24-14 32 0 10-10 22-10 30 0 8-16 24-14 32 0 10-10 22-10 30 2 8-12 22-12 30-2 10-8 20-6 32 4V300z' fill='%2307030f'/%3E%3Cpath d='M60 262l-6-26M182 258l8-30M300 262l-4-28' stroke='%2307030f' stroke-width='7' stroke-linecap='round'/%3E%3C/svg%3E"); }
+.scene-nacht { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300' preserveAspectRatio='xMidYMid slice'%3E%3Cdefs%3E%3ClinearGradient id='a' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%230a0f2e'/%3E%3Cstop offset='.45' stop-color='%232d1a5e'/%3E%3Cstop offset='.62' stop-color='%23ff4f7e'/%3E%3C/linearGradient%3E%3ClinearGradient id='s' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23ffd36b'/%3E%3Cstop offset='1' stop-color='%23ff4f7e'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='400' height='300' fill='url(%23a)'/%3E%3Ccircle cx='200' cy='168' r='62' fill='url(%23s)'/%3E%3Cg fill='%234a2a78'%3E%3Crect x='138' y='140' width='124' height='5'/%3E%3Crect x='138' y='152' width='124' height='6'/%3E%3Crect x='138' y='165' width='124' height='7'/%3E%3C/g%3E%3Cpath d='M0 186h22v-22h14v-12h16v34h18v-26h12v26h22v-40h16v40h40V186h120v-30h14v30h18v-22h16v22h14v-36h18v36h40v-24h14v24h18' fill='%231b1145'/%3E%3Crect y='186' width='400' height='114' fill='%23120b2b'/%3E%3Cpath d='M200 186L-60 300M200 186L460 300' stroke='%23ff4fd8' stroke-width='2.5' opacity='.9'/%3E%3Cpath d='M200 186l-30 114M200 186l30 114' stroke='%2352e5ff' stroke-width='2' opacity='.6'/%3E%3Cpath d='M200 186L118 300M200 186l82 114' stroke='%2352e5ff' stroke-width='1.2' opacity='.35'/%3E%3Cpath d='M-20 214H420M-20 238H420M-20 270H420' stroke='%23ff4fd8' stroke-width='1' opacity='.35'/%3E%3Cg fill='%23fff'%3E%3Ccircle cx='60' cy='40' r='1.2'/%3E%3Ccircle cx='330' cy='28' r='1.4'/%3E%3Ccircle cx='250' cy='70' r='1'/%3E%3Ccircle cx='110' cy='90' r='1.1'/%3E%3C/g%3E%3C/svg%3E"); }
+.scene-herbst { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300' preserveAspectRatio='xMidYMid slice'%3E%3Cdefs%3E%3ClinearGradient id='a' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23fbd38d'/%3E%3Cstop offset='1' stop-color='%23e7843f'/%3E%3C/linearGradient%3E%3ClinearGradient id='m' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23fff' stop-opacity='0'/%3E%3Cstop offset='.5' stop-color='%23fff' stop-opacity='.35'/%3E%3Cstop offset='1' stop-color='%23fff' stop-opacity='0'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='400' height='300' fill='url(%23a)'/%3E%3Cg opacity='.55'%3E%3Ccircle cx='40' cy='150' r='46' fill='%23d9663a'/%3E%3Ccircle cx='130' cy='130' r='54' fill='%23e89a3c'/%3E%3Ccircle cx='250' cy='140' r='50' fill='%23c8502f'/%3E%3Ccircle cx='350' cy='125' r='58' fill='%23e89a3c'/%3E%3C/g%3E%3Crect y='150' width='400' height='60' fill='url(%23m)'/%3E%3Cg fill='%234a2a1d'%3E%3Crect x='66' y='170' width='9' height='110'/%3E%3Crect x='186' y='160' width='10' height='120'/%3E%3Crect x='306' y='168' width='9' height='112'/%3E%3C/g%3E%3Ccircle cx='70' cy='160' r='44' fill='%23c2452d'/%3E%3Ccircle cx='96' cy='182' r='30' fill='%23e5862c'/%3E%3Ccircle cx='190' cy='148' r='52' fill='%23f0a93a'/%3E%3Ccircle cx='160' cy='176' r='28' fill='%23c2452d'/%3E%3Ccircle cx='310' cy='156' r='48' fill='%238f2d1f'/%3E%3Ccircle cx='338' cy='186' r='30' fill='%23e5862c'/%3E%3Cpath d='M0 262c80-14 160-10 240-2s120 4 160-6v46H0z' fill='%236b3a22'/%3E%3Cg fill='%23f2b44c'%3E%3Cellipse cx='120' cy='272' rx='6' ry='3'/%3E%3Cellipse cx='260' cy='282' rx='5' ry='2.5'/%3E%3Cellipse cx='340' cy='270' rx='6' ry='3'/%3E%3C/g%3E%3C/svg%3E"); }
+.scene-studio { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300' preserveAspectRatio='xMidYMid slice'%3E%3Cdefs%3E%3CradialGradient id='a' cx='.25' cy='.35' r='.9'%3E%3Cstop offset='0' stop-color='%236b3f12'/%3E%3Cstop offset='.55' stop-color='%231d1209'/%3E%3Cstop offset='1' stop-color='%230a0705'/%3E%3C/radialGradient%3E%3CradialGradient id='l'%3E%3Cstop offset='0' stop-color='%23ffb347' stop-opacity='.55'/%3E%3Cstop offset='1' stop-color='%23ffb347' stop-opacity='0'/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect width='400' height='300' fill='url(%23a)'/%3E%3Cellipse cx='90' cy='90' rx='150' ry='110' fill='url(%23l)'/%3E%3Ccircle cx='262' cy='160' r='116' fill='%23111'/%3E%3Cg fill='none' stroke='%232b2b2b' stroke-width='1.5'%3E%3Ccircle cx='262' cy='160' r='104'/%3E%3Ccircle cx='262' cy='160' r='92'/%3E%3Ccircle cx='262' cy='160' r='80'/%3E%3Ccircle cx='262' cy='160' r='68'/%3E%3Ccircle cx='262' cy='160' r='56'/%3E%3C/g%3E%3Cpath d='M190 84a104 104 0 0 1 120-14' stroke='%235a5a5a' stroke-width='3' fill='none' opacity='.6'/%3E%3Ccircle cx='262' cy='160' r='36' fill='%23e3a33b'/%3E%3Ccircle cx='262' cy='160' r='4' fill='%23111'/%3E%3Cpath d='M380 20l-60 110' stroke='%23c9c9c9' stroke-width='5' stroke-linecap='round'/%3E%3Crect x='306' y='124' width='22' height='12' rx='3' fill='%23d9d9d9' transform='rotate(-60 317 130)'/%3E%3C/svg%3E"); }
+.scene-wien { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300' preserveAspectRatio='xMidYMid slice'%3E%3Cdefs%3E%3ClinearGradient id='a' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23c9dcf2'/%3E%3Cstop offset='.7' stop-color='%23f6d6de'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='400' height='300' fill='url(%23a)'/%3E%3Cg fill='%23aebfd4'%3E%3Crect x='0' y='170' width='70' height='70'/%3E%3Crect x='300' y='160' width='100' height='80'/%3E%3Crect x='60' y='182' width='40' height='58'/%3E%3C/g%3E%3Cg fill='%238ea3bd'%3E%3Crect x='120' y='150' width='160' height='90'/%3E%3Cpath d='M150 150a50 50 0 0 1 100 0z'/%3E%3Crect x='196' y='72' width='8' height='30'/%3E%3Ccircle cx='200' cy='70' r='5'/%3E%3Crect x='104' y='96' width='14' height='144'/%3E%3Crect x='282' y='96' width='14' height='144'/%3E%3Cpath d='M100 96h22l-11-16zM278 96h22l-11-16z'/%3E%3Crect x='166' y='170' width='68' height='70' fill='%237a90ab'/%3E%3Cpath d='M166 170h68l-34-22z' fill='%239fb2c9'/%3E%3C/g%3E%3Cg fill='%237a90ab'%3E%3Crect x='176' y='186' width='6' height='54'/%3E%3Crect x='190' y='186' width='6' height='54'/%3E%3Crect x='204' y='186' width='6' height='54'/%3E%3Crect x='218' y='186' width='6' height='54'/%3E%3C/g%3E%3Cpath d='M0 236c100-10 300-10 400 0v64H0z' fill='%23f6f8fc'/%3E%3Cpath d='M0 262c120-8 280-6 400 4' stroke='%23dfe6f0' stroke-width='3' fill='none'/%3E%3Cg fill='%23fff' opacity='.85'%3E%3Ccircle cx='40' cy='60' r='2'/%3E%3Ccircle cx='90' cy='120' r='1.6'/%3E%3Ccircle cx='150' cy='40' r='2.2'/%3E%3Ccircle cx='250' cy='110' r='1.8'/%3E%3Ccircle cx='330' cy='50' r='2'/%3E%3Ccircle cx='370' cy='120' r='1.6'/%3E%3Ccircle cx='300' cy='200' r='1.8'/%3E%3Ccircle cx='60' cy='210' r='2'/%3E%3C/g%3E%3C/svg%3E"); }
+.scene-film { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300' preserveAspectRatio='xMidYMid slice'%3E%3Cdefs%3E%3ClinearGradient id='a' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%230f4c5c'/%3E%3Cstop offset='.45' stop-color='%231f7a77'/%3E%3Cstop offset='.7' stop-color='%23f4a259'/%3E%3Cstop offset='1' stop-color='%23e76f51'/%3E%3C/linearGradient%3E%3ClinearGradient id='r' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23ffd27a' stop-opacity='.9'/%3E%3Cstop offset='1' stop-color='%23ffd27a' stop-opacity='0'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='400' height='300' fill='url(%23a)'/%3E%3Ccircle cx='250' cy='196' r='44' fill='%23ffd166'/%3E%3Crect x='206' y='214' width='88' height='86' fill='url(%23r)' opacity='.7'/%3E%3Cpath d='M0 214h400v86H0z' fill='%230b2a33' opacity='.55'/%3E%3Cpath d='M0 214c40-6 70-30 96-28s40 20 70 22 70-8 100-4 90 8 134 4v8H0z' fill='%230b2a33'/%3E%3Cpath d='M70 214c-2-40 4-70 14-92' stroke='%230b2a33' stroke-width='5' fill='none'/%3E%3Cpath d='M84 122c-18-8-38-4-50 8M84 122c-6-16-22-24-38-22M84 122c14-12 34-14 48-4M84 122c18-2 32 8 38 22M84 122c4-16 16-26 30-28' stroke='%230b2a33' stroke-width='5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); }
+.scene-person { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='xMidYMid slice'%3E%3Cdefs%3E%3ClinearGradient id='a' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23f3d9c1'/%3E%3Cstop offset='1' stop-color='%23d8a98a'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' fill='url(%23a)'/%3E%3Cpath d='M14 104c4-22 18-32 36-32s32 10 36 32z' fill='%233d5a80'/%3E%3Ccircle cx='50' cy='44' r='19' fill='%239c6b52'/%3E%3Cpath d='M30 44c0-16 9-25 21-25 13 0 21 9 21 22-6-6-16-9-26-8-7 1-12 5-16 11z' fill='%233a2418'/%3E%3C/svg%3E"); }
+
+/* Erprobte Bildausschnitte für weitere „Fotos“ aus einem Motiv (z. B. Fotoraster): class="scene-lissabon crop-3" */
+.crop-1 { background-size: 260%; background-position: 8% 18%; }
+.crop-2 { background-size: 320%; background-position: 85% 60%; }
+.crop-3 { background-size: 360%; background-position: 50% 95%; }
+.crop-4 { background-size: 300%; background-position: 60% 35%; }
+.crop-5 { background-size: 280%; background-position: 0% 60%; }
+.crop-6 { background-size: 500%; background-position: 20% 20%; }
+.crop-7 { background-size: 240%; background-position: 100% 90%; }
+.crop-8 { background-size: 550%; background-position: 70% 55%; }
+.crop-9 { background-size: 220%; background-position: 35% 0%; }
+.crop-10 { background-size: 420%; background-position: 40% 62%; }
+.crop-11 { background-size: 340%; background-position: 95% 45%; }
+.crop-12 { background-size: 300%; background-position: 0% 100%; }
+
+/* Körnung als Überlagerung: Element bekommt .grain, Stärke per --grain (0–1). */
+.grain { position: relative; }
+.grain::after { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: var(--grain, .18); mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E"); background-size: 160px 160px; }
+
+/* Horizontale Reihen dürfen am Rand angeschnitten sein wie beim echten Scrollen. */
+.row-x { display: flex; overflow: hidden; }
+
+</style>
+
+<!-- Stile der Vorschau-Seite selbst. Betreffen nur das Drumherum, nie den Inhalt der Phones:
+     die Phones behalten immer ihre eigenen Farben aus dem Entwurf. -->
+<style id="seite">
+:root {
+  --vs-bg: #f3f3f6; --vs-flaeche: #ffffff; --vs-flaeche-2: #ececf1;
+  --vs-text: #17171c; --vs-leise: #6a6a76; --vs-linie: #dededf;
+  --vs-akzent: #2f5bd0; --vs-auf-akzent: #ffffff;
+  --vs-r: 16px;
+  --vs-zoom: 1;        /* Verkleinerung der Phones auf schmalen Fenstern */
+  --vs-zoom-vgl: .82;  /* Verkleinerung im Vergleichsmodus */
+  color-scheme: light dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --vs-bg: #121216; --vs-flaeche: #1b1b21; --vs-flaeche-2: #24242c;
+    --vs-text: #f2f2f5; --vs-leise: #9a9aa6; --vs-linie: #31313a;
+    --vs-akzent: #8aa6ff; --vs-auf-akzent: #10121a;
+  }
+}
+body { background: var(--vs-bg); color: var(--vs-text);
+  font-family: Inter, system-ui, "Segoe UI", "DejaVu Sans", sans-serif; }
+html, body { max-width: 100%; overflow-x: hidden; }
+
+/* Hüllen des Musterscreen-Renderers abschalten, falls Bausteine samt Hülle kopiert werden. */
+.ms-wrap, .stage, .shot { display: block; width: auto; padding: 0; margin: 0; gap: 0; background: none; }
+.ms-foot, .shot > figcaption { display: none; }
+
+/* ---------- Kopfzeile ---------- */
+.vs-top { padding: 28px 20px 18px; border-bottom: 1px solid var(--vs-linie); background: var(--vs-flaeche); }
+.vs-top-in { max-width: 1680px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 10px 20px; align-items: flex-end; }
+.vs-top h1 { margin: 0; font-size: clamp(22px, 3vw, 30px); font-weight: 700; letter-spacing: -.01em; }
+.vs-sub { margin: 4px 0 0; color: var(--vs-leise); font-size: 14px; line-height: 1.5; }
+.vs-sub b { color: var(--vs-text); font-weight: 600; }
+.vs-top-rechts { margin-left: auto; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.vs-schalter { display: inline-flex; gap: 8px; align-items: center; padding: 8px 13px; font: 500 13px/1.2 inherit;
+  cursor: pointer; border: 1px solid var(--vs-linie); border-radius: 999px;
+  background: var(--vs-flaeche-2); color: var(--vs-text); }
+.vs-schalter[aria-pressed="true"] { background: var(--vs-akzent); color: var(--vs-auf-akzent); border-color: transparent; }
+.vs-warnung { margin: 14px auto 0; max-width: 1648px; padding: 10px 14px; border-radius: 10px; font-size: 13px;
+  background: #ffe8e8; color: #7a1414; border: 1px solid #f3b4b4; }
+@media (prefers-color-scheme: dark) { .vs-warnung { background: #3a1616; color: #ffd4d4; border-color: #6d2323; } }
+.vs-warnung[hidden] { display: none; }
+
+/* ---------- Fläche der Entwürfe ---------- */
+.vs-entwuerfe { max-width: 1680px; margin: 0 auto; padding: 24px 16px 72px;
+  display: flex; flex-wrap: wrap; gap: 26px; align-items: flex-start; justify-content: center; }
+.vs-design { width: calc(390px * var(--vs-zoom) + 34px); flex: none;
+  background: var(--vs-flaeche); border: 1px solid var(--vs-linie); border-radius: var(--vs-r);
+  padding: 16px 16px 18px; display: flex; flex-direction: column; gap: 12px; outline-offset: 3px; }
+.vs-design:focus-visible { outline: 2px solid var(--vs-akzent); }
+
+.vs-zeile-nr { margin: 0; font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--vs-leise); }
+.vs-name { margin: 2px 0 0; font-size: 20px; font-weight: 700; letter-spacing: -.01em; }
+.vs-kopfdaten { margin: 7px 0 0; display: flex; flex-wrap: wrap; gap: 7px; align-items: center; font-size: 12.5px; }
+.vs-chip { padding: 3px 9px; border-radius: 999px; background: var(--vs-flaeche-2);
+  border: 1px solid var(--vs-linie); font-weight: 600; }
+.vs-inspiriert { color: var(--vs-leise); }
+
+.vs-zeilen { margin: 0; display: grid; gap: 3px; font-size: 12.5px; line-height: 1.45; }
+.vs-zeilen > div { display: grid; grid-template-columns: 94px 1fr; gap: 8px; }
+.vs-zeilen dt { color: var(--vs-leise); }
+.vs-zeilen dd { margin: 0; }
+
+/* ---------- Variantenumschalter ---------- */
+.vs-schalterreihe { display: flex; flex-wrap: wrap; gap: 6px; }
+.vs-knopf { flex: 1 1 auto; display: flex; gap: 6px; align-items: center; justify-content: center;
+  padding: 7px 7px; font: 600 11.5px/1.2 inherit; cursor: pointer; white-space: nowrap;
+  border: 1px solid var(--vs-linie); border-radius: 10px; background: var(--vs-flaeche); color: var(--vs-text); }
+.vs-knopf:hover { background: var(--vs-flaeche-2); }
+.vs-knopf[aria-pressed="true"] { border-color: var(--vs-akzent); box-shadow: inset 0 0 0 1px var(--vs-akzent); }
+.vs-farben { display: inline-flex; flex: none; }
+.vs-farben i { display: block; width: 10px; height: 10px; border-radius: 50%; border: 1px solid rgba(128,128,128,.45); }
+.vs-farben i + i { margin-left: -3px; }
+
+/* ---------- Bühne mit dem Phone ---------- */
+.vs-screen { display: flex; justify-content: center; }
+.phone { zoom: var(--vs-zoom); }
+
+/* ---------- Ausschnitte für die Vergleiche aus Schritt 7 ----------
+   Ein Ausschnitt zeigt nur den fraglichen Teil eines Screens (nur die Leiste, nur eine Karte …).
+   Die Klassen gehören auf das Phone selbst:
+     <section class="phone ausschnitt ende" style="--vs-hoehe:190px"> … nur die Leiste … </section>
+   Eine Hülle mit denselben Klassen um ein unverändertes Phone wirkt genauso:
+     <figure class="ausschnitt ende" style="--vs-hoehe:190px"><section class="phone"> … </section></figure>
+   --vs-hoehe = sichtbare Höhe (Standard 220px)
+   .ende      = Inhalt am unteren Rand (für Leisten unten), ohne .ende am oberen Rand.
+
+   WICHTIG: Ein Ausschnitt muss INNERHALB der Entwurfs-Karte #dN liegen, zu deren Entwurf er
+   gehört – nur dort gelten die Tokens von #dN und die Regeln #dN .phone, #dN .leiste … (die
+   Entwurfs-Stile sind durchweg auf #dN gebunden, siehe „HIER 1 c)“). Liegt ein Ausschnitt
+   außerhalb, fehlen ihm alle Farben des Entwurfs. Die beiden Rückfallwerte unten (var(--bg, …),
+   var(--text, …)) machen ihn dann grau statt weiß auf weiß, und das Skript schreibt eine Warnung
+   in die Konsole und in das rote Band oben – gemeint ist das als Hinweis, nicht als Lösung. */
+.phone.ausschnitt, .ausschnitt > .phone {
+  height: var(--vs-hoehe, 220px); border-radius: 22px; overflow: hidden;
+  background: var(--bg, var(--vs-flaeche-2)); color: var(--text, var(--vs-text)); }
+.phone.ausschnitt.ende, .ausschnitt.ende > .phone {
+  display: flex; flex-direction: column; justify-content: flex-end; }
+/* Zwei bis drei Ausschnitte nebeneinander in einer Karte. Eine Karte mit einer .vs-reihe wird
+   dafür so breit wie nötig – sonst stünden die Ausschnitte untereinander. Browser ohne :has()
+   erreichen dasselbe über class="vs-design vs-breit" an der Karte. */
+.vs-design.vs-breit, .vs-design:has(.vs-reihe) { width: min(100%, 1280px); }
+.vs-reihe { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; align-items: flex-end; }
+.vs-reihe > figure { margin: 0; display: flex; flex-direction: column; gap: 7px; align-items: center; }
+.vs-reihe figcaption { font-size: 12px; font-weight: 600; color: var(--vs-leise); text-align: center; }
+.vs-reihe .phone { zoom: var(--vs-zoom-vgl); }
+
+.vs-waehlen { margin-top: 2px; padding: 11px 14px; font: 600 14px/1.2 inherit; cursor: pointer;
+  border: 0; border-radius: 12px; background: var(--vs-akzent); color: var(--vs-auf-akzent); }
+.vs-waehlen:hover { filter: brightness(1.08); }
+.vs-waehlen:active { transform: translateY(1px); }
+
+/* ---------- Vergleichsmodus „Alle Varianten nebeneinander“ ---------- */
+body.vs-alle .vs-design { width: min(100%, 1240px); }
+body.vs-alle .vs-screen { display: none; }
+body.vs-alle .vs-schalterreihe { display: none; }
+.vs-vergleich { display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; }
+.vs-vergleich > figure { margin: 0; display: flex; flex-direction: column; gap: 8px; align-items: center; }
+.vs-vergleich figcaption { font-size: 12px; font-weight: 600; color: var(--vs-leise); }
+.vs-vergleich .phone { zoom: var(--vs-zoom-vgl); }
+body:not(.vs-alle) .vs-vergleich { display: none; }
+
+/* ---------- Kopieren: Rückmeldung ---------- */
+.vs-toast { position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 12px);
+  padding: 11px 16px; border-radius: 12px; font-size: 13.5px; font-weight: 600; z-index: 100;
+  background: #17171c; color: #ffffff; box-shadow: 0 10px 30px rgba(0,0,0,.28);
+  opacity: 0; pointer-events: none; transition: opacity .18s ease, transform .18s ease; }
+.vs-toast.vs-an { opacity: 1; transform: translate(-50%, 0); }
+@media (prefers-color-scheme: dark) { .vs-toast { background: #f2f2f5; color: #17171c; } }
+.vs-feld { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 101;
+  display: flex; gap: 8px; align-items: center; padding: 10px 12px; border-radius: 12px;
+  background: var(--vs-flaeche); border: 1px solid var(--vs-linie); box-shadow: 0 10px 30px rgba(0,0,0,.22);
+  font-size: 13px; max-width: calc(100vw - 32px); flex-wrap: wrap; }
+.vs-feld[hidden] { display: none; }
+.vs-feld input { width: min(46vw, 300px); padding: 7px 9px; font: inherit; color: var(--vs-text);
+  background: var(--vs-flaeche-2); border: 1px solid var(--vs-linie); border-radius: 8px; }
+.vs-feld button { padding: 6px 10px; font: 600 12px/1 inherit; cursor: pointer; color: var(--vs-text);
+  background: none; border: 1px solid var(--vs-linie); border-radius: 8px; }
+
+/* ---------- Schmale Fenster: Phones verkleinern, nie seitlich scrollen ---------- */
+@media (max-width: 900px) { :root { --vs-zoom-vgl: .46; } }
+@media (max-width: 520px) { :root { --vs-zoom: .86; --vs-zoom-vgl: .5; }
+  .vs-entwuerfe { gap: 18px; padding: 18px 12px 60px; } }
+@media (max-width: 430px) { :root { --vs-zoom: .82; } .vs-top { padding: 20px 14px 14px; } }
+@media (max-width: 380px) { :root { --vs-zoom: .74; --vs-zoom-vgl: .46; } }
+</style>
+
+<!-- ===========================================================================================
+     HIER 1 – Stile der Entwürfe
+     ===========================================================================================
+     Pro Entwurf drei Teile, alle unter der Karten-Id (#d1, #d2, …) – so stoßen sich die Entwürfe
+     nicht gegenseitig:
+
+     a) Tokens auf #dN. Immer diese sieben Namen belegen; daraus liest das Skript die Farbpunkte
+        der Umschalter:
+            --bg         Hintergrund des Screens
+            --surface    Flächen darüber (Karten, Leisten)
+            --text       Textfarbe
+            --muted      zweite Textstufe
+            --line       Linien und Rahmen
+            --accent     Akzent
+            --on-accent  Text und Icons auf dem Akzent
+        Weitere Werte des Entwurfs (Radien, Schatten, Dauern, Schriftstapel …) gern dazu. Werden
+        Tokens aus screens/<slug>.html übernommen, deren Namen behalten UND zusätzlich die sieben
+        Namen oben belegen.
+
+     b) Die beiden weiteren Varianten als eigene Blöcke, die NUR Tokens umschreiben:
+            #dN[data-variante="2"] { … }   Gegenmodus hell ↔ dunkel, Akzent bleibt
+            #dN[data-variante="3"] { … }   eigene Akzentfarbe passend zum Zweck der App
+        Nur Tokens, keine Bausteinregeln – daran hängt auch „Alle Varianten nebeneinander“.
+        Feste Farbwerte in Bausteinen (z. B. ein Verlauf) vorher in ein Token auslagern, sonst
+        wandert sie beim Umschalten nicht mit.
+        Welche Variante eine Karte zeigt, steht allein in data-variante="…" auf der Karte selbst
+        (siehe „HIER 3“); die Knöpfe richten sich beim Laden danach.
+
+     c) Bausteine aus screens/<slug>.html übernehmen (Leisten, Karten, Listen, Buttons, Animationen)
+        und jede Regel mit der Karten-Id beginnen:
+            :root { … }       ->  #dN { … }          (nur Tokens, siehe a)
+            .phone { … }      ->  #dN .phone { … }
+            .nav { … }        ->  #dN .nav { … }
+            #start { … }      ->  #dN .phone { … }   (Id-Regeln der Musterscreens auflösen)
+            @keyframes auf    ->  @keyframes dN-auf  (Namen eindeutig machen, auch in animation:)
+        Animationen wie dort in @media (prefers-reduced-motion: no-preference) kapseln.
+
+        Diese Bindung an #dN gilt genauso für die Vergleichs-Ausschnitte aus Schritt 7: auch sie
+        bekommen Tokens und Bausteine nur, wenn sie IM Element #dN stehen. Ein Ausschnitt gehört
+        deshalb in die Karte #dN seines Entwurfs. Die Unterschiede der drei Vorschläge über je
+        eine zusätzliche Klasse, ebenfalls unter der Karten-Id:
+            #dN .vgl-a .leiste { … }   #dN .vgl-b .leiste { … }   #dN .vgl-c .leiste { … }
+        Soll ein Vergleich in einer eigenen Karte stehen, braucht diese eine eigene Id (#v1 …)
+        UND den Tokenblock des Entwurfs unter dieser Id – sonst bleibt der Ausschnitt farblos.
+     =========================================================================================== -->
+<style id="entwuerfe">
+/* ====== Design 1 · Beispiel – ersetzen ====== */
+/* a) Tokens */
+#d1 {
+  --bg: #0f1116; --surface: #171a21; --text: #f3f4f7; --muted: #9aa1ae; --line: #262b34;
+  --accent: #ffc84d; --on-accent: #1b1403;
+  /* weitere Werte dieses Entwurfs */
+  --schleier: #2b2416;   /* Farbschleier hinter dem Bühnenbild, wandert mit der Variante mit */
+  --r: 20px; --r-klein: 13px; --r-pille: 999px;
+  --dur: 220ms; --ease: cubic-bezier(.2, .7, .2, 1);
+  --schrift: Inter, system-ui, "DejaVu Sans", sans-serif;
+}
+/* b) Variante 2 – Gegenmodus hell, Akzent bleibt */
+#d1[data-variante="2"] {
+  --bg: #fbfaf6; --surface: #ffffff; --text: #16181d; --muted: #6b7280; --line: #e6e3da;
+  --accent: #ffc84d; --on-accent: #1b1403;
+  --schleier: #fdf3dd;
+}
+/* b) Variante 3 – eigene Akzentfarbe */
+#d1[data-variante="3"] {
+  --bg: #0b1317; --surface: #121e23; --text: #ecf5f6; --muted: #8fa5ac; --line: #1d2d34;
+  --accent: #35d6a4; --on-accent: #04241a;
+  --schleier: #0f2a26;
+}
+
+/* c) Bausteine */
+#d1 .phone { background: linear-gradient(180deg, var(--schleier) 0, var(--bg) 320px);
+  color: var(--text); font-family: var(--schrift); font-size: 16px; display: flex; flex-direction: column; }
+#d1 .sb, #d1 .hi { color: var(--text); }
+
+#d1 .kopf-zeile { display: flex; align-items: center; gap: 12px; padding: 6px 20px 10px; }
+#d1 .kopf-zeile h3 { font: 700 26px/1.15 var(--schrift); letter-spacing: -.02em; flex: 1; }
+#d1 .rund { width: 38px; height: 38px; flex: none; display: grid; place-items: center; font-size: 19px;
+  border-radius: var(--r-pille); background: var(--surface); border: 1px solid var(--line); }
+
+#d1 .suche { display: flex; align-items: center; gap: 10px; margin: 0 20px 14px; padding: 11px 14px;
+  border-radius: var(--r-pille); background: var(--surface); border: 1px solid var(--line);
+  color: var(--muted); font-size: 14px; }
+#d1 .suche .ic { font-size: 18px; }
+
+#d1 .gross-bild { position: relative; margin: 0 20px; height: 232px; border-radius: var(--r); overflow: hidden;
+  display: flex; flex-direction: column; justify-content: flex-end; padding: 16px; }
+#d1 .gross-bild::before { content: ""; position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0) 35%, rgba(0,0,0,.72) 100%); }
+#d1 .gross-bild > * { position: relative; }
+#d1 .einwurf { align-self: flex-start; margin-bottom: 10px; padding: 4px 10px; border-radius: var(--r-pille);
+  font: 700 11px/1.4 var(--schrift); letter-spacing: .08em; text-transform: uppercase;
+  background: var(--accent); color: var(--on-accent); }
+#d1 .gross-titel { font: 700 23px/1.2 var(--schrift); color: #ffffff; letter-spacing: -.015em; }
+#d1 .gross-unter { margin-top: 5px; font: 500 13px/1.4 var(--schrift); color: rgba(255,255,255,.78); }
+
+#d1 .abschnitt { display: flex; align-items: baseline; gap: 10px; padding: 24px 20px 10px; }
+#d1 .abschnitt h4 { font: 700 15px/1.2 var(--schrift); letter-spacing: -.01em; }
+#d1 .abschnitt span { margin-left: auto; font: 600 12.5px/1 var(--schrift); color: var(--accent); }
+
+#d1 .kacheln { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 0 20px; }
+#d1 .kachel { border-radius: var(--r-klein); overflow: hidden; background: var(--surface);
+  border: 1px solid var(--line); transition: transform var(--dur) var(--ease); }
+#d1 .kachel .bild { height: 92px; }
+#d1 .kachel .text { padding: 9px 11px 11px; }
+#d1 .kachel b { display: block; font: 600 13.5px/1.3 var(--schrift); }
+#d1 .kachel small { display: block; margin-top: 3px; font: 500 11.5px/1.3 var(--schrift); color: var(--muted); }
+#d1 .kachel:active { transform: scale(.975); }
+
+#d1 .leiste { margin-top: auto; display: flex; padding: 10px 14px 26px;
+  background: var(--surface); border-top: 1px solid var(--line); }
+#d1 .leiste a { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px;
+  font: 600 10.5px/1.2 var(--schrift); color: var(--muted); }
+#d1 .leiste a .ic { font-size: 23px; }
+#d1 .leiste a.aktiv { color: var(--text); }
+#d1 .leiste a.aktiv .ic { color: var(--accent); }
+
+@media (prefers-reduced-motion: no-preference) {
+  #d1 .kachel { animation: d1-auf var(--dur) var(--ease) both; }
+  #d1 .kachel:nth-child(2) { animation-delay: 50ms; }
+  #d1 .kachel:nth-child(3) { animation-delay: 100ms; }
+  #d1 .kachel:nth-child(4) { animation-delay: 150ms; }
+  @keyframes d1-auf { from { opacity: 0; transform: translateY(8px); } }
+}
+
+/* ====== Design 2 · hier die nächste Karte ergänzen ====== */
+</style>
+</head>
+
+<body>
+
+<header class="vs-top">
+  <div class="vs-top-in">
+    <div>
+      <h1>Designvorschläge</h1>
+      <!-- HIER 2 – App-Name eintragen -->
+      <p class="vs-sub">für <b data-app>«App-Name»</b> · Hauptscreen in jeder Designsprache ·
+        Farbvariante umschalten mit den Tasten <b>1</b>, <b>2</b>, <b>3</b></p>
+    </div>
+    <div class="vs-top-rechts">
+      <button type="button" class="vs-schalter" id="vs-alle-knopf" aria-pressed="false">
+        <i data-icon="lucide:layout-grid"></i> Alle Varianten nebeneinander
+      </button>
+    </div>
+  </div>
+  <p class="vs-warnung" id="vs-warnung" hidden></p>
+</header>
+
+<!-- ===========================================================================================
+     HIER 3 – die Karten
+     ===========================================================================================
+     Eine <article class="vs-design"> je Vorschlag. Neue Karte = diese Karte kopieren, id auf d2,
+     d3 … setzen, data-variante="1" lassen und oben im Style-Block den gleichen Satz Regeln für
+     #d2 anlegen. Die Nummer in .vs-zeile-nr und der Name in .vs-name wandern in den Text, den
+     „Dieses Design wählen“ kopiert.
+
+     Vorauswahl einer Farbvariante: data-variante auf der Karte ist der einzige Schalter – steht
+     dort data-variante="2" oder "3" (z. B. nach der Wahl in Schritt 4 oder beim Zeigen des
+     Hauptscreens in Schritt 6), zeigt die Karte beim Laden diese Variante UND der Umschalter
+     stellt sich selbst darauf ein. Die aria-pressed-Werte der Knöpfe bleiben also unverändert
+     wie unten (Knopf 1 auf "true"); sie werden beim Laden überschrieben. Nichts von Hand
+     umhängen, keine Inline-Farben in die Karte schreiben.
+
+     In das <section class="phone"> gehört der HAUPTSCREEN DER EIGENEN APP: echte Bezeichnungen,
+     echte Inhalte, echte Navigationsziele der App – nur Anordnung, Navigation, Komponenten,
+     Icon-Stil, Bildbehandlung, Typografie und Abstände kommen aus der Designsprache der Marke.
+     Keine Platzhalter wie „Titel 1“, keine Logos und keine Markennamen der Vorlage.
+
+     Bilder nur über die Motive der Musterscreens: class="scene-see | scene-lissabon | scene-konzert |
+     scene-nacht | scene-herbst | scene-studio | scene-wien | scene-film | scene-person",
+     weitere Ausschnitte desselben Motivs mit crop-1 … crop-12, Körnung mit class="grain".
+     Icons als <i data-icon="lucide:house"></i> oder <i data-icon="ph-fill:house"></i>;
+     alle Namen stehen im Kopf von icons.js (dort nach dem Bedarf suchen, z. B. „fernseher“).
+
+     Vergleiche aus Schritt 7 (zwei bis drei Varianten eines Bereichs nebeneinander, z. B. drei
+     Navigationsleisten): statt des ganzen Screens nur Ausschnitte zeigen – und zwar INNERHALB
+     der Karte #dN des Entwurfs, zu dem sie gehören, weil alle Entwurfs-Stile an #dN hängen.
+     Die Klassen „ausschnitt“ und „ende“ sowie --vs-hoehe gehören auf dasselbe Element wie die
+     Klasse „phone“; alternativ auf eine Hülle direkt um das Phone (.ausschnitt > .phone). Nicht
+     auf das <figure> der Reihe, wenn dazwischen noch etwas steht.
+     Was die Vorschläge unterscheidet, kommt in je eine eigene Klasse (hier .vgl-a/-b/-c), deren
+     Regeln oben im Style-Block unter der Karten-Id stehen: #dN .vgl-a .leiste { … }
+
+       <article class="vs-design" id="d1" data-variante="1" tabindex="0">
+         … Kopf, Angaben und (wenn noch gewünscht) der ganze Screen …
+         <div class="vs-reihe">
+           <figure>
+             <section class="phone ausschnitt ende vgl-a" style="--vs-hoehe:170px">
+               <nav class="leiste"> … vier Ziele … </nav>
+               <div class="hi"></div>
+             </section>
+             <figcaption>1 · flache Leiste</figcaption>
+           </figure>
+           <figure>
+             <section class="phone ausschnitt ende vgl-b" style="--vs-hoehe:170px"> … </section>
+             <figcaption>2 · schwebende Pille</figcaption>
+           </figure>
+           <figure>
+             <section class="phone ausschnitt ende vgl-c" style="--vs-hoehe:170px"> … </section>
+             <figcaption>3 · Leiste mit Beschriftung</figcaption>
+           </figure>
+         </div>
+       </article>
+
+     Die Karte mit der .vs-reihe wird von selbst breit genug für zwei bis drei Ausschnitte
+     nebeneinander (in alten Browsern ohne :has() zusätzlich class="vs-design vs-breit").
+     Rutscht ein Ausschnitt aus der Karte heraus, erscheint er grau und die Seite warnt oben im
+     roten Band sowie in der Konsole („Ausschnitt ohne Entwurfs-Stile“) – dann die Karten-Id
+     ergänzen, nicht die Farben von Hand setzen.
+     =========================================================================================== -->
+<main class="vs-entwuerfe">
+
+  <!-- ===== Beispiel – ersetzen ===== -->
+  <article class="vs-design" id="d1" data-variante="1" tabindex="0">
+    <header>
+      <p class="vs-zeile-nr">Design <span class="vs-nummer">1</span> · Beispiel – ersetzen</p>
+      <h2 class="vs-name">Ruhige Bühne</h2>
+      <p class="vs-kopfdaten">
+        <span class="vs-chip">Große Bühne</span>
+        <span class="vs-inspiriert">Inspiriert von: Beispielmarke</span>
+      </p>
+    </header>
+
+    <dl class="vs-zeilen">
+      <div><dt>Aufbau</dt><dd>Ein großes Bild oben, darunter ein Raster aus zwei Spalten.</dd></div>
+      <div><dt>Navigation</dt><dd>Flache Leiste unten mit vier Zielen, aktives Ziel am Akzent.</dd></div>
+      <div><dt>Komponenten</dt><dd>Weiche Karten mit feinem Rahmen, Pillen für Suche und Einwurf.</dd></div>
+      <div><dt>Icons</dt><dd>Lucide, 2 px Strich, 23 px in der Leiste.</dd></div>
+      <div><dt>Bewegung</dt><dd>Kacheln blenden gestaffelt ein, Druck verkleinert auf 97,5 %.</dd></div>
+    </dl>
+
+    <div class="vs-schalterreihe" role="group" aria-label="Farbvariante">
+      <button type="button" class="vs-knopf" data-v="1" aria-pressed="true"><span class="vs-farben"></span>1 Original</button>
+      <button type="button" class="vs-knopf" data-v="2" aria-pressed="false"><span class="vs-farben"></span>2 Hell/Dunkel</button>
+      <button type="button" class="vs-knopf" data-v="3" aria-pressed="false"><span class="vs-farben"></span>3 Eigene Farbe</button>
+    </div>
+
+    <div class="vs-screen">
+      <section class="phone">
+        <div class="sb"><span>9:41</span>
+          <span class="sb-icons"><i data-icon="lucide:wifi"></i><i data-icon="lucide:battery-full"></i></span></div>
+
+        <div class="kopf-zeile">
+          <h3>Guten Abend</h3>
+          <span class="rund"><i data-icon="lucide:bell"></i></span>
+          <span class="rund"><i data-icon="lucide:user"></i></span>
+        </div>
+
+        <div class="suche"><i data-icon="lucide:search"></i> Suchen …</div>
+
+        <div class="gross-bild scene-see grain" style="--grain:.14">
+          <span class="einwurf">Heute</span>
+          <div class="gross-titel">Abendlicht am See</div>
+          <div class="gross-unter">Gesammelt · 24 Aufnahmen</div>
+        </div>
+
+        <div class="abschnitt"><h4>Zuletzt geöffnet</h4><span>Alle</span></div>
+        <div class="kacheln">
+          <div class="kachel"><div class="bild scene-lissabon crop-1"></div>
+            <div class="text"><b>Lissabon</b><small>82 Aufnahmen</small></div></div>
+          <div class="kachel"><div class="bild scene-herbst crop-4"></div>
+            <div class="text"><b>Herbstwoche</b><small>31 Aufnahmen</small></div></div>
+          <div class="kachel"><div class="bild scene-konzert crop-2"></div>
+            <div class="text"><b>Konzertabend</b><small>17 Aufnahmen</small></div></div>
+          <div class="kachel"><div class="bild scene-studio crop-6"></div>
+            <div class="text"><b>Werkstatt</b><small>9 Aufnahmen</small></div></div>
+        </div>
+
+        <nav class="leiste">
+          <a class="aktiv"><i data-icon="lucide:house"></i>Start</a>
+          <a><i data-icon="lucide:search"></i>Suchen</a>
+          <a><i data-icon="lucide:folder"></i>Alben</a>
+          <a><i data-icon="lucide:settings"></i>Mehr</a>
+        </nav>
+        <div class="hi"></div>
+      </section>
+    </div>
+
+    <button type="button" class="vs-waehlen">Dieses Design wählen</button>
+  </article>
+
+  <!-- ===== Weitere Karten hier anfügen (diese Karte kopieren, id d2, d3 … ) ===== -->
+
+</main>
+
+<div class="vs-toast" id="vs-toast" role="status" aria-live="polite"></div>
+<div class="vs-feld" id="vs-feld" hidden>
+  <span>Text markiert – mit Strg/Cmd + C kopieren:</span>
+  <input id="vs-feld-text" readonly>
+  <button type="button" id="vs-feld-zu">Schließen</button>
+</div>
+
+<script src="./icons.js"></script>
+<script>
+/* Kleines Skript der Vorschau: Icons einsetzen, Varianten umschalten, Auswahl kopieren.
+   Es liest nur vorhandene Werte – an den Entwürfen ist hier nichts zu ändern. */
+(function () {
+  "use strict";
+  var TOKENS = ["--bg", "--surface", "--text", "--muted", "--line", "--accent", "--on-accent"];
+  var VARIANTEN = ["1", "2", "3"];
+  var karten = [].slice.call(document.querySelectorAll(".vs-design"));
+  var werte = {};          /* Karten-Id -> { "1": {Token: Wert}, "2": …, "3": … } */
+  var ueberKarte = null;   /* Karte unter dem Mauszeiger */
+  var warnungen = [];      /* Texte für das rote Band in der Kopfzeile */
+
+  function warnungenZeigen() {
+    var w = document.getElementById("vs-warnung");
+    if (!w || !warnungen.length) return;
+    w.hidden = false;
+    w.textContent = warnungen.join(" ");
+  }
+
+  /* ---------- Icons ---------- */
+  if (window.VorschauIcons) {
+    var fehlend = VorschauIcons.ersetzen(document);
+    if (fehlend) {
+      warnungen.push(fehlend + " Icon-Name" + (fehlend === 1 ? "" : "n") + " nicht gefunden "
+        + "(rot gestrichelte Kästchen). Die gültigen Namen stehen im Kopf von icons.js; "
+        + "Einzelheiten in der Konsole.");
+    }
+  } else {
+    console.warn("icons.js wurde nicht geladen – liegt die Datei neben dieser Seite?");
+  }
+
+  /* ---------- Tokens der drei Varianten einlesen ---------- */
+  /* Neben den sieben Standard-Tokens alles, was die Blöcke dieser Karte zusätzlich setzen. */
+  function tokenListe(karte) {
+    var satz = {}, i;
+    for (i = 0; i < TOKENS.length; i++) satz[TOKENS[i]] = 1;
+    var id = "#" + karte.id;
+    try {
+      var blaetter = document.styleSheets;
+      for (var b = 0; b < blaetter.length; b++) {
+        var regeln;
+        try { regeln = blaetter[b].cssRules; } catch (e) { continue; }
+        if (!regeln) continue;
+        for (var r = 0; r < regeln.length; r++) {
+          var regel = regeln[r];
+          if (!regel.selectorText || !regel.style) continue;
+          var teile = regel.selectorText.split(","), trifft = false;
+          for (var t = 0; t < teile.length; t++) {
+            var s = teile[t].trim();
+            if (s === id || s.indexOf(id + "[data-variante") === 0) trifft = true;
+          }
+          if (!trifft) continue;
+          for (var p = 0; p < regel.style.length; p++) {
+            var name = regel.style[p];
+            if (name.indexOf("--") === 0) satz[name] = 1;
+          }
+        }
+      }
+    } catch (e) { /* ohne CSSOM bleiben die sieben Standard-Tokens */ }
+    return Object.keys(satz);
+  }
+
+  function werteLesen(karte) {
+    var liste = tokenListe(karte);
+    var vorher = karte.getAttribute("data-variante") || "1";
+    var out = {};
+    ["1", "2", "3"].forEach(function (v) {
+      karte.setAttribute("data-variante", v);
+      var cs = getComputedStyle(karte), o = {};
+      liste.forEach(function (t) { o[t] = cs.getPropertyValue(t).trim(); });
+      out[v] = o;
+    });
+    karte.setAttribute("data-variante", vorher);
+    return out;
+  }
+
+  /* ---------- Farbpunkte der Umschalter (live aus den Variablen der Variante) ---------- */
+  function farbenFuellen(karte) {
+    var w = werte[karte.id];
+    [].forEach.call(karte.querySelectorAll(".vs-knopf"), function (knopf) {
+      var v = knopf.getAttribute("data-v"), p = knopf.querySelector(".vs-farben");
+      if (!p || !w[v]) return;
+      p.textContent = "";
+      ["--bg", "--surface", "--accent"].forEach(function (t) {
+        var punkt = document.createElement("i");
+        punkt.style.background = w[v][t] || "transparent";
+        p.appendChild(punkt);
+      });
+      knopf.title = "Variante " + v + ": Fläche " + (w[v]["--bg"] || "?")
+        + ", Akzent " + (w[v]["--accent"] || "?");
+    });
+  }
+
+  /* ---------- Variante setzen ---------- */
+  /* Maßgeblich ist immer data-variante auf der Karte: so lässt sich eine Karte mit
+     data-variante="2" oder "3" ausliefern (Vorauswahl nach Schritt 4/6). umschalterSyncen()
+     bringt die Knopfreihe auf genau diesen Stand und läuft deshalb auch beim Laden, nicht nur
+     beim Klick. Alles, was den aktuellen Stand anzeigt, gehört in diese Funktion. */
+  function umschalterSyncen(karte) {
+    var v = String(karte.getAttribute("data-variante") || "1");
+    if (VARIANTEN.indexOf(v) < 0) {
+      console.warn("Karte #" + karte.id + ": data-variante=\"" + v + "\" gibt es nicht – "
+                 + "erlaubt sind 1, 2 und 3. Es gilt wieder 1.");
+      v = "1";
+    }
+    karte.setAttribute("data-variante", v);
+    var reihe = karte.querySelector(".vs-schalterreihe");
+    if (reihe) reihe.setAttribute("data-aktiv", v);
+    [].forEach.call(karte.querySelectorAll(".vs-knopf"), function (knopf) {
+      knopf.setAttribute("aria-pressed", knopf.getAttribute("data-v") === v ? "true" : "false");
+    });
+  }
+  function setzen(karte, v) {
+    karte.setAttribute("data-variante", String(v));
+    umschalterSyncen(karte);
+  }
+
+  /* ---------- Vergleich: alle drei Varianten nebeneinander ---------- */
+  /* Kopien des Phones, auf die die Tokens der jeweiligen Variante direkt geschrieben werden.
+     Das klappt, weil die Variantenblöcke ausschließlich Tokens umschreiben. */
+  var NAMEN = { "1": "1 Original", "2": "2 Hell/Dunkel", "3": "3 Eigene Farbe" };
+  function vergleichBauen(karte) {
+    if (karte.querySelector(".vs-vergleich")) return;
+    var buehne = karte.querySelector(".vs-screen");
+    var phone = buehne && buehne.querySelector(".phone");
+    if (!phone) return;
+    var reihe = document.createElement("div");
+    reihe.className = "vs-vergleich";
+    ["1", "2", "3"].forEach(function (v) {
+      var fig = document.createElement("figure");
+      var klon = phone.cloneNode(true);
+      klon.removeAttribute("id");
+      [].forEach.call(klon.querySelectorAll("[id]"), function (el) { el.removeAttribute("id"); });
+      var w = werte[karte.id][v] || {};
+      Object.keys(w).forEach(function (t) { if (w[t]) klon.style.setProperty(t, w[t]); });
+      var cap = document.createElement("figcaption");
+      cap.textContent = NAMEN[v];
+      fig.appendChild(klon);
+      fig.appendChild(cap);
+      reihe.appendChild(fig);
+    });
+    buehne.parentNode.insertBefore(reihe, buehne.nextSibling);
+  }
+
+  var alleKnopf = document.getElementById("vs-alle-knopf");
+  if (alleKnopf) {
+    alleKnopf.addEventListener("click", function () {
+      var an = alleKnopf.getAttribute("aria-pressed") !== "true";
+      alleKnopf.setAttribute("aria-pressed", an ? "true" : "false");
+      document.body.classList.toggle("vs-alle", an);
+      if (an) karten.forEach(vergleichBauen);
+    });
+  }
+
+  /* ---------- Auswahl kopieren ---------- */
+  var toast = document.getElementById("vs-toast"), toastZeit = null;
+  function melden(text) {
+    if (!toast) return;
+    toast.textContent = text;
+    toast.classList.add("vs-an");
+    clearTimeout(toastZeit);
+    toastZeit = setTimeout(function () { toast.classList.remove("vs-an"); }, 2400);
+  }
+  var feld = document.getElementById("vs-feld"), eingabe = document.getElementById("vs-feld-text");
+  var zu = document.getElementById("vs-feld-zu");
+  if (zu) zu.addEventListener("click", function () { feld.hidden = true; });
+  function notloesung(text) {
+    if (!feld || !eingabe) { melden(text); return; }
+    feld.hidden = false;
+    eingabe.value = text;
+    eingabe.focus();
+    eingabe.select();
+  }
+  function altKopieren(text) {
+    var tmp = document.createElement("textarea");
+    tmp.value = text;
+    tmp.setAttribute("readonly", "");
+    tmp.style.cssText = "position:fixed;top:-1000px;opacity:0";
+    document.body.appendChild(tmp);
+    tmp.select();
+    var ok = false;
+    try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
+    document.body.removeChild(tmp);
+    if (ok) melden("Kopiert: " + text); else notloesung(text);
+  }
+  function kopieren(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () {
+        melden("Kopiert: " + text);
+      }, function () { altKopieren(text); });
+    } else {
+      altKopieren(text);
+    }
+  }
+  function auswahlText(karte) {
+    var nr = karte.querySelector(".vs-nummer");
+    nr = nr ? nr.textContent.trim() : (karte.id || "").replace(/^d/, "");
+    var name = karte.querySelector(".vs-name");
+    name = name ? name.textContent.trim() : "Entwurf";
+    return "Design " + nr + " · " + name + " · Variante " + (karte.getAttribute("data-variante") || "1");
+  }
+
+  /* ---------- Karten verdrahten ---------- */
+  karten.forEach(function (karte) {
+    if (!karte.id) {
+      console.warn("Karte ohne id – die Entwurfs-Stile greifen nur über eine id (#d1, #d2 …).");
+      return;
+    }
+    werte[karte.id] = werteLesen(karte);
+    farbenFuellen(karte);
+    umschalterSyncen(karte);   /* Knöpfe auf das data-variante der Karte stellen */
+    [].forEach.call(karte.querySelectorAll(".vs-knopf"), function (knopf) {
+      knopf.addEventListener("click", function () { setzen(karte, knopf.getAttribute("data-v")); });
+    });
+    var waehlen = karte.querySelector(".vs-waehlen");
+    if (waehlen) waehlen.addEventListener("click", function () { kopieren(auswahlText(karte)); });
+    karte.addEventListener("pointerover", function () { ueberKarte = karte; });
+  });
+
+  /* ---------- Ausschnitte aus Schritt 7 prüfen ---------- */
+  /* Ein Ausschnitt außerhalb der Karte #dN bekommt keine Tokens und keine Bausteinregeln des
+     Entwurfs. Das CSS fängt ihn grau auf, hier kommt die Erklärung dazu. */
+  function ausschnittePruefen() {
+    var liste = document.querySelectorAll(".phone.ausschnitt, .ausschnitt > .phone");
+    var ohne = 0;
+    [].forEach.call(liste, function (el) {
+      var karte = el.closest ? el.closest(".vs-design[id]") : null;
+      var tokens = getComputedStyle(el).getPropertyValue("--bg").trim();
+      if (karte && tokens) return;
+      ohne++;
+      console.warn("Ausschnitt ohne Entwurfs-Stile: "
+        + (karte ? "die Karte #" + karte.id + " setzt kein --bg."
+                 : "der Ausschnitt liegt in keiner Karte <article class=\"vs-design\" id=\"dN\">.")
+        + " Die Entwurfs-Stile hängen alle an #dN – Ausschnitt dorthin verschieben "
+        + "oder die Tokens des Entwurfs für die Id dieser Karte anlegen.", el);
+    });
+    if (ohne) {
+      warnungen.push(ohne + " Vergleichs-Ausschnitt" + (ohne === 1 ? "" : "e") + " ohne "
+        + "Entwurfs-Stile (grau dargestellt): Ausschnitte gehören in die Karte #dN ihres "
+        + "Entwurfs. Einzelheiten in der Konsole.");
+    }
+  }
+  ausschnittePruefen();
+  warnungenZeigen();
+
+  /* ---------- Tasten 1 / 2 / 3 für die Karte unter dem Zeiger oder im Fokus ---------- */
+  document.addEventListener("keydown", function (e) {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    if (e.key !== "1" && e.key !== "2" && e.key !== "3") return;
+    var z = e.target;
+    if (z && (z.tagName === "INPUT" || z.tagName === "TEXTAREA" || z.isContentEditable)) return;
+    var aktiv = document.activeElement;
+    var karte = (aktiv && aktiv.closest) ? aktiv.closest(".vs-design") : null;
+    if (!karte) karte = ueberKarte;
+    if (!karte) return;
+    setzen(karte, e.key);
+    e.preventDefault();
+  });
+})();
+</script>
+</body>
+</html>

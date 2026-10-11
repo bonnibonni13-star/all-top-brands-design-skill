@@ -1,103 +1,208 @@
 ---
 name: all-top-brands-design-skill
-description: All Top Brands Design Skill – wenn eine App oder Website wie eine bekannte Marke (Apple, Stripe, Spotify …) aussehen soll, Designideen, alle Designs oder eine DESIGN.md gewünscht sind oder jemand nur „design md“ sagt.
+description: All Top Brands Design Skill – wenn eine App oder Website wie eine bekannte Marke (Apple, Stripe, Spotify …) aussehen soll, mit ganzer Designsprache (Aufbau, Navigation, Komponenten, Icons, Animation), wenn Designvorschläge, Designideen, alle Designs oder eine DESIGN.md gewünscht sind oder jemand nur „design md“ sagt.
 ---
 
 # All Top Brands Design Skill
 
-74 Designsysteme bekannter Marken im DESIGN.md-Format, aus deren öffentlichen Websites herausgelesen (Quelle: VoltAgent/awesome-design-md, MIT-Lizenz). Jede Datei legt Farben, Schrift, Abstände, Radien, Schatten, Komponenten, Do's & Don'ts und Responsive-Verhalten fest.
+Designsprachen von 74 bekannten Marken, aus deren öffentlichen Websites herausgelesen (Designdateien: VoltAgent/awesome-design-md, MIT-Lizenz). Pro Marke gibt es drei Teile:
+- `references/<slug>.md` – die DESIGN.md: Farben, Schrift, Abstände, Radien, Schatten, Komponenten, Do's and Don'ts, Responsive-Verhalten.
+- `designsprache/<slug>.md` – das Designsprache-Profil: Aufbau, Navigation, Komponenten, Icons, Bildsprache, Typografie-Stimme, Form, Bewegung, Signatur-Elemente und die Übertragung auf eine App. Die Kopfdaten (`ansatz`, `aufbau`, `navigation`, `komponenten`, `icons`, `bewegung`, `schrift`) fassen jeden Bereich in einer Zeile zusammen.
+- `screens/<slug>.png` und `screens/<slug>.html` – Musterscreens: dieselbe Beispiel-App (Start, Bibliothek, Detail) in dieser Designsprache; das HTML enthält die Bausteine als CSS, Inline-SVG-Icons und die Animationen.
 
-Katalog zum Durchklicken: https://bonnibonni13-star.github.io/all-top-brands-design-skill/katalog.html (liegt der Skill lokal vor, auch als `katalog.html` in seinem Ordner).
+Dazu kommt der **Animations-Katalog** `animationen/KATALOG.md`: 60 benannte Effekte (Schimmer, Lichtkante, gestaffeltes Einblenden, Zahlen hochzählen, Skelett-Laden, gemeinsame Elemente …), jeweils mit Werten und der Umsetzung im Web, in React (Magic UI) und in Jetpack Compose. `animationen/animationen.html` zeigt 40 davon live zum Anschauen und Auswählen.
+
+Katalog mit den Musterscreens aller Marken und Filter nach Ansatz: https://bonnibonni13-star.github.io/all-top-brands-design-skill/katalog.html (lokal: `katalog.html` im Ordner dieses Skills).
+
+**Grundsatz:** Ein Design anwenden heißt, die ganze Designsprache zu übertragen – Anordnung, Navigation, Komponenten, Icons, Bildbehandlung, Typografie, Abstände und Bewegung. Nur Farben und Schrift zu tauschen ist zu wenig; das gibt es nur auf ausdrücklichen Wunsch („nur die Farben“). Funktionen, Daten, Texte und Abläufe der App bleiben erhalten.
+
+**Der Ablauf ist ein Gespräch.** Nach jedem Schritt wird gefragt, nie einfach durchgebaut: erst die Anzahl, dann die Vorschläge zur Auswahl, dann der Hauptscreen als Muster, dann jeder Designbereich einzeln, zuletzt der Rest der App. Jede Frage hat konkrete Vorschläge zur Auswahl (AskUserQuestion, wenn vorhanden), nie nur „Was möchtest du?“. Nur wenn niemand mitliest (geplanter Lauf, ausdrücklich „mach einfach alles“), wird mit den Vorgaben durchgearbeitet und am Ende berichtet.
 
 ## Ablauf
 
 ### 1. Einstieg: Was ist gewünscht?
-- **Marke genannt** (z. B. `/all-top-brands-design-skill stripe`, „mach es wie Airbnb“): Slug im Index nachschlagen, weiter mit Schritt 2.
-- **„Zeig mir alle Designs“** (auch „alle Designarten“, „was hast du alles“):
-  1. Auf den Katalog verweisen. Er zeigt alle 74 Designs mit Farben, Schriftprobe und Button-Form; „Auswählen“ kopiert den Befehl `/all-top-brands-design-skill <slug>`. Online: Link oben. Lokal in Claude Code (macOS): `open <Ordner dieses Skills>/katalog.html`.
-  2. Darunter den ganzen Index ausgeben, nach Kategorien gruppiert, je Marke eine Zeile mit Kurzbeschreibung.
-  3. Fragen, welches Design es sein soll. Nach der Wahl weiter mit Schritt 2.
-- **„Gib mir Designideen“** (auch „Vorschläge“, „was würde passen“): 3–5 Ideen im Ideen-Format. In einem Projekt die Suche a–d, ohne Projekt Punkt e.
-- **Nur „design md“ oder der Skill-Name ohne weitere Angaben:** in einem Projekt die Suche a–d, ohne Projekt Punkt e.
-- **Stil beschrieben** („dunkel und edel“, „seriös wie eine Bank“): Suche ab c, mit dem Stilwunsch statt der Projektanalyse.
+- **Nur „design md“, der Skill-Name, „Designvorschläge“, „Gib mir Designideen“:** weiter mit Schritt 2.
+- **Marke genannt** (`/all-top-brands-design-skill stripe`, „mach es wie Airbnb“): Slug im Index nachschlagen, weiter mit Schritt 5.
+- **„Zeig mir alle Designs“** (auch „alle Designarten“, „was hast du alles“): auf den Katalog verweisen – er zeigt die Musterscreens aller 74 Marken, filtert nach Ansatz, und „Auswählen“ kopiert `/all-top-brands-design-skill <slug>`; lokal in Claude Code auf macOS `open <Ordner dieses Skills>/katalog.html`. Darunter den Index nach Ansätzen gruppiert ausgeben, je Marke eine Zeile. Fragen, welches Design es sein soll, dann Schritt 5.
+- **Stil beschrieben** („dunkel und edel“, „seriös wie eine Bank“): weiter mit Schritt 2, die Kandidaten nach dem Stilwunsch wählen.
+- **Einen Bereich ändern** („andere Icons“, „Navigation wie bei Airbnb“, „mehr Animation“) in einem Projekt mit `DESIGN.md`: direkt Schritt 7 für diesen einen Bereich.
+- **Nur Farben bzw. Theme:** Schritte 5, 6 und 8.1, ohne Umbau.
 - **Marke nicht im Index:** siehe „Marke fehlt“.
 
-#### Suche
-- **a.** Liegt im Projekt schon eine `DESIGN.md`, nicht neu suchen: Theme-Dateien und ein bis zwei Haupt-Screens damit abgleichen, Abweichungen auflisten (Farben, Schriften, Radien, Abstände) und die Korrektur anbieten. Neue Vorschläge nur auf Wunsch.
-- **b.** Projekt gezielt ansehen: README, App-Name, Theme-Dateien (z. B. `Color.kt`, `Theme.kt`, `tailwind.config`, CSS-Variablen) und ein bis zwei Haupt-Screens. Daraus ableiten: Plattform, Zweck, Zielgruppe und bisherigen Grundton. Standardfarben aus Vorlagen (Android-Studio-Lila, Material- oder Tailwind-Standard) zählen nicht als Designentscheidung; dann nur nach Zweck und Zielgruppe wählen.
-- **c.** Alle 74 Marken im Index dagegen abgleichen (Grundton, Akzent, Besonderheit; die Branche muss nicht passen) und 6–8 Kandidaten wählen. Von jedem die ersten rund 60 Zeilen der Datei lesen (Beschreibung und Farben). Fehlt `references/`, vorher die Sammlung wie in Schritt 2 holen.
-- **d.** 3–5 Ideen im Ideen-Format zeigen, die sich spürbar unterscheiden, und eine davon empfehlen.
-- **e.** Ohne Projekt (z. B. im Chat): 5 Ideen mit unterschiedlicher Stimmung aus verschiedenen Kategorien zeigen – dunkel und edel, hell und minimal, warm mit Creme-Tönen, bunt und verspielt, kräftig und plakativ. Vorher von jeder gewählten Marke die ersten rund 60 Zeilen lesen wie in c, damit Schrift und Formen stimmen. Dazu fragen, wofür das Design ist (Website, Android, iOS …).
+### 2. Anzahl der Vorschläge fragen
+Als Erstes fragen, wie viele Designvorschläge es sein sollen, mit Auswahl: **3 · 5 (Empfohlen) · 8 · alle 11 Ansätze**. Nicht fragen, wenn die Zahl schon genannt wurde; ohne Antwort 5.
+
+### 3. Vorschläge erarbeiten und als Vorschau-Seite zeigen
+- **a. Bestehende DESIGN.md:** Liegt im Projekt schon eine, zuerst prüfen statt neu suchen: Theme und Haupt-Screens mit `DESIGN.md` und `DESIGNSPRACHE.md` abgleichen – Farben, Schrift, Radien, Abstände, aber ebenso Navigation, Komponenten, Icons und Bewegung –, Abweichungen auflisten und die Korrektur anbieten. Neue Vorschläge nur auf Wunsch.
+- **b. Projekt verstehen:** README, App-Name, Theme-Dateien (`Color.kt`, `Theme.kt`, `tailwind.config`, CSS-Variablen …) und die Screens ansehen. Daraus Plattform, Zweck, Zielgruppe und Grundton ableiten und eine Bestandsaufnahme machen: welche Screens, welches Navigationsmuster, welche Komponenten, welche Icons, welche Animationen. **Den Hauptscreen bestimmen** (meist den Startscreen) – er ist das Muster für alles Weitere. Standardfarben aus Vorlagen (Android-Studio-Lila, Material- oder Tailwind-Standard) zählen nicht als Designentscheidung.
+- **c. Kandidaten wählen:** Im Index (Grundton; Akzent; Besonderheit; Ansatz; Aufbau) so viele Marken wählen wie gewünscht – passend zum Zweck der App und mit **verschiedenen Ansätzen** (bis 11 Vorschläge jeden Ansatz höchstens einmal). Die Branche muss nicht passen. Von jeder Marke das Profil `designsprache/<slug>.md` lesen und `screens/<slug>.png` ansehen. Fehlen diese Ordner, sie wie in Schritt 5 holen.
+- **d. Vorschau-Seite bauen:**
+  1. `<Ordner dieses Skills>/tools/vorschau/vorlage.html` als `design-vorschau/index.html` ins Projekt kopieren (`cp`) und `icons.js` aus demselben Ordner daneben legen. Ohne Projekt in einen temporären Ordner.
+  2. Pro Vorschlag eine Karte mit dem **Hauptscreen der eigenen App** in der Designsprache der Marke: echte Bezeichnungen, Inhalte und Navigationsziele der App, aber Anordnung, Navigation, Komponenten, Icon-Stil, Bildbehandlung, Typografie und Abstände nach Profil und Musterscreens. Bausteine (CSS von Leisten, Karten, Listen, Buttons) aus `screens/<slug>.html` übernehmen; Icons als `<i data-icon="SATZ:NAME"></i>` (verfügbare Namen in `icons.js`). Die Vorlage erklärt Aufbau und Platzhalter.
+  3. Pro Vorschlag drei **Farbvarianten** als CSS-Variablen, in der Vorschau umschaltbar: 1 – Original der Marke; 2 – Gegenmodus (hell ↔ dunkel, Akzent bleibt); 3 – eigene Akzentvariante passend zum Zweck der App (hat die App schon eine Markenfarbe, diese). Fällt die Wahl auf Variante 2, nachfragen: nur dieser eine Modus, oder Variante 1 als helles und Variante 2 als dunkles Schema nebeneinander? Ohne Antwort beides anlegen, wenn die Plattform es vorsieht (Android, Web), sonst nur den gewählten Modus.
+  4. Jede Karte trägt Nummer, Ideen-Namen, Ansatz-Chip und „Inspiriert von: <Marke>“.
+  5. **Selbst ansehen, bevor du sie zeigst:** die Seite mit Playwright bei 1440 px und 390 px fotografieren und das Bild wirklich anschauen; dabei die Browser-Konsole mitlesen – „Icon fehlt: …“ heißt falscher Icon-Name, Fehler darf es keine geben. Erst dann dem Menschen zeigen: macOS `open design-vorschau/index.html`, Linux `xdg-open …`, in der Claude-App die HTML-Datei zeigen, und wo nichts davon geht, den Screenshot schicken. Zusätzlich im Chat je Vorschlag zwei Zeilen im Ideen-Format.
+- **e. Ohne Projekt** (z. B. im Chat): fragen, wofür das Design ist (Website, Android, iOS …) und um welche App es geht; die Vorschau mit dieser App bauen, sonst mit der Beispiel-App der Musterscreens.
 
 #### Ideen-Format
-Jede Idee bekommt einen eigenen Namen, der ihre Stimmung beschreibt, und darunter die Quelle:
-
-> **1. <Ideen-Name>** – ein bis zwei Sätze, wie die App damit aussähe (Grundton, Akzentfarbe, Schrift, Formen).
+> **1. <Ideen-Name>** – Ansatz: <Ansatz-Name>
+> Aufbau: … · Navigation: … · Komponenten: … · Icons: … · Bewegung: …
 > Inspiriert von: <Marke> · https://getdesign.md/<slug>/design-md
 
-Höchstens eine Idee pro Auswahl darf zwei Marken mischen („Inspiriert von: Linear (Farben) + Notion (Schrift)“). Zum Schluss: eine Empfehlung mit einem Satz Begründung, der Hinweis auf den Katalog und die Frage „Welche soll es sein? Nummer oder Name genügt.“ Bei „mach einfach“ die Empfehlung nehmen. Nach der Wahl weiter mit Schritt 2.
+Höchstens ein Vorschlag darf zwei Marken mischen („Inspiriert von: Linear (Aufbau) + Notion (Schrift)“).
 
-### 2. Datei vollständig laden
-- Lokal: `references/<slug>.md` im Ordner dieses Skills.
-- Fehlt der Ordner `references/`: `curl -fsSL https://raw.githubusercontent.com/VoltAgent/awesome-design-md/main/design-md/<slug>/DESIGN.md`. Ist das blockiert: `git clone --depth 1 https://github.com/VoltAgent/awesome-design-md` in einen temporären Ordner und dort `design-md/<slug>/DESIGN.md` lesen.
-- Immer den ganzen Text verwenden, keine Zusammenfassung: Zusammenfassungen verlieren Hex-Werte und Maße.
+### 4. Auswahl: zufrieden oder noch eine Runde?
+Nach der Vorschau fragen, mit Auswahl:
+- **„Zufrieden mit den Varianten? Welches Design und welche Farbvariante soll es sein?“** (z. B. „3, Variante 2“).
+- **„Noch eine Runde Varianten?“** Dann anbieten:
+  1. **Neue Designs von anderen Marken** – gleiche Anzahl, andere Ansätze und Marken als in der ersten Runde.
+  2. **Varianten des Vorschlags, der am besten passte** – dieselbe Marke, abgewandelt in Farbe, Dichte, Navigation oder Form.
+  3. **Mischung aus zwei Vorschlägen** – fragen, welcher Aufbau und welche Farben oder Icons.
+  4. **Nach Wunsch in Worten** – beschreiben lassen, was fehlt, und gezielt neue Vorschläge bauen.
+  Die neue Runde ersetzt die Karten in derselben Vorschau-Seite; die bisherigen Favoriten bleiben als Karten erhalten, damit sich alles vergleichen lässt. So oft wiederholen, bis eine Wahl getroffen ist.
+- Bei „mach einfach“ die Empfehlung mit Variante 1 nehmen.
 
-### 3. Ins Projekt legen
-- Die Datei als `DESIGN.md` ins Hauptverzeichnis des Projekts kopieren (`cp`, ohne `references/` per `curl -o`), nicht abtippen: Abtippen ist langsam und verfälscht Werte. Danach nur Hinweiszeile und Anpassungen per Bearbeitung ergänzen. Gibt es schon eine `DESIGN.md`, vorher fragen: ersetzen, zusammenführen oder unter anderem Namen ablegen.
-- Hinweiszeile einfügen – bei YAML-Kopf direkt nach dem schließenden `---`, sonst als erste Zeile: `> Basis: <Marke>-Stil aus awesome-design-md (inoffizielle Nachbildung). Vorrang haben die „Projektspezifischen Anpassungen“ am Ende.`
-- Am Ende den Abschnitt `## Projektspezifische Anpassungen` anlegen. Dort landen Schrift-Ersatz, Plattform-Übersetzung, Mischungen und Entscheidungen bei Widersprüchen. Dieser Abschnitt hat Vorrang vor dem Rest der Datei.
-- Gibt es eine `CLAUDE.md`, dort eine Zeile ergänzen: `UI-Arbeit: zuerst DESIGN.md lesen und nur deren Tokens verwenden; die „Projektspezifischen Anpassungen“ am Ende haben Vorrang.` So halten sich auch künftige Sitzungen daran. Gibt es keine, das Anlegen anbieten.
-- Ohne Projekt (z. B. im Chat): die angepasste DESIGN.md als Datei ausgeben.
-- Danach anbieten, das Design gleich anzuwenden (Schritte 4 und 5), falls das nicht schon verlangt war.
+Nach der Wahl weiter mit Schritt 5. Die Vorschau-Datei ist kein Teil der App; am Ende anbieten, `design-vorschau/` zu löschen (ohne Antwort stehen lassen und die Zeile `design-vorschau/` in `.gitignore` ergänzen).
 
-### 4. Anwenden
-Vor dem ersten UI-Code die Datei lesen. Es gibt zwei Formate:
-- **Mit YAML-Kopf** (`colors`, `typography`, `rounded`, `spacing`, `components`): Die Werte im Kopf sind verbindlich. Die Abschnitte darunter (Overview, Colors, Typography, Layout, Elevation & Depth, Shapes, Components, Do's and Don'ts, Responsive Behavior, Iteration Guide) erklären, wo und wie sie eingesetzt werden.
-- **Ohne YAML-Kopf** (9 nummerierte Abschnitte): Die Werte stehen in den Abschnitten 2–6. Abschnitt 9 „Agent Prompt Guide“ enthält eine Kurzreferenz und fertige Prompts.
+### 5. Dateien vollständig laden
+- `references/<slug>.md` und `designsprache/<slug>.md` ganz lesen, `screens/<slug>.png` ansehen und für konkrete Bausteine `screens/<slug>.html` lesen. Immer den ganzen Text verwenden, keine Zusammenfassung: Zusammenfassungen verlieren Hex-Werte und Maße.
+- Fehlen Ordner: `git clone --depth 1 https://github.com/bonnibonni13-star/all-top-brands-design-skill` in einen temporären Ordner und dort lesen. Nur die DESIGN.md geht auch per `curl -fsSL https://raw.githubusercontent.com/VoltAgent/awesome-design-md/main/design-md/<slug>/DESIGN.md`.
+- **Echte Website-Screens (optional, Claude Code mit Internet):** `python3 <Ordner dieses Skills>/tools/live_screens.py <slug>` fotografiert Startseite und weitere Seiten der Marken-Website auf Desktop und Handy und liest Animations- und Layoutwerte aus (Dauer, Easing, Hover-Effekte, Containerbreite, Abstände, Radien). Ergebnis in `~/.cache/all-top-brands-design-skill/live/<slug>/` mit `zusammenfassung.md`; davon 2–4 Bilder ansehen. Rückgabewert 0 heißt gemessen, 3 Teilerfolg (einzelne Seiten fehlen), 1 nichts geladen (dann gilt das Profil – im Bericht steht dann ausdrücklich „nicht gemessen“, das ist kein Messwert), 2 Playwright fehlt; vor einer Installation fragen (Download rund 150 MB). Gemessene Werte haben Vorrang vor den Empfehlungen im Profil. Die Bilder dienen nur der Anschauung: nichts daraus kopieren, nichts davon veröffentlichen.
+- **Mobbin (optional):** Sind Mobbin-Werkzeuge verbunden (`search_screens`, `search_flows`, `search_sections`), dort echte App-Screens zur Marke oder zum Muster suchen (z. B. „<Marke> home“, „media library bottom navigation“, Plattform `ios`) und 3–6 Ergebnisse ansehen. Ebenfalls nur Anschauung.
 
-Dann:
-1. Tokens zentral anlegen (Theme-Datei bzw. CSS-Variablen). Token-Namen übernehmen, Markennamen darin aber neutralisieren (z. B. `spotify-green` → `accent-green`).
-2. Komponenten bauen, die nur diese Tokens verwenden – keine verstreuten Hex-Werte oder Maße.
-3. Spannen (z. B. Gewicht 600–700): einen Wert daraus wählen. Widersprüche innerhalb der Datei: YAML-Kopf vor Fließtext, konkreter Abschnitt (Components) vor Zusammenfassung (Agent Prompt Guide). Die Entscheidung in den Anpassungen vermerken.
-4. Weicht der Wunsch von der Datei ab (z. B. hell statt dunkel), gilt der Wunsch: die Variante ableiten (Flächen- und Textstufen umkehren, Akzent beibehalten, Kontrast prüfen) und in den Anpassungen festhalten. Do's and Don'ts, die dem Wunsch widersprechen, entfallen.
-5. Zum Schluss die übrigen Do's and Don'ts als Prüfliste durchgehen und Verstöße beheben.
+### 6. Hauptscreen als Muster bauen
+Erst den einen Screen, nicht die ganze App. So sieht man das Design im echten Projekt, bevor viel Arbeit hineinfließt.
+1. **Dateien ins Projekt legen:** die DESIGN.md als `DESIGN.md` und das Profil als `DESIGNSPRACHE.md` ins Hauptverzeichnis kopieren (`cp`, nicht abtippen – Abtippen verfälscht Werte). Gibt es schon eine `DESIGN.md`, vorher fragen: ersetzen, zusammenführen oder unter anderem Namen ablegen.
+   - Hinweiszeile in der DESIGN.md – bei YAML-Kopf direkt nach dem schließenden `---`, sonst als erste Zeile: `> Basis: <Marke>-Stil aus awesome-design-md (inoffizielle Nachbildung). Aufbau, Navigation, Komponenten, Icons und Bewegung: DESIGNSPRACHE.md. Vorrang haben die „Projektspezifischen Anpassungen“ am Ende.`
+   - Am Ende der DESIGN.md den Abschnitt `## Projektspezifische Anpassungen` anlegen. Dort landen die gewählte Farbvariante mit Werten, Schrift-Ersatz, Plattform-Übersetzung, Mischungen und alle Entscheidungen aus Schritt 7. Dieser Abschnitt hat Vorrang vor dem Rest.
+   - Gibt es eine `CLAUDE.md`, dort ergänzen (sonst das Anlegen anbieten; ohne Antwort anlegen): `UI-Arbeit: zuerst DESIGN.md und DESIGNSPRACHE.md lesen; Tokens, Aufbau, Navigation, Komponenten, Icons und Bewegung einhalten; die „Projektspezifischen Anpassungen“ haben Vorrang.`
+   - Die DESIGN.md beschreibt eine Website und ist lang. Was eindeutig nicht zur App gehört (Preistabellen, Fußzeilen, Cookie-Banner, Kundenlogos), beim Kopieren weglassen und das in den Anpassungen vermerken – lieber eine kurze, zutreffende Datei als eine lange, die zur Hälfte nicht gilt.
+2. **Tokens zentral anlegen** (Theme-Datei bzw. CSS-Variablen): Farben der gewählten Variante, Typografie, Formen, Abstände, Schatten, Bewegung. Token-Namen übernehmen, Markennamen darin neutralisieren (`spotify-green` → `accent-green`). Spannen (z. B. Gewicht 600–700): einen Wert wählen. Widersprüche: YAML-Kopf vor Fließtext, Components vor Zusammenfassung.
+3. **Die Komponenten bauen, die dieser Screen braucht**, an einer gemeinsamen Stelle (z. B. `ui/components/`): Form, Größen, Zustände (gedrückt, Fokus, deaktiviert), nur mit Tokens.
+4. **Den Hauptscreen neu anordnen** nach „Übertragung auf eine App“ im Profil: Anordnung, Navigation, Hierarchie, Dichte, Icons, Bildbehandlung, Bewegung. Funktionen, Daten und Texte bleiben.
+5. **Zeigen:** bauen und starten lassen, einen Screenshot machen oder die Vorschau aktualisieren. Dann fragen: **„So sieht der Hauptscreen jetzt aus. Passt die Richtung?“** Passt sie nicht, zurück zu Schritt 4 (Auswahl) oder gezielt nachbessern.
 
-### 5. Auf die Plattform übertragen
-Die Dateien beschreiben Websites. Für andere Plattformen sinngemäß übersetzen und das Ergebnis in den Anpassungen festhalten:
+### 7. Details durchgehen – Bereich für Bereich
+Passt die Richtung, jeden Bereich einzeln durchgehen, **in dieser Reihenfolge**. Pro Bereich:
+- den aktuellen Stand in einem Satz nennen („Icons: Lucide, Strich 1,5, 24 dp“),
+- **drei konkrete Vorschläge** zeigen, jeder aus einem anderen Profil, jeweils mit „Inspiriert von: <Marke>“ und einem Satz, wie es wirkt,
+- dazu die Auswahl: **„So lassen“ · Vorschlag 1 · 2 · 3 · „etwas anderes“**,
+- bei sichtbaren Bereichen die drei Varianten zusätzlich nebeneinander in die Vorschau-Seite bauen (`.phone.ausschnitt` zeigt nur den fraglichen Teil, z. B. die Navigationsleiste),
+- die Wahl umsetzen und in den „Projektspezifischen Anpassungen“ festhalten (z. B. „Navigation: schwebende Pille wie Linear“).
+
+Vorab fragen, **welche Bereiche** durchgegangen werden sollen (Mehrfachauswahl, Vorgabe „alle der Reihe nach“). Bei kleinen Projekten genügen oft Icons, Navigation und Animationen.
+
+Die Vorschläge findet man über die Kopfzeilen aller Profile, z. B. `grep -H '^navigation:' designsprache/*.md`, ebenso `icons:`, `bewegung:`, `komponenten:`, `schrift:`; dann den passenden Abschnitt im jeweiligen Profil lesen. Für **Farben, Abstände, Bildsprache und Sonstiges** gibt es keine Kopfzeile: dort drei Marken mit passendem Ansatz auswählen und deren Abschnitte „Form, Tiefe und Material“, „Aufbau und Raster“ bzw. „Bildsprache“ lesen. Für **Animationen** ist `animationen/KATALOG.md` die Quelle: drei benannte Effekte vorschlagen, die zum Ansatz passen (`Passt zu:` in jedem Eintrag), mit Werten und der Compose- oder Web-Umsetzung; zum Zeigen `animationen/animationen.html` öffnen.
+
+In den Kopfzeilen stehen Schlüssel, im Index und in der Ansatz-Tabelle die Namen: `buehne` = Große Bühne, `regale` = Medien-Regale, `galerie` = Bild-Karten, `werkzeug` = Präzises Werkzeug, `editorial` = Editorial, `daten` = Daten und Zahlen, `verspielt` = Verspielt, `plakativ` = Plakativ, `minimal` = Stilles Minimal, `leuchten` = Verlauf und Leuchten, `retro` = Retro. `ansatz` ist der Hauptansatz, `ansatz2` ein Nebenansatz; für die Regel „jeden Ansatz höchstens einmal“ in Schritt 3c zählt nur `ansatz`.
+
+| # | Bereich | Worum es geht |
+| --- | --- | --- |
+| 1 | **Farben** | Akzent, Hell oder Dunkel, Flächenstufen, Farbe für Zustände |
+| 2 | **Schrift** | Familie, Größenabstufung, Gewichte, Laufweite, Versalien |
+| 3 | **Icons** | Familie, Linie oder gefüllt, Strichstärke, Größen, Aktiv-Zustand |
+| 4 | **Navigationsleiste** | Muster, Position, Zahl der Ziele, Beschriftung, Aktiv-Zustand, Verhalten beim Scrollen |
+| 5 | **Karten und Listen** | Form, Radius, Schatten oder Linien, Dichte, Bild im Verhältnis zum Text |
+| 6 | **Animationen** | Dauer, Easing, Druck-Effekt, Einblenden und Staffeln, Screenwechsel, gemeinsame Elemente – Auswahl aus `animationen/KATALOG.md` |
+| 7 | **Abstände und Dichte** | Raster, Ränder, Luft zwischen Abschnitten, Zeilenhöhe |
+| 8 | **Bildsprache** | Ecken, Seitenverhältnis, Vollbild oder Karte, Filter, Verlauf, Körnung |
+| 9 | **Sonstiges** | leere Zustände, Laden, Fehler, Dialoge und Sheets, Formulare |
+
+Zum Schluss des Durchgangs fragen: **„Passt alles, oder soll ich bei einem Punkt noch andere Varianten zeigen?“** So lange wiederholen, bis die App rund ist.
+
+### 8. Restliche App umbauen
+Erst wenn der Hauptscreen und die Details stimmen:
+1. **Tokens vervollständigen** und alle Entscheidungen aus Schritt 7 darin festhalten.
+2. **Komponenten vervollständigen**: Buttons, Karten, Listenzeilen, Leisten, Chips, Felder, Dialoge und Sheets – alle in der Sprache der Marke, nur mit Tokens.
+3. **Navigation** auf das gewählte Muster umbauen.
+4. **Plan pro Screen** als kurze Tabelle zeigen: Screen | neue Anordnung | Komponenten | Icons | Bewegung. Eine Bestätigung einholen, wenn Screens zusammengelegt oder geteilt werden; sonst direkt umsetzen.
+5. **Screen für Screen umbauen**, alte Komponenten ersetzen, Icons überall auf die eine Familie umstellen (auch in Leisten, Buttons und leeren Zuständen), Bewegung umsetzen, leere Zustände, Laden und Fehler gestalten.
+6. **Abnahme:** Navigation wie geplant; mindestens drei Signatur-Elemente sichtbar; eine Icon-Familie überall; Komponentenformen, Abstände und Dichte laut Profil; Bewegung umgesetzt; keine Reste von Standard-Komponenten oder -Farben; die App sieht auch in Graustufen anders aus als vorher; Funktionen unverändert; der Build läuft – lässt sich das Projekt hier nicht bauen (keine Build-Dateien, kein SDK), das sagen statt es zu behaupten, und stattdessen die geänderten Dateien noch einmal gegen die Tokens durchsehen. Do's and Don'ts der DESIGN.md und „Vermeiden“ aus dem Profil als Prüfliste durchgehen und Lücken beheben.
+7. **Zusammenfassung** in wenigen Zeilen, gegliedert nach Aufbau, Navigation, Komponenten, Icons, Bewegung, Farben und Schrift. Danach noch einmal anbieten, einen Bereich aus Schritt 7 zu ändern.
+
+#### Website → App
+Die Dateien beschreiben Websites. Muster sinngemäß übertragen:
+
+| Website | App (Handy) | TV |
+| --- | --- | --- |
+| Kopfleiste mit Links | Leiste unten (3–5 Ziele); Tablet: Navigation Rail; viele Bereiche: Drawer | Leiste oben oder Seitennavigation |
+| Hero mit großer Überschrift | großer Kopf auf dem Startscreen in Display-Schrift, ggf. Vollbild-Kopf | Vollbild-Bühne mit Hintergrundbild |
+| Feature-Raster (3 Spalten) | 2-spaltiges Raster oder quer scrollende Reihe | Reihen mit Fokus-Karten |
+| Abwechselnde Text-Bild-Abschnitte | gestapelte Karten oder Abschnitte mit Flächenwechsel | Reihen |
+| Preistabelle | Segment-Umschalter mit Plan-Karten | – |
+| Feste Handlungsaufforderung | FAB oder feste Aktionsleiste unten | Hauptaktion mit Fokus |
+| Mega-Menü | Bottom Sheet oder Vollbild-Menü | Seitennavigation |
+| Hover-Effekt | Druck-Zustand (Ripple, Skalierung, Fläche) | Fokus-Zustand (Skalierung, Rahmen, Leuchten) |
+| Tabelle | Listenzeilen mit Werten rechts oder Datenkarten | Liste |
+| Modal | Dialog oder Bottom Sheet | Dialog |
+| Scroll-Animationen | gestaffeltes Einblenden, Shared-Element-Übergänge | Fokus-Animation |
+| Footer, Logo-Wand, Kundenstimmen | entfallen oder wandern in Einstellungen/Info | entfallen |
+
+#### Icons
+- Eine Familie im Stil des Profils: Linie oder gefüllt, Strichstärke passend zum Textgewicht, Ecken rund oder eckig, feste Größen (z. B. 20 und 24 dp).
+- Compose: `material-icons-extended` mit `Icons.Outlined`, `Rounded`, `Sharp`, `Filled` oder `TwoTone`, oder Material Symbols (Font mit Achsen für Gewicht und Füllung). iOS: SF Symbols mit passendem Gewicht, `.fill` für Aktiv. Web: Lucide (Strichstärke), Phosphor (thin, light, regular, bold, fill, duotone) oder Material Symbols.
+- Aktiv-Zustände nie nur über Farbe zeigen, sondern zusätzlich über Füllung, Fläche, Unterstrich oder Gewicht.
+
+#### Bewegung
+- Vorrang: gemessene Werte aus `live_screens.py`, dann „Laut Datei“, dann „Empfehlung“ im Profil.
+- Compose: `tween(dauer, easing = CubicBezierEasing(…))`, `spring(dampingRatio, stiffness)`, `AnimatedVisibility`, `animateContentSize()`, `Modifier.animateItem()` in Listen, `SharedTransitionLayout` für gemeinsame Elemente, `enterTransition`/`exitTransition` in Navigation Compose, Druck-Skalierung über `interactionSource`. Web: CSS-Transitions und -Keyframes, View Transitions. Die Systemeinstellung für reduzierte Bewegung respektieren.
+
+### 9. Auf die Plattform übertragen
+Ergebnisse in den Anpassungen festhalten:
 - **Web:** Tokens als CSS-Variablen in `:root` oder im Tailwind-Theme, Breakpoints aus „Responsive Behavior“.
 - **Android / Jetpack Compose:**
-  - Farben als `Color(0xFFRRGGBB)` in ein Material-3-`ColorScheme`. Alle Rollen belegen – neben primary, onPrimary, secondary, tertiary, background, surface, surfaceVariant, outline und error ausdrücklich auch surfaceContainerLowest bis surfaceContainerHighest, surfaceBright, surfaceDim und die inverse-Rollen (Karten, Navigationsleisten, Dialoge und Menüs nutzen sie) –, sonst scheinen die lila Standardfarben durch; Dynamic Color abschalten. Bietet die Marke nur hell oder nur dunkel, diesen Modus fest verwenden oder die zweite Variante wie in Schritt 4 ableiten.
-  - Übrige Markenfarben, Abstände, zusätzliche Radien und Schatten in eigene Token-Klassen per `CompositionLocal`.
-  - px → dp, Schriftgrößen px → sp. letter-spacing in px → sp, in em → `.em`. line-height als Faktor → Schriftgröße × Faktor. Versalschreibung (text-transform) im Composable umsetzen.
-  - Radien → `Shapes`, Box-Shadows → `Modifier.shadow` bzw. Elevation (Annäherung genügt; Schattenfarben wirken erst ab Android 9). Übergänge → `tween(…, easing = CubicBezierEasing(…))`, Breakpoints → WindowSizeClass. Hover-Zustände als Pressed-Zustände umsetzen.
-  - Freie Schriften per Downloadable Fonts (`androidx.compose.ui:ui-text-google-fonts`) oder als Datei in `res/font`.
-- **Android TV:** Das Theme über `androidx.tv.material3.MaterialTheme` setzen, denn die TV-Komponenten lesen nur dieses (sein `ColorScheme` hat `border`/`borderVariant` statt `outline`). Dunkles Schema als Basis, helle Markenflächen sparsam. Hover-Zustände als deutliche Fokus-Zustände umsetzen (Skalierung, Rahmen oder Leuchten; fehlt eine Fokusfarbe, die Kontrastfarbe der Fläche nehmen). Text größer als auf dem Handy, Overscan-Ränder von 48 dp seitlich und 27 dp oben/unten.
-- **iOS / SwiftUI, Flutter:** entsprechend über Color-Assets bzw. `ThemeData`, pt statt px.
+  - Farben als `Color(0xFFRRGGBB)` in ein Material-3-`ColorScheme`. Alle Rollen belegen – neben primary, onPrimary, secondary, tertiary, background, surface, surfaceVariant, outline und error ausdrücklich auch surfaceContainerLowest bis surfaceContainerHighest, surfaceBright, surfaceDim und die inverse-Rollen (Karten, Navigationsleisten, Dialoge und Menüs nutzen sie) –, sonst scheinen die lila Standardfarben durch; Dynamic Color abschalten. Bietet die Marke nur hell oder nur dunkel, diesen Modus fest verwenden oder die zweite Variante ableiten (Flächen- und Textstufen umkehren, Akzent behalten, Kontrast prüfen).
+  - Übrige Markenfarben, Abstände, zusätzliche Radien, Schatten und Bewegungs-Tokens in eigene Token-Klassen per `CompositionLocal`.
+  - px → dp, Schriftgrößen px → sp. letter-spacing in px → sp, in em → `.em`. line-height als Faktor → Schriftgröße × Faktor. Versalschreibung im Composable umsetzen.
+  - Radien → `Shapes`, Box-Shadows → `Modifier.shadow` bzw. Elevation (Annäherung genügt; Schattenfarben wirken erst ab Android 9). Breakpoints → WindowSizeClass. Hover-Zustände als Pressed-Zustände.
+  - Material-Komponenten nur verwenden, wenn sie sich vollständig an die Designsprache anpassen lassen; sonst eigene Composables (z. B. eigene Leiste statt `NavigationBar`, eigene Karten statt `Card`).
+  - Freie Schriften per Downloadable Fonts (`androidx.compose.ui:ui-text-google-fonts`) oder als Datei in `res/font`. Vorher prüfen, ob es `res/` und die Abhängigkeit überhaupt gibt; fehlt beides, eine Systemschrift (`FontFamily.SansSerif`, `Serif`, `Monospace`) nehmen und den Umstieg als auskommentierten Block mit den nötigen Zeilen hinterlegen, statt das Projekt unbaubar zu machen.
+- **Android TV:** Das Theme über `androidx.tv.material3.MaterialTheme` setzen, denn die TV-Komponenten lesen nur dieses (sein `ColorScheme` hat `border`/`borderVariant` statt `outline`). Dunkles Schema als Basis, helle Markenflächen sparsam. Hover-Zustände als deutliche Fokus-Zustände (Skalierung, Rahmen oder Leuchten; fehlt eine Fokusfarbe, die Kontrastfarbe der Fläche). Text größer als auf dem Handy, Overscan-Ränder 48 dp seitlich und 27 dp oben und unten. Den Abschnitt „TV“ im Profil beachten.
+- **iOS / SwiftUI, Flutter:** entsprechend über Color-Assets bzw. `ThemeData`, pt statt px; eigene Views und Widgets für Navigation und Karten statt Standard-Optik, wo die Designsprache es verlangt.
 
-### 6. Schriften und Marke
-- Viele Dateien nennen proprietäre Schriften (z. B. SF Pro, SoDoSans, LamboType). Für eigene Produkte eine freie Schrift mit ähnlichem Charakter wählen (z. B. von Google Fonts) und die Wahl in den Anpassungen vermerken.
+### 10. Schriften und Marke
+- Viele Dateien nennen proprietäre Schriften (z. B. SF Pro, SoDoSans, LamboType). Für eigene Produkte die freie Schrift aus dem Profil („Freier Ersatz“) oder eine ähnliche von Google Fonts wählen und in den Anpassungen vermerken.
 - Farb- und Maßwerte dürfen übernommen werden. Die markentypische Signaturfarbe (z. B. Spotify-Grün, Ferrari-Rot) für eigene Produkte leicht abwandeln, besonders in derselben Branche.
-- Logos, Markennamen, Slogans, Maskottchen und Markenfotos nie übernehmen. Das Ergebnis soll vom Stil inspiriert sein, nicht wie die Marke selbst aussehen.
+- Logos, Markennamen, Slogans, Maskottchen und Markenfotos nie übernehmen. Das Ergebnis soll vom Stil inspiriert sein, nicht wie die Marke oder ihr Produkt selbst aussehen.
 
-### 7. Mischen
-Kombinationen sind erlaubt, z. B. Farben von Linear mit Typografie von Notion. Dann in den Anpassungen festhalten, was woher stammt, und Widersprüche (Radien, Schatten, Abstände) zugunsten einer Quelle auflösen.
+### 11. Mischen
+Kombinationen sind erlaubt, auch nach Bereichen: Aufbau von A, Icons von B, Bewegung von C, Farben von D. In den Anpassungen festhalten, was woher stammt, und Widersprüche (Radien, Schatten, Abstände) zugunsten einer Quelle auflösen.
+
+## Ansätze
+Jede Marke hat einen Hauptansatz (Kopfdaten `ansatz`, im Index „Ansatz“). Für verschiedene Vorschläge verschiedene Ansätze wählen.
+
+| Ansatz | Kennzeichen |
+| --- | --- |
+| Große Bühne | vollflächige Bilder oder Produkte, wenig UI, große ruhige Überschriften |
+| Medien-Regale | Inhalte in Reihen aus Covern und Kacheln, oft dunkel, Medien im Vordergrund |
+| Bild-Karten | Fotokarten im Raster, runde Ecken, hell und freundlich |
+| Präzises Werkzeug | dichte Listen, feine Linien, Tastatur- und Befehlsdenken, kleine Schrift |
+| Editorial | Typografie im Mittelpunkt, Lesetexte, Magazin-Rhythmus |
+| Daten und Zahlen | Kennzahlen, Diagramme, Tabellen, nüchtern und vertrauenswürdig |
+| Verspielt | kräftige Farben, Illustrationen, runde dicke Formen, Persönlichkeit |
+| Plakativ | riesige Schrift, harte Kontraste, Blöcke, Versalien |
+| Stilles Minimal | viel Weißraum, monochrom, zurückhaltende Details |
+| Verlauf und Leuchten | Verläufe, Glühen, dunkle Flächen mit Lichtakzenten |
+| Retro | Web der 90er und 2000er: Systemschriften, Rahmen, Reliefs, Tabellenlayout |
 
 ## Marke fehlt
-Die gewünschte Website abrufen (HTML und CSS) und eine eigene DESIGN.md im gleichen Aufbau schreiben: YAML-Kopf mit `colors`, `typography`, `rounded`, `spacing`, `components`, danach die Abschnitte Overview bis Responsive Behavior. Eine Datei aus dem Index als Muster lesen. Nur beobachtbare Werte übernehmen und Geschätztes als geschätzt kennzeichnen.
+Die gewünschte Website abrufen (HTML und CSS) und eine eigene DESIGN.md im gleichen Aufbau schreiben: YAML-Kopf mit `colors`, `typography`, `rounded`, `spacing`, `components`, danach die Abschnitte Overview bis Responsive Behavior. Eine Datei aus dem Index als Muster lesen. Nur beobachtbare Werte übernehmen und Geschätztes als geschätzt kennzeichnen. Dazu ein Designsprache-Profil nach der Vorlage in `tools/screens/ANLEITUNG.md` schreiben; `tools/live_screens.py <url>` liefert dafür Screens, Animations- und Layoutwerte.
 
 ## Aktualisieren
-Die Sammlung wächst. Auf Wunsch mit den Skripten in `tools/` (brauchen Python 3 und `pyyaml`):
+Die Sammlung wächst. Auf Wunsch mit den Skripten in `tools/` (brauchen Python 3, `pyyaml`, `pillow` und für die Musterscreens `playwright`). Alles im Ordner dieses Skills ausführen:
 1. `git clone --depth 1 https://github.com/VoltAgent/awesome-design-md /tmp/adm`
-2. Für neue Marken (Ordner in `/tmp/adm/design-md/` ohne Eintrag im Index) die Datei lesen und in `tools/build_skill.py` unter `BLURB_DE` eine deutsche Kurzbeschreibung ergänzen (Grundton; Akzent; Besonderheit).
-3. Im Ordner dieses Skills: `python3 tools/build_skill.py /tmp/adm tools/SKILL.template.md .` – erneuert `SKILL.md` und `references/`.
-4. `python3 tools/extract_tokens.py . /tmp/profiles.json && python3 tools/build_catalog.py /tmp/profiles.json tools/katalog.template.html /tmp/katalog-online.html all-top-brands-design-skill katalog.html` – erneuert den Katalog. `/tmp/katalog-online.html` ist die Fassung für die Online-Seite.
+2. Für jede neue Marke (Ordner in `/tmp/adm/design-md/` ohne Eintrag im Index): die DESIGN.md lesen, in `tools/build_skill.py` unter `BLURB_DE` eine deutsche Kurzbeschreibung ergänzen (Grundton; Akzent; Besonderheit) und nach `tools/screens/ANLEITUNG.md` das Profil `designsprache/<slug>.md` sowie die Musterscreens `screens/<slug>.html` schreiben. Dann rendern: `python3 tools/render_screens.py <slug> --src screens --profiles designsprache --out screens --qa` und das Ergebnis ansehen.
+3. `python3 tools/build_skill.py /tmp/adm tools/SKILL.template.md . --sprache designsprache --screens screens --tools tools` – erneuert `SKILL.md` (mit Index), `references/` und `LICENSE`.
+4. `python3 tools/extract_tokens.py . /tmp/profiles.json && python3 tools/build_catalog.py /tmp/profiles.json tools/katalog.template.html /tmp/katalog-online.html all-top-brands-design-skill katalog.html` – erneuert den Katalog samt Vorschaubildern in `screens/klein/`.
+5. Prüfen: `python3 tools/test_skill.py . /tmp/adm` (die Zahl `ERWARTET` im Skript auf die neue Markenzahl setzen).
 
 ## Hinweise
-- Inoffizielle Nachbildungen aus öffentlich sichtbarem CSS, keine offiziellen Designsysteme. Marken- und Schriftrechte liegen bei den Inhabern. Lizenz der Sammlung: MIT (`LICENSE` bzw. https://github.com/VoltAgent/awesome-design-md).
+- Die DESIGN.md-Dateien sind inoffizielle Nachbildungen aus öffentlich sichtbarem CSS, keine offiziellen Designsysteme. Marken- und Schriftrechte liegen bei den Inhabern. Lizenz der Sammlung: MIT (`LICENSE` bzw. https://github.com/VoltAgent/awesome-design-md).
+- Profile und Musterscreens sind eigene Arbeiten mit Beispielinhalten, keine Originalscreens der Marken. Icons der Musterscreens: Lucide (ISC) und Phosphor (MIT).
 - Manche Dateien verfremden den Markennamen absichtlich (z. B. „Stripi“, „Slacc“); gemeint ist die jeweilige Marke.
-- Erfasst sind Marketing-Websites, keine eingeloggten App-Bereiche. Für dichte Dashboards die Werte sinngemäß übertragen.
+- Erfasst sind Marketing-Websites, keine eingeloggten App-Bereiche. App-Muster in den Profilen sind entsprechend gekennzeichnet („App-Muster der Marke“ bzw. „Empfehlung“).
 
 ## Index
-Format: `slug` — **Marke**: Grundton; Akzent; Besonderheit.
+Format: `slug` — **Marke**: Grundton; Akzent; Besonderheit. Ansatz: … · Aufbau: …
 
 <!-- INDEX -->

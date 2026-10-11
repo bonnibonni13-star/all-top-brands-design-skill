@@ -1,196 +1,301 @@
 ---
 name: all-top-brands-design-skill
-description: All Top Brands Design Skill – wenn eine App oder Website wie eine bekannte Marke (Apple, Stripe, Spotify …) aussehen soll, Designideen, alle Designs oder eine DESIGN.md gewünscht sind oder jemand nur „design md“ sagt.
+description: All Top Brands Design Skill – wenn eine App oder Website wie eine bekannte Marke (Apple, Stripe, Spotify …) aussehen soll, mit ganzer Designsprache (Aufbau, Navigation, Komponenten, Icons, Animation), wenn Designvorschläge, Designideen, alle Designs oder eine DESIGN.md gewünscht sind oder jemand nur „design md“ sagt.
 ---
 
 # All Top Brands Design Skill
 
-74 Designsysteme bekannter Marken im DESIGN.md-Format, aus deren öffentlichen Websites herausgelesen (Quelle: VoltAgent/awesome-design-md, MIT-Lizenz). Jede Datei legt Farben, Schrift, Abstände, Radien, Schatten, Komponenten, Do's & Don'ts und Responsive-Verhalten fest.
+Designsprachen von 74 bekannten Marken, aus deren öffentlichen Websites herausgelesen (Designdateien: VoltAgent/awesome-design-md, MIT-Lizenz). Pro Marke gibt es drei Teile:
+- `references/<slug>.md` – die DESIGN.md: Farben, Schrift, Abstände, Radien, Schatten, Komponenten, Do's and Don'ts, Responsive-Verhalten.
+- `designsprache/<slug>.md` – das Designsprache-Profil: Aufbau, Navigation, Komponenten, Icons, Bildsprache, Typografie-Stimme, Form, Bewegung, Signatur-Elemente und die Übertragung auf eine App. Die Kopfdaten (`ansatz`, `aufbau`, `navigation`, `komponenten`, `icons`, `bewegung`, `schrift`) fassen jeden Bereich in einer Zeile zusammen.
+- `screens/<slug>.png` und `screens/<slug>.html` – Musterscreens: dieselbe Beispiel-App (Start, Bibliothek, Detail) in dieser Designsprache; das HTML enthält die Bausteine als CSS, Inline-SVG-Icons und die Animationen.
 
-Katalog zum Durchklicken: https://bonnibonni13-star.github.io/all-top-brands-design-skill/katalog.html (liegt der Skill lokal vor, auch als `katalog.html` in seinem Ordner).
+Dazu kommt der **Animations-Katalog** `animationen/KATALOG.md`: 60 benannte Effekte (Schimmer, Lichtkante, gestaffeltes Einblenden, Zahlen hochzählen, Skelett-Laden, gemeinsame Elemente …), jeweils mit Werten und der Umsetzung im Web, in React (Magic UI) und in Jetpack Compose. `animationen/animationen.html` zeigt 40 davon live zum Anschauen und Auswählen.
+
+Katalog mit den Musterscreens aller Marken und Filter nach Ansatz: https://bonnibonni13-star.github.io/all-top-brands-design-skill/katalog.html (lokal: `katalog.html` im Ordner dieses Skills).
+
+**Grundsatz:** Ein Design anwenden heißt, die ganze Designsprache zu übertragen – Anordnung, Navigation, Komponenten, Icons, Bildbehandlung, Typografie, Abstände und Bewegung. Nur Farben und Schrift zu tauschen ist zu wenig; das gibt es nur auf ausdrücklichen Wunsch („nur die Farben“). Funktionen, Daten, Texte und Abläufe der App bleiben erhalten.
+
+**Der Ablauf ist ein Gespräch.** Nach jedem Schritt wird gefragt, nie einfach durchgebaut: erst die Anzahl, dann die Vorschläge zur Auswahl, dann der Hauptscreen als Muster, dann jeder Designbereich einzeln, zuletzt der Rest der App. Jede Frage hat konkrete Vorschläge zur Auswahl (AskUserQuestion, wenn vorhanden), nie nur „Was möchtest du?“. Nur wenn niemand mitliest (geplanter Lauf, ausdrücklich „mach einfach alles“), wird mit den Vorgaben durchgearbeitet und am Ende berichtet.
 
 ## Ablauf
 
 ### 1. Einstieg: Was ist gewünscht?
-- **Marke genannt** (z. B. `/all-top-brands-design-skill stripe`, „mach es wie Airbnb“): Slug im Index nachschlagen, weiter mit Schritt 2.
-- **„Zeig mir alle Designs“** (auch „alle Designarten“, „was hast du alles“):
-  1. Auf den Katalog verweisen. Er zeigt alle 74 Designs mit Farben, Schriftprobe und Button-Form; „Auswählen“ kopiert den Befehl `/all-top-brands-design-skill <slug>`. Online: Link oben. Lokal in Claude Code (macOS): `open <Ordner dieses Skills>/katalog.html`.
-  2. Darunter den ganzen Index ausgeben, nach Kategorien gruppiert, je Marke eine Zeile mit Kurzbeschreibung.
-  3. Fragen, welches Design es sein soll. Nach der Wahl weiter mit Schritt 2.
-- **„Gib mir Designideen“** (auch „Vorschläge“, „was würde passen“): 3–5 Ideen im Ideen-Format. In einem Projekt die Suche a–d, ohne Projekt Punkt e.
-- **Nur „design md“ oder der Skill-Name ohne weitere Angaben:** in einem Projekt die Suche a–d, ohne Projekt Punkt e.
-- **Stil beschrieben** („dunkel und edel“, „seriös wie eine Bank“): Suche ab c, mit dem Stilwunsch statt der Projektanalyse.
+- **Nur „design md“, der Skill-Name, „Designvorschläge“, „Gib mir Designideen“:** weiter mit Schritt 2.
+- **Marke genannt** (`/all-top-brands-design-skill stripe`, „mach es wie Airbnb“): Slug im Index nachschlagen, weiter mit Schritt 5.
+- **„Zeig mir alle Designs“** (auch „alle Designarten“, „was hast du alles“): auf den Katalog verweisen – er zeigt die Musterscreens aller 74 Marken, filtert nach Ansatz, und „Auswählen“ kopiert `/all-top-brands-design-skill <slug>`; lokal in Claude Code auf macOS `open <Ordner dieses Skills>/katalog.html`. Darunter den Index nach Ansätzen gruppiert ausgeben, je Marke eine Zeile. Fragen, welches Design es sein soll, dann Schritt 5.
+- **Stil beschrieben** („dunkel und edel“, „seriös wie eine Bank“): weiter mit Schritt 2, die Kandidaten nach dem Stilwunsch wählen.
+- **Einen Bereich ändern** („andere Icons“, „Navigation wie bei Airbnb“, „mehr Animation“) in einem Projekt mit `DESIGN.md`: direkt Schritt 7 für diesen einen Bereich.
+- **Nur Farben bzw. Theme:** Schritte 5, 6 und 8.1, ohne Umbau.
 - **Marke nicht im Index:** siehe „Marke fehlt“.
 
-#### Suche
-- **a.** Liegt im Projekt schon eine `DESIGN.md`, nicht neu suchen: Theme-Dateien und ein bis zwei Haupt-Screens damit abgleichen, Abweichungen auflisten (Farben, Schriften, Radien, Abstände) und die Korrektur anbieten. Neue Vorschläge nur auf Wunsch.
-- **b.** Projekt gezielt ansehen: README, App-Name, Theme-Dateien (z. B. `Color.kt`, `Theme.kt`, `tailwind.config`, CSS-Variablen) und ein bis zwei Haupt-Screens. Daraus ableiten: Plattform, Zweck, Zielgruppe und bisherigen Grundton. Standardfarben aus Vorlagen (Android-Studio-Lila, Material- oder Tailwind-Standard) zählen nicht als Designentscheidung; dann nur nach Zweck und Zielgruppe wählen.
-- **c.** Alle 74 Marken im Index dagegen abgleichen (Grundton, Akzent, Besonderheit; die Branche muss nicht passen) und 6–8 Kandidaten wählen. Von jedem die ersten rund 60 Zeilen der Datei lesen (Beschreibung und Farben). Fehlt `references/`, vorher die Sammlung wie in Schritt 2 holen.
-- **d.** 3–5 Ideen im Ideen-Format zeigen, die sich spürbar unterscheiden, und eine davon empfehlen.
-- **e.** Ohne Projekt (z. B. im Chat): 5 Ideen mit unterschiedlicher Stimmung aus verschiedenen Kategorien zeigen – dunkel und edel, hell und minimal, warm mit Creme-Tönen, bunt und verspielt, kräftig und plakativ. Vorher von jeder gewählten Marke die ersten rund 60 Zeilen lesen wie in c, damit Schrift und Formen stimmen. Dazu fragen, wofür das Design ist (Website, Android, iOS …).
+### 2. Anzahl der Vorschläge fragen
+Als Erstes fragen, wie viele Designvorschläge es sein sollen, mit Auswahl: **3 · 5 (Empfohlen) · 8 · alle 11 Ansätze**. Nicht fragen, wenn die Zahl schon genannt wurde; ohne Antwort 5.
+
+### 3. Vorschläge erarbeiten und als Vorschau-Seite zeigen
+- **a. Bestehende DESIGN.md:** Liegt im Projekt schon eine, zuerst prüfen statt neu suchen: Theme und Haupt-Screens mit `DESIGN.md` und `DESIGNSPRACHE.md` abgleichen – Farben, Schrift, Radien, Abstände, aber ebenso Navigation, Komponenten, Icons und Bewegung –, Abweichungen auflisten und die Korrektur anbieten. Neue Vorschläge nur auf Wunsch.
+- **b. Projekt verstehen:** README, App-Name, Theme-Dateien (`Color.kt`, `Theme.kt`, `tailwind.config`, CSS-Variablen …) und die Screens ansehen. Daraus Plattform, Zweck, Zielgruppe und Grundton ableiten und eine Bestandsaufnahme machen: welche Screens, welches Navigationsmuster, welche Komponenten, welche Icons, welche Animationen. **Den Hauptscreen bestimmen** (meist den Startscreen) – er ist das Muster für alles Weitere. Standardfarben aus Vorlagen (Android-Studio-Lila, Material- oder Tailwind-Standard) zählen nicht als Designentscheidung.
+- **c. Kandidaten wählen:** Im Index (Grundton; Akzent; Besonderheit; Ansatz; Aufbau) so viele Marken wählen wie gewünscht – passend zum Zweck der App und mit **verschiedenen Ansätzen** (bis 11 Vorschläge jeden Ansatz höchstens einmal). Die Branche muss nicht passen. Von jeder Marke das Profil `designsprache/<slug>.md` lesen und `screens/<slug>.png` ansehen. Fehlen diese Ordner, sie wie in Schritt 5 holen.
+- **d. Vorschau-Seite bauen:**
+  1. `<Ordner dieses Skills>/tools/vorschau/vorlage.html` als `design-vorschau/index.html` ins Projekt kopieren (`cp`) und `icons.js` aus demselben Ordner daneben legen. Ohne Projekt in einen temporären Ordner.
+  2. Pro Vorschlag eine Karte mit dem **Hauptscreen der eigenen App** in der Designsprache der Marke: echte Bezeichnungen, Inhalte und Navigationsziele der App, aber Anordnung, Navigation, Komponenten, Icon-Stil, Bildbehandlung, Typografie und Abstände nach Profil und Musterscreens. Bausteine (CSS von Leisten, Karten, Listen, Buttons) aus `screens/<slug>.html` übernehmen; Icons als `<i data-icon="SATZ:NAME"></i>` (verfügbare Namen in `icons.js`). Die Vorlage erklärt Aufbau und Platzhalter.
+  3. Pro Vorschlag drei **Farbvarianten** als CSS-Variablen, in der Vorschau umschaltbar: 1 – Original der Marke; 2 – Gegenmodus (hell ↔ dunkel, Akzent bleibt); 3 – eigene Akzentvariante passend zum Zweck der App (hat die App schon eine Markenfarbe, diese). Fällt die Wahl auf Variante 2, nachfragen: nur dieser eine Modus, oder Variante 1 als helles und Variante 2 als dunkles Schema nebeneinander? Ohne Antwort beides anlegen, wenn die Plattform es vorsieht (Android, Web), sonst nur den gewählten Modus.
+  4. Jede Karte trägt Nummer, Ideen-Namen, Ansatz-Chip und „Inspiriert von: <Marke>“.
+  5. **Selbst ansehen, bevor du sie zeigst:** die Seite mit Playwright bei 1440 px und 390 px fotografieren und das Bild wirklich anschauen; dabei die Browser-Konsole mitlesen – „Icon fehlt: …“ heißt falscher Icon-Name, Fehler darf es keine geben. Erst dann dem Menschen zeigen: macOS `open design-vorschau/index.html`, Linux `xdg-open …`, in der Claude-App die HTML-Datei zeigen, und wo nichts davon geht, den Screenshot schicken. Zusätzlich im Chat je Vorschlag zwei Zeilen im Ideen-Format.
+- **e. Ohne Projekt** (z. B. im Chat): fragen, wofür das Design ist (Website, Android, iOS …) und um welche App es geht; die Vorschau mit dieser App bauen, sonst mit der Beispiel-App der Musterscreens.
 
 #### Ideen-Format
-Jede Idee bekommt einen eigenen Namen, der ihre Stimmung beschreibt, und darunter die Quelle:
-
-> **1. <Ideen-Name>** – ein bis zwei Sätze, wie die App damit aussähe (Grundton, Akzentfarbe, Schrift, Formen).
+> **1. <Ideen-Name>** – Ansatz: <Ansatz-Name>
+> Aufbau: … · Navigation: … · Komponenten: … · Icons: … · Bewegung: …
 > Inspiriert von: <Marke> · https://getdesign.md/<slug>/design-md
 
-Höchstens eine Idee pro Auswahl darf zwei Marken mischen („Inspiriert von: Linear (Farben) + Notion (Schrift)“). Zum Schluss: eine Empfehlung mit einem Satz Begründung, der Hinweis auf den Katalog und die Frage „Welche soll es sein? Nummer oder Name genügt.“ Bei „mach einfach“ die Empfehlung nehmen. Nach der Wahl weiter mit Schritt 2.
+Höchstens ein Vorschlag darf zwei Marken mischen („Inspiriert von: Linear (Aufbau) + Notion (Schrift)“).
 
-### 2. Datei vollständig laden
-- Lokal: `references/<slug>.md` im Ordner dieses Skills.
-- Fehlt der Ordner `references/`: `curl -fsSL https://raw.githubusercontent.com/VoltAgent/awesome-design-md/main/design-md/<slug>/DESIGN.md`. Ist das blockiert: `git clone --depth 1 https://github.com/VoltAgent/awesome-design-md` in einen temporären Ordner und dort `design-md/<slug>/DESIGN.md` lesen.
-- Immer den ganzen Text verwenden, keine Zusammenfassung: Zusammenfassungen verlieren Hex-Werte und Maße.
+### 4. Auswahl: zufrieden oder noch eine Runde?
+Nach der Vorschau fragen, mit Auswahl:
+- **„Zufrieden mit den Varianten? Welches Design und welche Farbvariante soll es sein?“** (z. B. „3, Variante 2“).
+- **„Noch eine Runde Varianten?“** Dann anbieten:
+  1. **Neue Designs von anderen Marken** – gleiche Anzahl, andere Ansätze und Marken als in der ersten Runde.
+  2. **Varianten des Vorschlags, der am besten passte** – dieselbe Marke, abgewandelt in Farbe, Dichte, Navigation oder Form.
+  3. **Mischung aus zwei Vorschlägen** – fragen, welcher Aufbau und welche Farben oder Icons.
+  4. **Nach Wunsch in Worten** – beschreiben lassen, was fehlt, und gezielt neue Vorschläge bauen.
+  Die neue Runde ersetzt die Karten in derselben Vorschau-Seite; die bisherigen Favoriten bleiben als Karten erhalten, damit sich alles vergleichen lässt. So oft wiederholen, bis eine Wahl getroffen ist.
+- Bei „mach einfach“ die Empfehlung mit Variante 1 nehmen.
 
-### 3. Ins Projekt legen
-- Die Datei als `DESIGN.md` ins Hauptverzeichnis des Projekts kopieren (`cp`, ohne `references/` per `curl -o`), nicht abtippen: Abtippen ist langsam und verfälscht Werte. Danach nur Hinweiszeile und Anpassungen per Bearbeitung ergänzen. Gibt es schon eine `DESIGN.md`, vorher fragen: ersetzen, zusammenführen oder unter anderem Namen ablegen.
-- Hinweiszeile einfügen – bei YAML-Kopf direkt nach dem schließenden `---`, sonst als erste Zeile: `> Basis: <Marke>-Stil aus awesome-design-md (inoffizielle Nachbildung). Vorrang haben die „Projektspezifischen Anpassungen“ am Ende.`
-- Am Ende den Abschnitt `## Projektspezifische Anpassungen` anlegen. Dort landen Schrift-Ersatz, Plattform-Übersetzung, Mischungen und Entscheidungen bei Widersprüchen. Dieser Abschnitt hat Vorrang vor dem Rest der Datei.
-- Gibt es eine `CLAUDE.md`, dort eine Zeile ergänzen: `UI-Arbeit: zuerst DESIGN.md lesen und nur deren Tokens verwenden; die „Projektspezifischen Anpassungen“ am Ende haben Vorrang.` So halten sich auch künftige Sitzungen daran. Gibt es keine, das Anlegen anbieten.
-- Ohne Projekt (z. B. im Chat): die angepasste DESIGN.md als Datei ausgeben.
-- Danach anbieten, das Design gleich anzuwenden (Schritte 4 und 5), falls das nicht schon verlangt war.
+Nach der Wahl weiter mit Schritt 5. Die Vorschau-Datei ist kein Teil der App; am Ende anbieten, `design-vorschau/` zu löschen (ohne Antwort stehen lassen und die Zeile `design-vorschau/` in `.gitignore` ergänzen).
 
-### 4. Anwenden
-Vor dem ersten UI-Code die Datei lesen. Es gibt zwei Formate:
-- **Mit YAML-Kopf** (`colors`, `typography`, `rounded`, `spacing`, `components`): Die Werte im Kopf sind verbindlich. Die Abschnitte darunter (Overview, Colors, Typography, Layout, Elevation & Depth, Shapes, Components, Do's and Don'ts, Responsive Behavior, Iteration Guide) erklären, wo und wie sie eingesetzt werden.
-- **Ohne YAML-Kopf** (9 nummerierte Abschnitte): Die Werte stehen in den Abschnitten 2–6. Abschnitt 9 „Agent Prompt Guide“ enthält eine Kurzreferenz und fertige Prompts.
+### 5. Dateien vollständig laden
+- `references/<slug>.md` und `designsprache/<slug>.md` ganz lesen, `screens/<slug>.png` ansehen und für konkrete Bausteine `screens/<slug>.html` lesen. Immer den ganzen Text verwenden, keine Zusammenfassung: Zusammenfassungen verlieren Hex-Werte und Maße.
+- Fehlen Ordner: `git clone --depth 1 https://github.com/bonnibonni13-star/all-top-brands-design-skill` in einen temporären Ordner und dort lesen. Nur die DESIGN.md geht auch per `curl -fsSL https://raw.githubusercontent.com/VoltAgent/awesome-design-md/main/design-md/<slug>/DESIGN.md`.
+- **Echte Website-Screens (optional, Claude Code mit Internet):** `python3 <Ordner dieses Skills>/tools/live_screens.py <slug>` fotografiert Startseite und weitere Seiten der Marken-Website auf Desktop und Handy und liest Animations- und Layoutwerte aus (Dauer, Easing, Hover-Effekte, Containerbreite, Abstände, Radien). Ergebnis in `~/.cache/all-top-brands-design-skill/live/<slug>/` mit `zusammenfassung.md`; davon 2–4 Bilder ansehen. Rückgabewert 0 heißt gemessen, 3 Teilerfolg (einzelne Seiten fehlen), 1 nichts geladen (dann gilt das Profil – im Bericht steht dann ausdrücklich „nicht gemessen“, das ist kein Messwert), 2 Playwright fehlt; vor einer Installation fragen (Download rund 150 MB). Gemessene Werte haben Vorrang vor den Empfehlungen im Profil. Die Bilder dienen nur der Anschauung: nichts daraus kopieren, nichts davon veröffentlichen.
+- **Mobbin (optional):** Sind Mobbin-Werkzeuge verbunden (`search_screens`, `search_flows`, `search_sections`), dort echte App-Screens zur Marke oder zum Muster suchen (z. B. „<Marke> home“, „media library bottom navigation“, Plattform `ios`) und 3–6 Ergebnisse ansehen. Ebenfalls nur Anschauung.
 
-Dann:
-1. Tokens zentral anlegen (Theme-Datei bzw. CSS-Variablen). Token-Namen übernehmen, Markennamen darin aber neutralisieren (z. B. `spotify-green` → `accent-green`).
-2. Komponenten bauen, die nur diese Tokens verwenden – keine verstreuten Hex-Werte oder Maße.
-3. Spannen (z. B. Gewicht 600–700): einen Wert daraus wählen. Widersprüche innerhalb der Datei: YAML-Kopf vor Fließtext, konkreter Abschnitt (Components) vor Zusammenfassung (Agent Prompt Guide). Die Entscheidung in den Anpassungen vermerken.
-4. Weicht der Wunsch von der Datei ab (z. B. hell statt dunkel), gilt der Wunsch: die Variante ableiten (Flächen- und Textstufen umkehren, Akzent beibehalten, Kontrast prüfen) und in den Anpassungen festhalten. Do's and Don'ts, die dem Wunsch widersprechen, entfallen.
-5. Zum Schluss die übrigen Do's and Don'ts als Prüfliste durchgehen und Verstöße beheben.
+### 6. Hauptscreen als Muster bauen
+Erst den einen Screen, nicht die ganze App. So sieht man das Design im echten Projekt, bevor viel Arbeit hineinfließt.
+1. **Dateien ins Projekt legen:** die DESIGN.md als `DESIGN.md` und das Profil als `DESIGNSPRACHE.md` ins Hauptverzeichnis kopieren (`cp`, nicht abtippen – Abtippen verfälscht Werte). Gibt es schon eine `DESIGN.md`, vorher fragen: ersetzen, zusammenführen oder unter anderem Namen ablegen.
+   - Hinweiszeile in der DESIGN.md – bei YAML-Kopf direkt nach dem schließenden `---`, sonst als erste Zeile: `> Basis: <Marke>-Stil aus awesome-design-md (inoffizielle Nachbildung). Aufbau, Navigation, Komponenten, Icons und Bewegung: DESIGNSPRACHE.md. Vorrang haben die „Projektspezifischen Anpassungen“ am Ende.`
+   - Am Ende der DESIGN.md den Abschnitt `## Projektspezifische Anpassungen` anlegen. Dort landen die gewählte Farbvariante mit Werten, Schrift-Ersatz, Plattform-Übersetzung, Mischungen und alle Entscheidungen aus Schritt 7. Dieser Abschnitt hat Vorrang vor dem Rest.
+   - Gibt es eine `CLAUDE.md`, dort ergänzen (sonst das Anlegen anbieten; ohne Antwort anlegen): `UI-Arbeit: zuerst DESIGN.md und DESIGNSPRACHE.md lesen; Tokens, Aufbau, Navigation, Komponenten, Icons und Bewegung einhalten; die „Projektspezifischen Anpassungen“ haben Vorrang.`
+   - Die DESIGN.md beschreibt eine Website und ist lang. Was eindeutig nicht zur App gehört (Preistabellen, Fußzeilen, Cookie-Banner, Kundenlogos), beim Kopieren weglassen und das in den Anpassungen vermerken – lieber eine kurze, zutreffende Datei als eine lange, die zur Hälfte nicht gilt.
+2. **Tokens zentral anlegen** (Theme-Datei bzw. CSS-Variablen): Farben der gewählten Variante, Typografie, Formen, Abstände, Schatten, Bewegung. Token-Namen übernehmen, Markennamen darin neutralisieren (`spotify-green` → `accent-green`). Spannen (z. B. Gewicht 600–700): einen Wert wählen. Widersprüche: YAML-Kopf vor Fließtext, Components vor Zusammenfassung.
+3. **Die Komponenten bauen, die dieser Screen braucht**, an einer gemeinsamen Stelle (z. B. `ui/components/`): Form, Größen, Zustände (gedrückt, Fokus, deaktiviert), nur mit Tokens.
+4. **Den Hauptscreen neu anordnen** nach „Übertragung auf eine App“ im Profil: Anordnung, Navigation, Hierarchie, Dichte, Icons, Bildbehandlung, Bewegung. Funktionen, Daten und Texte bleiben.
+5. **Zeigen:** bauen und starten lassen, einen Screenshot machen oder die Vorschau aktualisieren. Dann fragen: **„So sieht der Hauptscreen jetzt aus. Passt die Richtung?“** Passt sie nicht, zurück zu Schritt 4 (Auswahl) oder gezielt nachbessern.
 
-### 5. Auf die Plattform übertragen
-Die Dateien beschreiben Websites. Für andere Plattformen sinngemäß übersetzen und das Ergebnis in den Anpassungen festhalten:
+### 7. Details durchgehen – Bereich für Bereich
+Passt die Richtung, jeden Bereich einzeln durchgehen, **in dieser Reihenfolge**. Pro Bereich:
+- den aktuellen Stand in einem Satz nennen („Icons: Lucide, Strich 1,5, 24 dp“),
+- **drei konkrete Vorschläge** zeigen, jeder aus einem anderen Profil, jeweils mit „Inspiriert von: <Marke>“ und einem Satz, wie es wirkt,
+- dazu die Auswahl: **„So lassen“ · Vorschlag 1 · 2 · 3 · „etwas anderes“**,
+- bei sichtbaren Bereichen die drei Varianten zusätzlich nebeneinander in die Vorschau-Seite bauen (`.phone.ausschnitt` zeigt nur den fraglichen Teil, z. B. die Navigationsleiste),
+- die Wahl umsetzen und in den „Projektspezifischen Anpassungen“ festhalten (z. B. „Navigation: schwebende Pille wie Linear“).
+
+Vorab fragen, **welche Bereiche** durchgegangen werden sollen (Mehrfachauswahl, Vorgabe „alle der Reihe nach“). Bei kleinen Projekten genügen oft Icons, Navigation und Animationen.
+
+Die Vorschläge findet man über die Kopfzeilen aller Profile, z. B. `grep -H '^navigation:' designsprache/*.md`, ebenso `icons:`, `bewegung:`, `komponenten:`, `schrift:`; dann den passenden Abschnitt im jeweiligen Profil lesen. Für **Farben, Abstände, Bildsprache und Sonstiges** gibt es keine Kopfzeile: dort drei Marken mit passendem Ansatz auswählen und deren Abschnitte „Form, Tiefe und Material“, „Aufbau und Raster“ bzw. „Bildsprache“ lesen. Für **Animationen** ist `animationen/KATALOG.md` die Quelle: drei benannte Effekte vorschlagen, die zum Ansatz passen (`Passt zu:` in jedem Eintrag), mit Werten und der Compose- oder Web-Umsetzung; zum Zeigen `animationen/animationen.html` öffnen.
+
+In den Kopfzeilen stehen Schlüssel, im Index und in der Ansatz-Tabelle die Namen: `buehne` = Große Bühne, `regale` = Medien-Regale, `galerie` = Bild-Karten, `werkzeug` = Präzises Werkzeug, `editorial` = Editorial, `daten` = Daten und Zahlen, `verspielt` = Verspielt, `plakativ` = Plakativ, `minimal` = Stilles Minimal, `leuchten` = Verlauf und Leuchten, `retro` = Retro. `ansatz` ist der Hauptansatz, `ansatz2` ein Nebenansatz; für die Regel „jeden Ansatz höchstens einmal“ in Schritt 3c zählt nur `ansatz`.
+
+| # | Bereich | Worum es geht |
+| --- | --- | --- |
+| 1 | **Farben** | Akzent, Hell oder Dunkel, Flächenstufen, Farbe für Zustände |
+| 2 | **Schrift** | Familie, Größenabstufung, Gewichte, Laufweite, Versalien |
+| 3 | **Icons** | Familie, Linie oder gefüllt, Strichstärke, Größen, Aktiv-Zustand |
+| 4 | **Navigationsleiste** | Muster, Position, Zahl der Ziele, Beschriftung, Aktiv-Zustand, Verhalten beim Scrollen |
+| 5 | **Karten und Listen** | Form, Radius, Schatten oder Linien, Dichte, Bild im Verhältnis zum Text |
+| 6 | **Animationen** | Dauer, Easing, Druck-Effekt, Einblenden und Staffeln, Screenwechsel, gemeinsame Elemente – Auswahl aus `animationen/KATALOG.md` |
+| 7 | **Abstände und Dichte** | Raster, Ränder, Luft zwischen Abschnitten, Zeilenhöhe |
+| 8 | **Bildsprache** | Ecken, Seitenverhältnis, Vollbild oder Karte, Filter, Verlauf, Körnung |
+| 9 | **Sonstiges** | leere Zustände, Laden, Fehler, Dialoge und Sheets, Formulare |
+
+Zum Schluss des Durchgangs fragen: **„Passt alles, oder soll ich bei einem Punkt noch andere Varianten zeigen?“** So lange wiederholen, bis die App rund ist.
+
+### 8. Restliche App umbauen
+Erst wenn der Hauptscreen und die Details stimmen:
+1. **Tokens vervollständigen** und alle Entscheidungen aus Schritt 7 darin festhalten.
+2. **Komponenten vervollständigen**: Buttons, Karten, Listenzeilen, Leisten, Chips, Felder, Dialoge und Sheets – alle in der Sprache der Marke, nur mit Tokens.
+3. **Navigation** auf das gewählte Muster umbauen.
+4. **Plan pro Screen** als kurze Tabelle zeigen: Screen | neue Anordnung | Komponenten | Icons | Bewegung. Eine Bestätigung einholen, wenn Screens zusammengelegt oder geteilt werden; sonst direkt umsetzen.
+5. **Screen für Screen umbauen**, alte Komponenten ersetzen, Icons überall auf die eine Familie umstellen (auch in Leisten, Buttons und leeren Zuständen), Bewegung umsetzen, leere Zustände, Laden und Fehler gestalten.
+6. **Abnahme:** Navigation wie geplant; mindestens drei Signatur-Elemente sichtbar; eine Icon-Familie überall; Komponentenformen, Abstände und Dichte laut Profil; Bewegung umgesetzt; keine Reste von Standard-Komponenten oder -Farben; die App sieht auch in Graustufen anders aus als vorher; Funktionen unverändert; der Build läuft – lässt sich das Projekt hier nicht bauen (keine Build-Dateien, kein SDK), das sagen statt es zu behaupten, und stattdessen die geänderten Dateien noch einmal gegen die Tokens durchsehen. Do's and Don'ts der DESIGN.md und „Vermeiden“ aus dem Profil als Prüfliste durchgehen und Lücken beheben.
+7. **Zusammenfassung** in wenigen Zeilen, gegliedert nach Aufbau, Navigation, Komponenten, Icons, Bewegung, Farben und Schrift. Danach noch einmal anbieten, einen Bereich aus Schritt 7 zu ändern.
+
+#### Website → App
+Die Dateien beschreiben Websites. Muster sinngemäß übertragen:
+
+| Website | App (Handy) | TV |
+| --- | --- | --- |
+| Kopfleiste mit Links | Leiste unten (3–5 Ziele); Tablet: Navigation Rail; viele Bereiche: Drawer | Leiste oben oder Seitennavigation |
+| Hero mit großer Überschrift | großer Kopf auf dem Startscreen in Display-Schrift, ggf. Vollbild-Kopf | Vollbild-Bühne mit Hintergrundbild |
+| Feature-Raster (3 Spalten) | 2-spaltiges Raster oder quer scrollende Reihe | Reihen mit Fokus-Karten |
+| Abwechselnde Text-Bild-Abschnitte | gestapelte Karten oder Abschnitte mit Flächenwechsel | Reihen |
+| Preistabelle | Segment-Umschalter mit Plan-Karten | – |
+| Feste Handlungsaufforderung | FAB oder feste Aktionsleiste unten | Hauptaktion mit Fokus |
+| Mega-Menü | Bottom Sheet oder Vollbild-Menü | Seitennavigation |
+| Hover-Effekt | Druck-Zustand (Ripple, Skalierung, Fläche) | Fokus-Zustand (Skalierung, Rahmen, Leuchten) |
+| Tabelle | Listenzeilen mit Werten rechts oder Datenkarten | Liste |
+| Modal | Dialog oder Bottom Sheet | Dialog |
+| Scroll-Animationen | gestaffeltes Einblenden, Shared-Element-Übergänge | Fokus-Animation |
+| Footer, Logo-Wand, Kundenstimmen | entfallen oder wandern in Einstellungen/Info | entfallen |
+
+#### Icons
+- Eine Familie im Stil des Profils: Linie oder gefüllt, Strichstärke passend zum Textgewicht, Ecken rund oder eckig, feste Größen (z. B. 20 und 24 dp).
+- Compose: `material-icons-extended` mit `Icons.Outlined`, `Rounded`, `Sharp`, `Filled` oder `TwoTone`, oder Material Symbols (Font mit Achsen für Gewicht und Füllung). iOS: SF Symbols mit passendem Gewicht, `.fill` für Aktiv. Web: Lucide (Strichstärke), Phosphor (thin, light, regular, bold, fill, duotone) oder Material Symbols.
+- Aktiv-Zustände nie nur über Farbe zeigen, sondern zusätzlich über Füllung, Fläche, Unterstrich oder Gewicht.
+
+#### Bewegung
+- Vorrang: gemessene Werte aus `live_screens.py`, dann „Laut Datei“, dann „Empfehlung“ im Profil.
+- Compose: `tween(dauer, easing = CubicBezierEasing(…))`, `spring(dampingRatio, stiffness)`, `AnimatedVisibility`, `animateContentSize()`, `Modifier.animateItem()` in Listen, `SharedTransitionLayout` für gemeinsame Elemente, `enterTransition`/`exitTransition` in Navigation Compose, Druck-Skalierung über `interactionSource`. Web: CSS-Transitions und -Keyframes, View Transitions. Die Systemeinstellung für reduzierte Bewegung respektieren.
+
+### 9. Auf die Plattform übertragen
+Ergebnisse in den Anpassungen festhalten:
 - **Web:** Tokens als CSS-Variablen in `:root` oder im Tailwind-Theme, Breakpoints aus „Responsive Behavior“.
 - **Android / Jetpack Compose:**
-  - Farben als `Color(0xFFRRGGBB)` in ein Material-3-`ColorScheme`. Alle Rollen belegen – neben primary, onPrimary, secondary, tertiary, background, surface, surfaceVariant, outline und error ausdrücklich auch surfaceContainerLowest bis surfaceContainerHighest, surfaceBright, surfaceDim und die inverse-Rollen (Karten, Navigationsleisten, Dialoge und Menüs nutzen sie) –, sonst scheinen die lila Standardfarben durch; Dynamic Color abschalten. Bietet die Marke nur hell oder nur dunkel, diesen Modus fest verwenden oder die zweite Variante wie in Schritt 4 ableiten.
-  - Übrige Markenfarben, Abstände, zusätzliche Radien und Schatten in eigene Token-Klassen per `CompositionLocal`.
-  - px → dp, Schriftgrößen px → sp. letter-spacing in px → sp, in em → `.em`. line-height als Faktor → Schriftgröße × Faktor. Versalschreibung (text-transform) im Composable umsetzen.
-  - Radien → `Shapes`, Box-Shadows → `Modifier.shadow` bzw. Elevation (Annäherung genügt; Schattenfarben wirken erst ab Android 9). Übergänge → `tween(…, easing = CubicBezierEasing(…))`, Breakpoints → WindowSizeClass. Hover-Zustände als Pressed-Zustände umsetzen.
-  - Freie Schriften per Downloadable Fonts (`androidx.compose.ui:ui-text-google-fonts`) oder als Datei in `res/font`.
-- **Android TV:** Das Theme über `androidx.tv.material3.MaterialTheme` setzen, denn die TV-Komponenten lesen nur dieses (sein `ColorScheme` hat `border`/`borderVariant` statt `outline`). Dunkles Schema als Basis, helle Markenflächen sparsam. Hover-Zustände als deutliche Fokus-Zustände umsetzen (Skalierung, Rahmen oder Leuchten; fehlt eine Fokusfarbe, die Kontrastfarbe der Fläche nehmen). Text größer als auf dem Handy, Overscan-Ränder von 48 dp seitlich und 27 dp oben/unten.
-- **iOS / SwiftUI, Flutter:** entsprechend über Color-Assets bzw. `ThemeData`, pt statt px.
+  - Farben als `Color(0xFFRRGGBB)` in ein Material-3-`ColorScheme`. Alle Rollen belegen – neben primary, onPrimary, secondary, tertiary, background, surface, surfaceVariant, outline und error ausdrücklich auch surfaceContainerLowest bis surfaceContainerHighest, surfaceBright, surfaceDim und die inverse-Rollen (Karten, Navigationsleisten, Dialoge und Menüs nutzen sie) –, sonst scheinen die lila Standardfarben durch; Dynamic Color abschalten. Bietet die Marke nur hell oder nur dunkel, diesen Modus fest verwenden oder die zweite Variante ableiten (Flächen- und Textstufen umkehren, Akzent behalten, Kontrast prüfen).
+  - Übrige Markenfarben, Abstände, zusätzliche Radien, Schatten und Bewegungs-Tokens in eigene Token-Klassen per `CompositionLocal`.
+  - px → dp, Schriftgrößen px → sp. letter-spacing in px → sp, in em → `.em`. line-height als Faktor → Schriftgröße × Faktor. Versalschreibung im Composable umsetzen.
+  - Radien → `Shapes`, Box-Shadows → `Modifier.shadow` bzw. Elevation (Annäherung genügt; Schattenfarben wirken erst ab Android 9). Breakpoints → WindowSizeClass. Hover-Zustände als Pressed-Zustände.
+  - Material-Komponenten nur verwenden, wenn sie sich vollständig an die Designsprache anpassen lassen; sonst eigene Composables (z. B. eigene Leiste statt `NavigationBar`, eigene Karten statt `Card`).
+  - Freie Schriften per Downloadable Fonts (`androidx.compose.ui:ui-text-google-fonts`) oder als Datei in `res/font`. Vorher prüfen, ob es `res/` und die Abhängigkeit überhaupt gibt; fehlt beides, eine Systemschrift (`FontFamily.SansSerif`, `Serif`, `Monospace`) nehmen und den Umstieg als auskommentierten Block mit den nötigen Zeilen hinterlegen, statt das Projekt unbaubar zu machen.
+- **Android TV:** Das Theme über `androidx.tv.material3.MaterialTheme` setzen, denn die TV-Komponenten lesen nur dieses (sein `ColorScheme` hat `border`/`borderVariant` statt `outline`). Dunkles Schema als Basis, helle Markenflächen sparsam. Hover-Zustände als deutliche Fokus-Zustände (Skalierung, Rahmen oder Leuchten; fehlt eine Fokusfarbe, die Kontrastfarbe der Fläche). Text größer als auf dem Handy, Overscan-Ränder 48 dp seitlich und 27 dp oben und unten. Den Abschnitt „TV“ im Profil beachten.
+- **iOS / SwiftUI, Flutter:** entsprechend über Color-Assets bzw. `ThemeData`, pt statt px; eigene Views und Widgets für Navigation und Karten statt Standard-Optik, wo die Designsprache es verlangt.
 
-### 6. Schriften und Marke
-- Viele Dateien nennen proprietäre Schriften (z. B. SF Pro, SoDoSans, LamboType). Für eigene Produkte eine freie Schrift mit ähnlichem Charakter wählen (z. B. von Google Fonts) und die Wahl in den Anpassungen vermerken.
+### 10. Schriften und Marke
+- Viele Dateien nennen proprietäre Schriften (z. B. SF Pro, SoDoSans, LamboType). Für eigene Produkte die freie Schrift aus dem Profil („Freier Ersatz“) oder eine ähnliche von Google Fonts wählen und in den Anpassungen vermerken.
 - Farb- und Maßwerte dürfen übernommen werden. Die markentypische Signaturfarbe (z. B. Spotify-Grün, Ferrari-Rot) für eigene Produkte leicht abwandeln, besonders in derselben Branche.
-- Logos, Markennamen, Slogans, Maskottchen und Markenfotos nie übernehmen. Das Ergebnis soll vom Stil inspiriert sein, nicht wie die Marke selbst aussehen.
+- Logos, Markennamen, Slogans, Maskottchen und Markenfotos nie übernehmen. Das Ergebnis soll vom Stil inspiriert sein, nicht wie die Marke oder ihr Produkt selbst aussehen.
 
-### 7. Mischen
-Kombinationen sind erlaubt, z. B. Farben von Linear mit Typografie von Notion. Dann in den Anpassungen festhalten, was woher stammt, und Widersprüche (Radien, Schatten, Abstände) zugunsten einer Quelle auflösen.
+### 11. Mischen
+Kombinationen sind erlaubt, auch nach Bereichen: Aufbau von A, Icons von B, Bewegung von C, Farben von D. In den Anpassungen festhalten, was woher stammt, und Widersprüche (Radien, Schatten, Abstände) zugunsten einer Quelle auflösen.
+
+## Ansätze
+Jede Marke hat einen Hauptansatz (Kopfdaten `ansatz`, im Index „Ansatz“). Für verschiedene Vorschläge verschiedene Ansätze wählen.
+
+| Ansatz | Kennzeichen |
+| --- | --- |
+| Große Bühne | vollflächige Bilder oder Produkte, wenig UI, große ruhige Überschriften |
+| Medien-Regale | Inhalte in Reihen aus Covern und Kacheln, oft dunkel, Medien im Vordergrund |
+| Bild-Karten | Fotokarten im Raster, runde Ecken, hell und freundlich |
+| Präzises Werkzeug | dichte Listen, feine Linien, Tastatur- und Befehlsdenken, kleine Schrift |
+| Editorial | Typografie im Mittelpunkt, Lesetexte, Magazin-Rhythmus |
+| Daten und Zahlen | Kennzahlen, Diagramme, Tabellen, nüchtern und vertrauenswürdig |
+| Verspielt | kräftige Farben, Illustrationen, runde dicke Formen, Persönlichkeit |
+| Plakativ | riesige Schrift, harte Kontraste, Blöcke, Versalien |
+| Stilles Minimal | viel Weißraum, monochrom, zurückhaltende Details |
+| Verlauf und Leuchten | Verläufe, Glühen, dunkle Flächen mit Lichtakzenten |
+| Retro | Web der 90er und 2000er: Systemschriften, Rahmen, Reliefs, Tabellenlayout |
 
 ## Marke fehlt
-Die gewünschte Website abrufen (HTML und CSS) und eine eigene DESIGN.md im gleichen Aufbau schreiben: YAML-Kopf mit `colors`, `typography`, `rounded`, `spacing`, `components`, danach die Abschnitte Overview bis Responsive Behavior. Eine Datei aus dem Index als Muster lesen. Nur beobachtbare Werte übernehmen und Geschätztes als geschätzt kennzeichnen.
+Die gewünschte Website abrufen (HTML und CSS) und eine eigene DESIGN.md im gleichen Aufbau schreiben: YAML-Kopf mit `colors`, `typography`, `rounded`, `spacing`, `components`, danach die Abschnitte Overview bis Responsive Behavior. Eine Datei aus dem Index als Muster lesen. Nur beobachtbare Werte übernehmen und Geschätztes als geschätzt kennzeichnen. Dazu ein Designsprache-Profil nach der Vorlage in `tools/screens/ANLEITUNG.md` schreiben; `tools/live_screens.py <url>` liefert dafür Screens, Animations- und Layoutwerte.
 
 ## Aktualisieren
-Die Sammlung wächst. Auf Wunsch mit den Skripten in `tools/` (brauchen Python 3 und `pyyaml`):
+Die Sammlung wächst. Auf Wunsch mit den Skripten in `tools/` (brauchen Python 3, `pyyaml`, `pillow` und für die Musterscreens `playwright`). Alles im Ordner dieses Skills ausführen:
 1. `git clone --depth 1 https://github.com/VoltAgent/awesome-design-md /tmp/adm`
-2. Für neue Marken (Ordner in `/tmp/adm/design-md/` ohne Eintrag im Index) die Datei lesen und in `tools/build_skill.py` unter `BLURB_DE` eine deutsche Kurzbeschreibung ergänzen (Grundton; Akzent; Besonderheit).
-3. Im Ordner dieses Skills: `python3 tools/build_skill.py /tmp/adm tools/SKILL.template.md .` – erneuert `SKILL.md` und `references/`.
-4. `python3 tools/extract_tokens.py . /tmp/profiles.json && python3 tools/build_catalog.py /tmp/profiles.json tools/katalog.template.html /tmp/katalog-online.html all-top-brands-design-skill katalog.html` – erneuert den Katalog. `/tmp/katalog-online.html` ist die Fassung für die Online-Seite.
+2. Für jede neue Marke (Ordner in `/tmp/adm/design-md/` ohne Eintrag im Index): die DESIGN.md lesen, in `tools/build_skill.py` unter `BLURB_DE` eine deutsche Kurzbeschreibung ergänzen (Grundton; Akzent; Besonderheit) und nach `tools/screens/ANLEITUNG.md` das Profil `designsprache/<slug>.md` sowie die Musterscreens `screens/<slug>.html` schreiben. Dann rendern: `python3 tools/render_screens.py <slug> --src screens --profiles designsprache --out screens --qa` und das Ergebnis ansehen.
+3. `python3 tools/build_skill.py /tmp/adm tools/SKILL.template.md . --sprache designsprache --screens screens --tools tools` – erneuert `SKILL.md` (mit Index), `references/` und `LICENSE`.
+4. `python3 tools/extract_tokens.py . /tmp/profiles.json && python3 tools/build_catalog.py /tmp/profiles.json tools/katalog.template.html /tmp/katalog-online.html all-top-brands-design-skill katalog.html` – erneuert den Katalog samt Vorschaubildern in `screens/klein/`.
+5. Prüfen: `python3 tools/test_skill.py . /tmp/adm` (die Zahl `ERWARTET` im Skript auf die neue Markenzahl setzen).
 
 ## Hinweise
-- Inoffizielle Nachbildungen aus öffentlich sichtbarem CSS, keine offiziellen Designsysteme. Marken- und Schriftrechte liegen bei den Inhabern. Lizenz der Sammlung: MIT (`LICENSE` bzw. https://github.com/VoltAgent/awesome-design-md).
+- Die DESIGN.md-Dateien sind inoffizielle Nachbildungen aus öffentlich sichtbarem CSS, keine offiziellen Designsysteme. Marken- und Schriftrechte liegen bei den Inhabern. Lizenz der Sammlung: MIT (`LICENSE` bzw. https://github.com/VoltAgent/awesome-design-md).
+- Profile und Musterscreens sind eigene Arbeiten mit Beispielinhalten, keine Originalscreens der Marken. Icons der Musterscreens: Lucide (ISC) und Phosphor (MIT).
 - Manche Dateien verfremden den Markennamen absichtlich (z. B. „Stripi“, „Slacc“); gemeint ist die jeweilige Marke.
-- Erfasst sind Marketing-Websites, keine eingeloggten App-Bereiche. Für dichte Dashboards die Werte sinngemäß übertragen.
+- Erfasst sind Marketing-Websites, keine eingeloggten App-Bereiche. App-Muster in den Profilen sind entsprechend gekennzeichnet („App-Muster der Marke“ bzw. „Empfehlung“).
 
 ## Index
-Format: `slug` — **Marke**: Grundton; Akzent; Besonderheit.
+Format: `slug` — **Marke**: Grundton; Akzent; Besonderheit. Ansatz: … · Aufbau: …
 
 ### KI & LLM-Plattformen
-- `claude` — **Claude**: hell, Creme-Fläche; Korallen-Buttons; Serifen-Überschriften, dunkle Produktkarten
-- `cohere` — **Cohere**: hell, viel Weiß; dunkelgrüne Produktbänder; Mono-artige Überschriften, runde Medienkarten
-- `elevenlabs` — **ElevenLabs**: hell, Off-White; Pastell-Verlaufskugeln als einzige Farbe; leichte Display-Schrift, magazinartig
-- `minimax` — **Minimax**: hell, reines Weiß; schwarze Pill-Buttons; bunte Verlaufs-Produktkarten, riesige Hero-Headline
-- `mistral.ai` — **Mistral AI**: hell, Cremegelb; orange Buttons; Sonnenuntergangs-Verläufe über Bergfotos
-- `ollama` — **Ollama**: hell, papierweiß, extrem minimal; nur Schwarz, Weiß, Grau; Pill-Buttons, wirkt wie eine README
-- `opencode.ai` — **OpenCode AI**: hell, warme Creme; alles in Monospace; Terminal-Look mit einer dunklen Hero-Karte
-- `replicate` — **Replicate**: hell, Creme; heißes Orange sparsam; sehr große Display-Schrift, „Labor-Notizbuch“
-- `runwayml` — **Runway**: dunkel, filmisch, helle Lesebänder; Fotos und Videos als UI; eine Schrift, schwarze Pill-Buttons
-- `together.ai` — **Together AI**: dunkle und helle Bänder im Wechsel; Orange-Magenta-Periwinkle-Verlauf; Mono-Versal-Labels
-- `voltagent` — **VoltAgent**: dunkel, fast schwarz; ein elektrisches Grün; Code-Editor-Mockups, dunkle Feature-Karten
-- `x.ai` — **xAI**: dunkel, fast schwarz; weiße Pill-Umrisse, vereinzelt Abendrot-Verläufe; Mono-Versal-Labels
+- `claude` — **Claude**: hell, Creme-Fläche; Korallen-Buttons; Serifen-Überschriften, dunkle Produktkarten Ansatz: Editorial · Aufbau: Creme-Lesespalte, linksbündig; Flächen wechseln im Takt Creme → Cremekarte → dunkle Produktkarte → Koralle
+- `cohere` — **Cohere**: hell, viel Weiß; dunkelgrüne Produktbänder; Mono-artige Überschriften, runde Medienkarten Ansatz: Editorial + Stilles Minimal · Aufbau: Weiße Redaktionsfläche mit einer Riesen-Überschrift je Screen, runden Medienkarten (22 px) und eingesetzten dunkelgrünen Bändern
+- `elevenlabs` — **ElevenLabs**: hell, Off-White; Pastell-Verlaufskugeln als einzige Farbe; leichte Display-Schrift, magazinartig Ansatz: Stilles Minimal + Editorial · Aufbau: Off-White-Fläche #f5f5f5, weiße Karten mit Haarlinie; Pastell-Verlaufskugeln als einzige Farbe, sonst Tinte
+- `minimax` — **Minimax**: hell, reines Weiß; schwarze Pill-Buttons; bunte Verlaufs-Produktkarten, riesige Hero-Headline Ansatz: Plakativ + Bild-Karten · Aufbau: Reinweiße Fläche mit schwarzer Typo; dazwischen vollfarbige Produktkarten mit 32-px-Radius wie Plattenhüllen
+- `mistral.ai` — **Mistral AI**: hell, Cremegelb; orange Buttons; Sonnenuntergangs-Verläufe über Bergfotos Ansatz: Editorial + Große Bühne · Aufbau: Warme Creme-/Weißflächen, Vollbild-Sonnenuntergang als Bühne oben, darunter ruhige Abschnitte mit Serif-Titeln
+- `ollama` — **Ollama**: hell, papierweiß, extrem minimal; nur Schwarz, Weiß, Grau; Pill-Buttons, wirkt wie eine README Ansatz: Stilles Minimal + Präzises Werkzeug · Aufbau: Eine papierweiße Lesespalte wie ein README, zentrierter Einstieg, viel Luft
+- `opencode.ai` — **OpenCode AI**: hell, warme Creme; alles in Monospace; Terminal-Look mit einer dunklen Hero-Karte Ansatz: Präzises Werkzeug + Retro · Aufbau: Warme Cremefläche, alles in Monospace; linksbündige Textblöcke mit 1-px-Linien, scharfe Ecken, kein Schatten
+- `replicate` — **Replicate**: hell, Creme; heißes Orange sparsam; sehr große Display-Schrift, „Labor-Notizbuch“ Ansatz: Editorial + Präzises Werkzeug · Aufbau: Warme Cremefläche, Abschnitte als Farbblöcke (Creme → Orangeband → Creme → dunkles Code-Feld), linksbündig
+- `runwayml` — **Runway**: dunkel, filmisch, helle Lesebänder; Fotos und Videos als UI; eine Schrift, schwarze Pill-Buttons Ansatz: Große Bühne + Editorial · Aufbau: Randlose Foto-/Video-Bühnen auf Schwarz, dazwischen helle Lesebänder; Mosaik-Raster, UI fast unsichtbar
+- `together.ai` — **Together AI**: dunkle und helle Bänder im Wechsel; Orange-Magenta-Periwinkle-Verlauf; Mono-Versal-Labels Ansatz: Verlauf und Leuchten + Daten und Zahlen · Aufbau: Vollflächige Nachtblau-Bänder (#010120) im Wechsel mit weißen Datenbändern; linksbündig, 4-px-Ecken
+- `voltagent` — **VoltAgent**: dunkel, fast schwarz; ein elektrisches Grün; Code-Editor-Mockups, dunkle Feature-Karten Ansatz: Präzises Werkzeug + Daten und Zahlen · Aufbau: Dokumentations-Rhythmus: Versal-Eyebrow, ruhige 400er-Überschrift, alles in 1-px-Haarlinienrahmen
+- `x.ai` — **xAI**: dunkel, fast schwarz; weiße Pill-Umrisse, vereinzelt Abendrot-Verläufe; Mono-Versal-Labels Ansatz: Stilles Minimal + Präzises Werkzeug · Aufbau: Fast schwarze Fläche, Inhalte als Bänder: Mono-Eyebrow, großer Titel 400, Haarlinie; Bilder klein gerahmt
 
 ### Entwickler-Tools & IDEs
-- `cursor` — **Cursor**: hell, warme Creme; Orange nur für Buttons; leichte Display-Schrift, Pastell-Timeline
-- `expo` — **Expo**: hell, Weiß mit himmelblauem Hauch; schwarze Buttons; Inter plus Mono
-- `lovable` — **Lovable**: hell, Pergament-Creme; fast schwarze Schrift; warm, analog, wie ein Notizbuch
-- `raycast` — **Raycast**: dunkel, fast schwarz; weiße Pill-Buttons, Haarlinien; bunte Kategorie-Akzente
-- `superhuman` — **Superhuman**: dunkler Indigo-Hero, heller Inhalt; dunkles Petrol als Abschluss; schwere, enge Display-Schrift
-- `vercel` — **Vercel**: hell, fast weiß, Schwarz-Weiß; bunter Mesh-Verlauf im Hero; geometrische Sans plus Mono
-- `warp` — **Warp**: dunkel, warmes Anthrazit; Inter mit Serifen-Kursiv-Akzenten; dichte Terminal-Mockups
+- `cursor` — **Cursor**: hell, warme Creme; Orange nur für Buttons; leichte Display-Schrift, Pastell-Timeline Ansatz: Präzises Werkzeug + Editorial · Aufbau: Warme Cremefläche, darauf weiße Flächen mit 1-px-Haarlinie und 12 px Radius; Tabelle statt Karten
+- `expo` — **Expo**: hell, Weiß mit himmelblauem Hauch; schwarze Buttons; Inter plus Mono Ansatz: Präzises Werkzeug + Stilles Minimal · Aufbau: Reines Weiß, Inhalte in haarlinien-gerahmten Panels; ein himmelblauer Verlauf nur hinter dem Kopfbereich
+- `lovable` — **Lovable**: hell, Pergament-Creme; fast schwarze Schrift; warm, analog, wie ein Notizbuch Ansatz: Stilles Minimal + Editorial · Aufbau: Warme Pergament-Fläche ohne Schatten; Inhalte liegen in 1-px-umrandeten Karten, getrennt durch viel Luft
+- `raycast` — **Raycast**: dunkel, fast schwarz; weiße Pill-Buttons, Haarlinien; bunte Kategorie-Akzente Ansatz: Präzises Werkzeug + Stilles Minimal · Aufbau: Befehlsleiste oben als Einstieg, darunter dichte, gruppierte Befehlszeilen in randlosen Flächenstufen, unten eine Aktionsleiste
+- `superhuman` — **Superhuman**: dunkler Indigo-Hero, heller Inhalt; dunkles Petrol als Abschluss; schwere, enge Display-Schrift Ansatz: Editorial + Große Bühne · Aufbau: Drei Leinwände nacheinander – Indigo-Bühne oben, ruhige weiße Mitte, dunkles Petrol als Schlussakkord
+- `vercel` — **Vercel**: hell, fast weiß, Schwarz-Weiß; bunter Mesh-Verlauf im Hero; geometrische Sans plus Mono Ansatz: Stilles Minimal + Präzises Werkzeug · Aufbau: Fast weiße Fläche, weiße Karten mit Haarlinie und Stapelschatten; Mesh-Verlauf nur im zentrierten Start-Hero
+- `warp` — **Warp**: dunkel, warmes Anthrazit; Inter mit Serifen-Kursiv-Akzenten; dichte Terminal-Mockups Ansatz: Präzises Werkzeug + Editorial · Aufbau: Warm-dunkle Bahn ohne Bruch: Terminal-Reiter oben, ruhige leichte Überschriften, vollbreite Linienzeilen und Mockup-Karten, Eingabe unten
 
 ### Backend, Datenbanken & DevOps
-- `clickhouse` — **ClickHouse**: dunkel, fast schwarz; elektrisches Gelb für Buttons und Kennzahlen; Code in dunklen Karten
-- `composio` — **Composio**: dunkel, fast schwarz; tiefes Elektroblau mit Spotlight-Glow; Terminal-Raster als Hero
-- `hashicorp` — **HashiCorp**: dunkel, schwarz; eine Akzentfarbe je Produkt; Anthrazit-Karten mit Haarlinien
-- `mongodb` — **MongoDB**: dunkle Petrol-Heros, weiße Doku-Flächen; leuchtend grüne Pill-Buttons
-- `posthog` — **PostHog**: hell, warme Creme; gelb-orange Buttons; handgezeichnete Igel, verspielt
-- `sanity` — **Sanity**: dunkel, fast schwarz, streng strukturiert; Korallenrot für Buttons; Neon-Grün und Blau als Akzente
-- `sentry` — **Sentry**: dunkel, violette Mitternacht; Limetten-Akzente; verspielte Display-Schrift, Sticker-Maskottchen
-- `supabase` — **Supabase**: hell mit Schwarz, fast monochrom; Smaragdgrün nur für Buttons; dichte Produkt-Mockups
+- `clickhouse` — **ClickHouse**: dunkel, fast schwarz; elektrisches Gelb für Buttons und Kennzahlen; Code in dunklen Karten Ansatz: Daten und Zahlen + Präzises Werkzeug · Aufbau: Fast schwarze Fläche in Bändern; Kennzahlen, Tabellen und Code-Fenster tragen den Inhalt, eine gelbe Fläche pro Screen setzt den Akzent
+- `composio` — **Composio**: dunkel, fast schwarz; tiefes Elektroblau mit Spotlight-Glow; Terminal-Raster als Hero Ansatz: Verlauf und Leuchten + Daten und Zahlen · Aufbau: Monolithisch dunkle Fläche, Tiefe nur über Helligkeitsstufen, ein blauer Spotlight-Schein hinter dem Einstieg
+- `hashicorp` — **HashiCorp**: dunkel, schwarz; eine Akzentfarbe je Produkt; Anthrazit-Karten mit Haarlinien Ansatz: Daten und Zahlen + Präzises Werkzeug · Aufbau: Schwarze Leinwand, jeder Bereich beginnt mit einer Versal-Augenbraue; Anthrazit-Karten und Tabellenzeilen auf 8-px-Basis
+- `mongodb` — **MongoDB**: dunkle Petrol-Heros, weiße Doku-Flächen; leuchtend grüne Pill-Buttons Ansatz: Große Bühne + Bild-Karten · Aufbau: Dunkles Petrol-Band oben als Bühne, darunter weiße Fläche mit 12-px-Karten; eine Karte überlappt die Bandkante
+- `posthog` — **PostHog**: hell, warme Creme; gelb-orange Buttons; handgezeichnete Igel, verspielt Ansatz: Präzises Werkzeug + Verspielt · Aufbau: Durchgehende warme Cremebahn #eeefe9; darauf flache weiße Karten mit 1-px-Olivrand und nur 6 px Radius
+- `sanity` — **Sanity**: dunkel, fast schwarz, streng strukturiert; Korallenrot für Buttons; Neon-Grün und Blau als Akzente Ansatz: Präzises Werkzeug + Plakativ · Aufbau: Fast schwarze Grundfläche, Inhalte als abgegrenzte Blöcke mit Haarlinien; große, extrem eng laufende Titel
+- `sentry` — **Sentry**: dunkel, violette Mitternacht; Limetten-Akzente; verspielte Display-Schrift, Sticker-Maskottchen Ansatz: Verspielt + Plakativ · Aufbau: Zwei getrennte Welten – violette Mitternacht für Einstieg und Detail, weiße Fläche für dichte Listen; dazwischen schwebende Sticker
+- `supabase` — **Supabase**: hell mit Schwarz, fast monochrom; Smaragdgrün nur für Buttons; dichte Produkt-Mockups Ansatz: Präzises Werkzeug + Stilles Minimal · Aufbau: Weiße Fläche, Inhalte in Haarlinien-Karten, Datentabellen und dunklen Code-Panes; dicht, linksbündig, ohne Deko
 
 ### Produktivität & SaaS
-- `cal` — **Cal.com**: hell, Weiß; schwarze Buttons; eigene geometrische Display-Schrift, dunkelblauer Footer
-- `intercom` — **Intercom**: hell, Creme-Weiß; Orange nur für die KI-Marke; schlicht, redaktionell, viele Screenshots
-- `linear.app` — **Linear**: dunkel, tiefstes Schwarz; ein Lavendelblau; dicht, technisch, Karten mit Haarlinien
-- `mintlify` — **Mintlify**: hell mit Himmelsverläufen, dunkle Bänder; Grün als Akzent; schwarze Pill-Buttons
-- `notion` — **Notion**: hell, dunkelblaues Hero-Band; lila Pill-Buttons; pastellige Feature-Karten, Illustrationen
-- `resend` — **Resend**: dunkel, fast schwarz; große Serifen-Headlines; zarte Glows, Haarlinien
-- `slack` — **Slack**: hell, Creme-Lavendel-Verläufe; Aubergine als Hauptfarbe; Pill-Buttons, blaue Links
-- `zapier` — **Zapier**: hell, warme Creme; kräftiges Orange; kaffeebraune Schrift, warm statt kühl
+- `cal` — **Cal.com**: hell, Weiß; schwarze Buttons; eigene geometrische Display-Schrift, dunkelblauer Footer Ansatz: Stilles Minimal + Bild-Karten · Aufbau: Weiße Fläche, weich gerundete Karten (12 px) mit echten Produkt-Bausteinen darin; eine einzige dunkle Fläche schließt ab
+- `intercom` — **Intercom**: hell, Creme-Weiß; Orange nur für die KI-Marke; schlicht, redaktionell, viele Screenshots Ansatz: Editorial + Stilles Minimal · Aufbau: Cremefarbene Grundfläche, darauf weiße Karten ohne Schatten; große ruhige Überschrift, Bild in gerahmter Kachel
+- `linear.app` — **Linear**: dunkel, tiefstes Schwarz; ein Lavendelblau; dicht, technisch, Karten mit Haarlinien Ansatz: Präzises Werkzeug + Stilles Minimal · Aufbau: Fast schwarze Fläche, Inhalte auf Haarlinien-Panels einer vierstufigen Flächenleiter; dicht, linksbündig
+- `mintlify` — **Mintlify**: hell mit Himmelsverläufen, dunkle Bänder; Grün als Akzent; schwarze Pill-Buttons Ansatz: Präzises Werkzeug + Stilles Minimal · Aufbau: Atmosphärischer Himmelsverlauf im Kopf, darunter weiße Dokumentationsfläche mit Haarlinien-Karten und Mono-Chips
+- `notion` — **Notion**: hell, dunkelblaues Hero-Band; lila Pill-Buttons; pastellige Feature-Karten, Illustrationen Ansatz: Verspielt + Präzises Werkzeug · Aufbau: Warm-weiße Seite, Inhalte als Block-Zeilen und 12px-Karten mit Haarlinie, dazwischen pastellige Farbkacheln
+- `resend` — **Resend**: dunkel, fast schwarz; große Serifen-Headlines; zarte Glows, Haarlinien Ansatz: Editorial + Stilles Minimal · Aufbau: Reines Schwarz als Papier, darauf linksbündige Textblöcke; ein atmosphärisches Glühen je Screen, viel Luft
+- `slack` — **Slack**: hell, Creme-Lavendel-Verläufe; Aubergine als Hauptfarbe; Pill-Buttons, blaue Links Ansatz: Bild-Karten + Daten und Zahlen · Aufbau: Helle Karten auf Creme-Lavendel-Verlaufsfeldern; Inhalt schwebt über dem Verlauf, Abschluss als Aubergine-Band
+- `zapier` — **Zapier**: hell, warme Creme; kräftiges Orange; kaffeebraune Schrift, warm statt kühl Ansatz: Präzises Werkzeug + Editorial · Aufbau: Warme Cremefläche, flache cremeweiche Blöcke mit 12 px, dazwischen ein tiefdunkler Kaffee-Block als Gegenpol
 
 ### Design- & Kreativ-Tools
-- `airtable` — **Airtable**: hell, Weiß; schwarze Pill-Buttons; Farbkarten in Koralle, Dunkelgrün, Pfirsich, Navy
-- `clay` — **Clay**: hell, Creme; dunkelblaue Buttons; Knet-3D-Illustrationen, bunte Feature-Karten
-- `figma` — **Figma**: hell, Schwarz-Weiß; große Pastell-Farbblöcke; Pill-Buttons, technisch und fröhlich
-- `framer` — **Framer**: dunkel, schwarz; Blau nur für Links; leuchtende Verlaufs-Panels, weiße Pill-Buttons
-- `miro` — **Miro**: hell, Weiß; Kanariengelb; Pastell-Tönungen, schwarze Pill-Buttons
-- `webflow` — **Webflow**: hell, Weiß mit Fast-Schwarz; fünf Akzentfarben je Produktbereich; enge Laufweite
+- `airtable` — **Airtable**: hell, Weiß; schwarze Pill-Buttons; Farbkarten in Koralle, Dunkelgrün, Pfirsich, Navy Ansatz: Editorial + Bild-Karten · Aufbau: Weiße Bahn mit viel Luft, unterbrochen von vollflächigen Signatur-Karten in Koralle, Waldgrün, Creme und Tintenschwarz
+- `clay` — **Clay**: hell, Creme; dunkelblaue Buttons; Knet-3D-Illustrationen, bunte Feature-Karten Ansatz: Verspielt + Editorial · Aufbau: Cremeboden #fffaf0 durchgehend; darauf satte einfarbige 24-px-Blöcke, die reihum die Farbe wechseln
+- `figma` — **Figma**: hell, Schwarz-Weiß; große Pastell-Farbblöcke; Pill-Buttons, technisch und fröhlich Ansatz: Editorial + Verspielt · Aufbau: Weißes Papier als Grundfläche, unterbrochen von übergroßen Pastell-Farbblöcken (Radius 24 px) mit je einem Thema
+- `framer` — **Framer**: dunkel, schwarz; Blau nur für Links; leuchtende Verlaufs-Panels, weiße Pill-Buttons Ansatz: Verlauf und Leuchten + Bild-Karten · Aufbau: Fast schwarze Arbeitsfläche, alles liegt in gerundeten Kacheln (15/20/30 px); ein Verlaufs-Spotlight bricht den Rhythmus
+- `miro` — **Miro**: hell, Weiß; Kanariengelb; Pastell-Tönungen, schwarze Pill-Buttons Ansatz: Verspielt + Bild-Karten · Aufbau: Weiße Fläche; Inhalte liegen auf einer gepunkteten Leinwand als Karten mit sehr großen Radien (20–28 px)
+- `webflow` — **Webflow**: hell, Weiß mit Fast-Schwarz; fünf Akzentfarben je Produktbereich; enge Laufweite Ansatz: Daten und Zahlen + Präzises Werkzeug · Aufbau: Weiße Fläche mit sichtbarem Haarlinien-Raster; Bänder, Karten und Tabellenzeilen stoßen kantig aneinander
 
 ### Fintech & Krypto
-- `binance` — **Binance**: dunkel, fast schwarz (Transaktionen hell); Binance-Gelb für alle Buttons
-- `coinbase` — **Coinbase**: hell, reines Weiß; Blau sparsam; leichte Display-Schrift, ruhig und seriös
-- `kraken` — **Kraken**: hell, Weiß; Lila als Hauptfarbe; fette Überschriften, seriös
-- `mastercard` — **Mastercard**: hell, Kitt-Creme; Signal-Orange; sehr große Radien, Pillen und Kreise
-- `revolut` — **Revolut**: Schwarz und Weiß; Kobalt-Violett plus kräftige Produktfarben; riesige Headlines, Produkt-Mockups
-- `stripe` — **Stripe**: hell, fast weiß, Navy-Schrift; Indigo; Verlaufs-Mesh oben, dünne Display-Schrift
-- `wise` — **Wise**: hell, blassgrüne Fläche; Limettengrün; extrem fette Display-Schrift
+- `binance` — **Binance**: dunkel, fast schwarz (Transaktionen hell); Binance-Gelb für alle Buttons Ansatz: Daten und Zahlen + Präzises Werkzeug · Aufbau: Fast schwarze Fläche #0b0e11, flache Blöcke #1e2329; Kennzahl oben, darunter dichte Tabellen-Listen
+- `coinbase` — **Coinbase**: hell, reines Weiß; Blau sparsam; leichte Display-Schrift, ruhig und seriös Ansatz: Daten und Zahlen + Stilles Minimal · Aufbau: Weiße Fläche mit Haarlinien-Listen, unterbrochen von einem tiefschwarzen Band mit schwebender Karte
+- `kraken` — **Kraken**: hell, Weiß; Lila als Hauptfarbe; fette Überschriften, seriös Ansatz: Daten und Zahlen + Präzises Werkzeug · Aufbau: Durchgehend Weiß; Inhalte liegen als einzeln abgesetzte Karten mit 12 px Radius und Flüster-Schatten darauf
+- `mastercard` — **Mastercard**: hell, Kitt-Creme; Signal-Orange; sehr große Radien, Pillen und Kreise Ansatz: Editorial + Stilles Minimal · Aufbau: Warme Kitt-Creme-Fläche, darauf Kreise und Stadion-Pillen, asymmetrisch gesetzt mit viel Leerraum
+- `revolut` — **Revolut**: Schwarz und Weiß; Kobalt-Violett plus kräftige Produktfarben; riesige Headlines, Produkt-Mockups Ansatz: Plakativ + Stilles Minimal · Aufbau: Vollflächige Bänder wechseln hart zwischen Schwarz #000000 und Weiß; darin riesige 500er-Headlines
+- `stripe` — **Stripe**: hell, fast weiß, Navy-Schrift; Indigo; Verlaufs-Mesh oben, dünne Display-Schrift Ansatz: Daten und Zahlen + Verlauf und Leuchten · Aufbau: Weiße Fläche, pastellener Mesh-Verlauf im oberen Drittel, darunter Haarlinien-Tabellen
+- `wise` — **Wise**: hell, blassgrüne Fläche; Limettengrün; extrem fette Display-Schrift Ansatz: Plakativ + Daten und Zahlen · Aufbau: Salbeigrüne Fläche, darauf weiße 24-px-Blöcke; linksbündige Schwergewicht-900-Titel über dichten Wertzeilen
 
 ### E-Commerce & Handel
-- `airbnb` — **Airbnb**: hell, Weiß; Pink-Rot für Buttons; fotolastig, großzügig, moderate Schriftgewichte
-- `meta` — **Meta**: hell, Weiß; Kobaltblau für Kaufaktionen; Produktfotos, Pill-Buttons, große Kartenradien
-- `nike` — **Nike**: hell, Schwarz-Weiß; schwarze Pill-Buttons; riesige Versal-Headlines über Kampagnenfotos
-- `shopify` — **Shopify**: dunkel im Marketing, Creme-Mint bei Preisen und Anmeldung; dünne, große Display-Schrift
-- `starbucks` — **Starbucks**: hell, warme Creme; vier Grüntöne; warm, wie im Laden
+- `airbnb` — **Airbnb**: hell, Weiß; Pink-Rot für Buttons; fotolastig, großzügig, moderate Schriftgewichte Ansatz: Bild-Karten · Aufbau: Weiße Fläche, Fotokarten mit 14 px Radius und Angaben darunter; offener Kopf, dichter Marktplatz darunter
+- `meta` — **Meta**: hell, Weiß; Kobaltblau für Kaufaktionen; Produktfotos, Pill-Buttons, große Kartenradien Ansatz: Bild-Karten + Große Bühne · Aufbau: Reines Weiß als Bühne; Inhalte als große Fotokarten mit 32 px Radius, dazwischen viel Luft
+- `nike` — **Nike**: hell, Schwarz-Weiß; schwarze Pill-Buttons; riesige Versal-Headlines über Kampagnenfotos Ansatz: Plakativ + Große Bühne · Aufbau: Katalog ohne Radien: randlose Kampagnenfläche mit Versal-Lockup, darunter Bildraster
+- `shopify` — **Shopify**: dunkel im Marketing, Creme-Mint bei Preisen und Anmeldung; dünne, große Display-Schrift Ansatz: Große Bühne + Bild-Karten · Aufbau: Zwei getrennte Spuren: kinoschwarze Bildseiten mit riesiger dünner Schrift, helle Creme-Seiten zum Handeln
+- `starbucks` — **Starbucks**: hell, warme Creme; vier Grüntöne; warm, wie im Laden Ansatz: Bild-Karten + Verspielt · Aufbau: Warme Cremefläche in Farbblock-Bändern: Creme → weiße 12-px-Karten → tiefgrünes Band → Creme, nie Linien
 
 ### Medien & Consumer-Tech
-- `apple` — **Apple**: helle und dunkle Flächen im Wechsel; ein Aktionsblau; Produktfotos, keine Deko
-- `hp` — **HP**: hell, Weiß; Elektroblau für Buttons; Chevron-Deko, dunkelblaue Abschlussbänder
-- `ibm` — **IBM**: hell, Weiß; IBM-Blau; eckig, leichte Display-Schrift, Carbon-Stil
-- `nvidia` — **NVIDIA**: Schwarz und Weiß im Wechsel; grelles Grün; kantig (2 px Radius)
-- `pinterest` — **Pinterest**: hell, warme Creme; Pinterest-Rot; Masonry-Raster, bildzentriert
-- `playstation` — **PlayStation**: Schwarz, Weiß und Blau im Kapitelwechsel; blaue Pill-Buttons; Konsolen-Renderings
-- `spacex` — **SpaceX**: dunkel, schwarz; Vollbild-Fotos; Versal-Display, Umriss-Pill-Buttons, sehr karg
-- `spotify` — **Spotify**: dunkel, Anthrazit; Spotify-Grün; die Inhalte (Cover) liefern die Farbe
-- `theverge` — **The Verge**: dunkel, fast schwarz; Säure-Mint und Ultraviolett; extrem fette Headlines, bunte Kacheln
-- `uber` — **Uber**: hell, Schwarz-Weiß; Pill-Form überall; geometrische Display-Schrift, Illustrationen
-- `vodafone` — **Vodafone**: hell mit Foto-Heros; Scharlachrot; riesige, fette Versal-Headlines
-- `wired` — **WIRED**: hell, Weiß; schwarze Typo, schmale Display-Serif; wie ein gedrucktes Magazin
+- `apple` — **Apple**: helle und dunkle Flächen im Wechsel; ein Aktionsblau; Produktfotos, keine Deko Ansatz: Große Bühne + Stilles Minimal · Aufbau: Randlose Vollbreit-Kacheln im Wechsel hell/dunkel, jede eine zentrierte Bühne für ein Bild
+- `hp` — **HP**: hell, Weiß; Elektroblau für Buttons; Chevron-Deko, dunkelblaue Abschlussbänder Ansatz: Bild-Karten + Daten und Zahlen · Aufbau: Weißes Katalog-Raster in Bändern: dunkles Ink-Band, weiße Leiste, weiße Bühne mit blauen Chevrons, Cloud-Band, Ink-Block
+- `ibm` — **IBM**: hell, Weiß; IBM-Blau; eckig, leichte Display-Schrift, Carbon-Stil Ansatz: Präzises Werkzeug + Daten und Zahlen · Aufbau: Carbon-Raster: weiße Fläche, graue Bänder #f4f4f4, alles rechteckig (0 px) und von 1-px-Linien geteilt
+- `nvidia` — **NVIDIA**: Schwarz und Weiß im Wechsel; grelles Grün; kantig (2 px Radius) Ansatz: Daten und Zahlen + Editorial · Aufbau: Schwarze Kopf- und Fußkapitel rahmen weiße Inhaltsflächen; darin Karten mit 1-px-Haarlinie im engen Raster
+- `pinterest` — **Pinterest**: hell, warme Creme; Pinterest-Rot; Masonry-Raster, bildzentriert Ansatz: Bild-Karten + Verspielt · Aufbau: Warm-cremefarbene Hülle um ein Masonry-Raster: Bilder in Spalten unterschiedlicher Höhe, 8 px Fuge
+- `playstation` — **PlayStation**: Schwarz, Weiß und Blau im Kapitelwechsel; blaue Pill-Buttons; Konsolen-Renderings Ansatz: Große Bühne + Plakativ · Aufbau: Kapitel in ganzflächigen Bändern – Schwarz, Weiß, Markenblau im Wechsel; Bildfläche trägt 60–90 % des Bandes
+- `spacex` — **SpaceX**: dunkel, schwarz; Vollbild-Fotos; Versal-Display, Umriss-Pill-Buttons, sehr karg Ansatz: Große Bühne + Plakativ · Aufbau: Vollbild-Foto auf reinem Schwarz, Text linksbündig am unteren Bildrand, darunter Haarlinien-Bänder
+- `spotify` — **Spotify**: dunkel, Anthrazit; Spotify-Grün; die Inhalte (Cover) liefern die Farbe Ansatz: Medien-Regale · Aufbau: Fast schwarze Fläche; Cover-Regale, Schnellzugriff-Kacheln und dichte Listen; Farbe kommt nur aus den Covern
+- `theverge` — **The Verge**: dunkel, fast schwarz; Säure-Mint und Ultraviolett; extrem fette Headlines, bunte Kacheln Ansatz: Plakativ + Editorial · Aufbau: Fast schwarze Fläche, riesige schmale Versal-Headline oben, darunter Zeitstrahl und gesättigte Farbblock-Kacheln
+- `uber` — **Uber**: hell, Schwarz-Weiß; Pill-Form überall; geometrische Display-Schrift, Illustrationen Ansatz: Plakativ + Stilles Minimal · Aufbau: Weiße Fläche, fette satzweise Titel, 16-px-Karten; schwarze Promo-Karten als Polaritätswechsel mitten im Fluss
+- `vodafone` — **Vodafone**: hell mit Foto-Heros; Scharlachrot; riesige, fette Versal-Headlines Ansatz: Plakativ + Große Bühne · Aufbau: Bänderfolge: dunkles Foto-Band mit riesiger Versal-Headline, danach weißes Inhaltsband, unten wieder dunkel
+- `wired` — **WIRED**: hell, Weiß; schwarze Typo, schmale Display-Serif; wie ein gedrucktes Magazin Ansatz: Editorial + Plakativ · Aufbau: Weiße Magazinseite: Kopfband, Titelgeschichte, dann gestapelte Zeilen mit 1-px-Haarlinien
 
 ### Automobil
-- `bmw` — **BMW**: hell, Cremeweiß; BMW-Blau für Buttons; dunkelblaue Hero-Bänder, Karten-Raster
-- `bmw-m` — **BMW M**: dunkel, fast schwarz; weiße Versal-Headlines; M-Farbstreifen sparsam
-- `bugatti` — **Bugatti**: dunkel, schwarz; kein Akzent; Versal-Display mit weiter Laufweite, nur Fotos
-- `ferrari` — **Ferrari**: dunkel, fast schwarz; Rennrot sehr sparsam; filmisch-redaktionell
-- `lamborghini` — **Lamborghini**: dunkel, reines Schwarz; Gold-Akzent; eigene Neo-Grotesk
-- `renault` — **Renault**: hell, Schwarz-Weiß; Sonnengelb-Akzent; eckige Container, Konfigurator
-- `tesla` — **Tesla**: hell, Weiß; ein Blau für Buttons; Vollbild-Fotos, radikal reduziert
+- `bmw` — **BMW**: hell, Cremeweiß; BMW-Blau für Buttons; dunkelblaue Hero-Bänder, Karten-Raster Ansatz: Bild-Karten + Daten und Zahlen · Aufbau: Helle Bahnen mit 80px Rhythmus, Foto-Karten im 2er-Raster, dazwischen genau eine dunkle Navy-Bahn
+- `bmw-m` — **BMW M**: dunkel, fast schwarz; weiße Versal-Headlines; M-Farbstreifen sparsam Ansatz: Große Bühne + Plakativ · Aufbau: Schwarze Fläche, randlose Fotobahnen über die volle Breite, Versal-Display darüber, dazwischen Spec-Zellen
+- `bugatti` — **Bugatti**: dunkel, schwarz; kein Akzent; Versal-Display mit weiter Laufweite, nur Fotos Ansatz: Große Bühne + Editorial · Aufbau: Schwarze Fläche, randlose Kinoformat-Fotos, darunter viel Leere und ein gesperrter Versaltitel
+- `ferrari` — **Ferrari**: dunkel, fast schwarz; Rennrot sehr sparsam; filmisch-redaktionell Ansatz: Große Bühne + Editorial · Aufbau: Kinoformat-Bild füllt das obere Drittel randlos, darunter ruhige Redaktionsbahnen auf Fast-Schwarz #181818, Listen als weiße Bahn
+- `lamborghini` — **Lamborghini**: dunkel, reines Schwarz; Gold-Akzent; eigene Neo-Grotesk Ansatz: Plakativ + Große Bühne · Aufbau: Reines Schwarz als Leere, einzelne große Blöcke darin; Versal-Display in schmaler Schrift, alles kantig und 0px
+- `renault` — **Renault**: hell, Schwarz-Weiß; Sonnengelb-Akzent; eckige Container, Konfigurator Ansatz: Plakativ + Große Bühne · Aufbau: Vollbreite Bänder im Wechsel Weiß → Schwarz → Sonnengelb; eckige Kacheln, Foto oben, Text darunter
+- `tesla` — **Tesla**: hell, Weiß; ein Blau für Buttons; Vollbild-Fotos, radikal reduziert Ansatz: Große Bühne + Stilles Minimal · Aufbau: Eine vollflächige Foto-Bühne pro Screen, darunter Weiß; mittig gestapelt: Titel → Zeile → zwei Buttons
 
 ### Retro-Web (1996–2001)
-- `dell-1996` — **Dell (1996)**: Retro 1996; schwarzer Seitenrahmen; flache Farbblock-Karten, GIF-Sticker
-- `nintendo-2001` — **Nintendo.com (2001)**: Retro 2001; Periwinkle-Metall-Look; bernsteinfarbene Navigation, Platinen-Optik
+- `dell-1996` — **Dell (1996)**: Retro 1996; schwarzer Seitenrahmen; flache Farbblock-Karten, GIF-Sticker Ansatz: Retro + Daten und Zahlen · Aufbau: Weiße Katalogseite in einem buchstäblichen schwarzen Rahmen (8 px), darin Tabellenblöcke und farbige Band-Karten
+- `nintendo-2001` — **Nintendo.com (2001)**: Retro 2001; Periwinkle-Metall-Look; bernsteinfarbene Navigation, Platinen-Optik Ansatz: Retro + Medien-Regale · Aufbau: Oberfläche wie ein Gerätegehäuse: Periwinkle-Metallplatten mit Fasen, dicht aneinandergesetzt, dazwischen dunkle Carbon-Leisten
 

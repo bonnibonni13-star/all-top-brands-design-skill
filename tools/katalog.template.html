@@ -3,54 +3,62 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Schibsted+Grotesk:wght@400..700&family=JetBrains+Mono:wght@400..800&family=Inter:wght@100..900&family=Fraunces:opsz,wght@9..144,100..900&display=swap">
 <style>
-/* Layout: sticky filter bar above a grid of specimen cards. The cards carry the brand colors;
-   the page itself stays a quiet, cool frame so 74 palettes can sit side by side. */
+/* Ruhige Galerie: eine Filterleiste über einem Raster aus Musterscreen-Karten.
+   Die Seite bleibt neutral und kühl, damit 74 Designsprachen nebeneinander wirken können. */
 :root {
   --bg: #eceff3;
   --surface: #ffffff;
+  --sunken: #e4e8ee;
   --fg: #141922;
   --muted: #586273;
-  --line: #d3d9e2;
+  --line: #d6dbe4;
+  --line-soft: #e5e9ef;
   --accent: #2f45c8;
+  --accent-soft: #e7eaff;
   --on-accent: #ffffff;
   --star: #b97c00;
+  --shot-bg: #e7e7eb;
   --font-display: "Bricolage Grotesque", "Schibsted Grotesk", system-ui, sans-serif;
   --font-ui: "Schibsted Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
-  --radius: 14px;
+  --radius: 16px;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #0e1117; --surface: #161a22; --fg: #e7ebf1; --muted: #9aa3b3; --line: #29303c;
-    --accent: #8593ff; --on-accent: #0e1117; --star: #f2b23a; color-scheme: dark;
+    --bg: #0e1117; --surface: #161a22; --sunken: #11151c; --fg: #e7ebf1; --muted: #9aa3b3;
+    --line: #29303c; --line-soft: #222834; --accent: #8593ff; --accent-soft: #232a46;
+    --on-accent: #0e1117; --star: #f2b23a; --shot-bg: #1b1f27; color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --bg: #0e1117; --surface: #161a22; --fg: #e7ebf1; --muted: #9aa3b3; --line: #29303c;
-  --accent: #8593ff; --on-accent: #0e1117; --star: #f2b23a; color-scheme: dark;
+  --bg: #0e1117; --surface: #161a22; --sunken: #11151c; --fg: #e7ebf1; --muted: #9aa3b3;
+  --line: #29303c; --line-soft: #222834; --accent: #8593ff; --accent-soft: #232a46;
+  --on-accent: #0e1117; --star: #f2b23a; --shot-bg: #1b1f27; color-scheme: dark;
 }
 * { box-sizing: border-box; }
 body { background: var(--bg); color: var(--fg); font: 15px/1.5 var(--font-ui); }
-.wrap { max-width: 1240px; margin: 0 auto; padding-inline: 16px; padding-block: 28px 48px; }
+.wrap { max-width: 1280px; margin: 0 auto; padding-inline: 16px; padding-block: 28px 48px; }
 @media (min-width: 720px) { .wrap { padding-inline: 28px; } }
+.vh { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 
-.intro { display: grid; gap: 10px; max-width: 68ch; padding-block: 8px 20px; }
+.intro { display: grid; gap: 10px; max-width: 72ch; padding-block: 8px 20px; }
 .eyebrow { margin: 0; font: 600 12px/1 var(--font-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
 h1 { margin: 0; font: 800 clamp(34px, 7vw, 58px)/1 var(--font-display); letter-spacing: -0.03em; text-wrap: balance; }
 .lede { margin: 0; color: var(--muted); font-size: 16px; }
+.lede b { color: var(--fg); font-weight: 600; }
 .steps { display: flex; flex-wrap: wrap; gap: 6px 18px; margin: 4px 0 0; padding: 0; list-style: none; font-size: 14px; }
 .steps li { display: flex; gap: 8px; align-items: baseline; }
 .steps b { font: 700 12px/1 var(--font-mono); color: var(--accent); }
 
 .bar {
   position: relative; top: env(safe-area-inset-top, 0px); z-index: 5;
-  display: grid; gap: 10px; padding: 12px; margin-bottom: 18px;
+  display: grid; gap: 10px; padding: 12px; margin-bottom: 20px;
   background: color-mix(in srgb, var(--bg) 88%, transparent);
   backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
   border: 1px solid var(--line); border-radius: var(--radius);
 }
 .bar { grid-template-columns: minmax(0, 1fr); }
-@media (min-width: 720px) { .bar { position: sticky; } }
+@media (min-width: 900px) { .bar { position: sticky; } }
 .bar-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; min-width: 0; }
 #q {
   flex: 1 1 260px; min-width: 0; height: 42px; padding: 0 14px; font: inherit; color: var(--fg);
@@ -68,39 +76,77 @@ h1 { margin: 0; font: 800 clamp(34px, 7vw, 58px)/1 var(--font-display); letter-s
 }
 .chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
 .chip.fav-chip[aria-pressed="true"] { background: var(--star); border-color: var(--star); color: #1b1300; }
+.chips-ans .chip { height: 31px; padding: 0 12px; font-size: 12.5px; font-weight: 600; }
+.chips-ans .chip b { font: inherit; font-variant-numeric: tabular-nums; opacity: .55; margin-left: 6px; }
+.chips-ans .chip[aria-pressed="true"] b { opacity: .8; }
+@media (min-width: 900px) { .chips-ans { flex-wrap: wrap; overflow: visible; row-gap: 6px; } }
+.bar-label { flex: 0 0 auto; font: 600 11px/1 var(--font-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); padding-right: 2px; }
 .count { margin-left: auto; font: 500 13px/1 var(--font-mono); color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
 
-.grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 290px), 1fr)); }
+.grid { display: grid; gap: 18px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 318px), 1fr)); }
 .card {
   display: flex; flex-direction: column; min-width: 0; overflow: hidden;
   background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
-  scroll-margin-top: 150px;
+  scroll-margin-top: 170px;
 }
 .card.flash { outline: 3px solid var(--accent); outline-offset: 2px; }
 
-.preview { display: flex; flex-direction: column; height: 168px; border-bottom: 1px solid var(--line); }
-.band { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 8px; padding: 14px 18px; background: var(--pv-bg); color: var(--pv-ink); }
+/* Musterscreen-Vorschau */
+.shot {
+  display: block; position: relative; width: 100%; aspect-ratio: 1346 / 862; padding: 0; margin: 0;
+  border: 0; border-bottom: 1px solid var(--line-soft); background: var(--shot-bg); cursor: zoom-in; overflow: hidden;
+}
+.shot img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center top; }
+.shot-hint {
+  position: absolute; inset: auto 10px 10px auto; padding: 5px 10px; border-radius: 999px;
+  font: 600 11.5px/1 var(--font-ui); background: color-mix(in srgb, #0d1017 76%, transparent); color: #fff;
+  opacity: 0; transform: translateY(4px); pointer-events: none;
+}
+.shot:hover .shot-hint, .shot:focus-visible .shot-hint { opacity: 1; transform: none; }
+
+/* Ersatz ohne Musterscreens: die Farb-/Schriftprobe wie bisher */
+.preview { position: relative; display: flex; flex-direction: column; aspect-ratio: 1346 / 862; border-bottom: 1px solid var(--line-soft); }
+.pv-tag {
+  position: absolute; inset: 10px 10px auto auto; z-index: 1; padding: 4px 9px; border-radius: 999px;
+  font: 600 11px/1 var(--font-mono); letter-spacing: .04em; text-transform: uppercase;
+  background: color-mix(in srgb, var(--surface) 86%, transparent); color: var(--muted); border: 1px solid var(--line);
+}
+.band { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 8px; padding: 14px 18px; background: var(--pv-bg); color: var(--pv-ink); overflow: hidden; }
+.pv-bands { display: contents; }
 .pv-h { margin: 0; font-size: 30px; line-height: 1.05; }
 .pv-t { margin: 0; font: 400 13px/1.35 Inter, system-ui, sans-serif; opacity: .78; }
 .pv-btn { align-self: flex-start; padding: 8px 16px; font: 600 13px/1.1 Inter, system-ui, sans-serif; border: 1px solid transparent; }
 
-.info { display: flex; flex-direction: column; gap: 10px; padding: 14px 16px 16px; flex: 1; }
+.info { display: flex; flex-direction: column; gap: 9px; padding: 14px 16px 16px; flex: 1; }
 .head { display: flex; align-items: center; gap: 10px; }
-.card h2 { margin: 0; font: 700 21px/1.1 var(--font-display); letter-spacing: -0.01em; min-width: 0; overflow-wrap: anywhere; }
+.card h2 { margin: 0; font: 700 20px/1.15 var(--font-display); letter-spacing: -0.01em; min-width: 0; overflow-wrap: anywhere; }
 .tone { margin-left: auto; flex: 0 0 auto; padding: 4px 9px; border-radius: 999px; font: 600 11px/1 var(--font-mono); letter-spacing: .04em; text-transform: uppercase; border: 1px solid var(--line); color: var(--muted); }
-.cat { margin: -6px 0 0; font-size: 13px; color: var(--muted); }
+.ans-row { display: flex; flex-wrap: wrap; gap: 6px; margin: -2px 0 0; }
+.ans {
+  padding: 4px 10px; border-radius: 999px; font: 600 12px/1.25 var(--font-ui);
+  background: var(--accent-soft); color: color-mix(in srgb, var(--accent) 82%, var(--fg));
+}
+.ans.alt { background: transparent; border: 1px solid var(--line); color: var(--muted); }
+.cat { margin: 0; font-size: 12.5px; color: var(--muted); }
 .blurb { margin: 0; font-size: 14px; }
-.swatches { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
-.swatches li { display: grid; gap: 4px; justify-items: center; }
-.swatches i { display: block; width: 34px; height: 34px; border-radius: 8px; background: var(--c); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--fg) 16%, transparent); }
-.swatches small { font: 500 9.5px/1 var(--font-mono); color: var(--muted); letter-spacing: -.02em; }
-.meta { margin: 0; font: 500 12px/1.4 var(--font-mono); color: var(--muted); overflow-wrap: anywhere; }
-.actions { display: flex; gap: 8px; align-items: center; margin-top: auto; padding-top: 4px; }
+.aufbau { margin: 0; font-size: 13.5px; color: var(--muted); border-left: 2px solid var(--line); padding-left: 10px; }
+.tokens { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; margin: 2px 0 0; }
+.swatches { display: flex; gap: 5px; margin: 0; padding: 0; list-style: none; }
+.swatches i { display: block; width: 19px; height: 19px; border-radius: 6px; background: var(--c); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--fg) 18%, transparent); }
+.tokens .sep { width: 1px; height: 18px; background: var(--line); flex: none; }
+.shape { display: block; width: 44px; height: 21px; border: 1px solid transparent; }
+.meta { margin: 0; font: 500 11.5px/1.3 var(--font-mono); color: var(--muted); overflow-wrap: anywhere; }
+.actions { display: flex; gap: 8px; align-items: center; margin-top: auto; padding-top: 6px; }
 .pick {
   height: 38px; padding: 0 16px; border-radius: 10px; border: 0; cursor: pointer;
   font: 700 14px/1 var(--font-ui); background: var(--accent); color: var(--on-accent);
 }
-.peek { padding: 0 6px; height: 38px; display: inline-flex; align-items: center; color: var(--fg); font-weight: 600; font-size: 14px; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+.peek {
+  padding: 0 6px; height: 38px; display: inline-flex; align-items: center; cursor: pointer;
+  background: none; border: 0; color: var(--fg); font: 600 14px/1 var(--font-ui);
+  text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px;
+}
+.peek:hover { color: var(--accent); }
 .fav {
   margin-left: auto; width: 38px; height: 38px; border-radius: 10px; cursor: pointer; font-size: 18px; line-height: 1;
   color: var(--muted); background: transparent; border: 1px solid var(--line);
@@ -112,6 +158,46 @@ h1 { margin: 0; font: 800 clamp(34px, 7vw, 58px)/1 var(--font-display); letter-s
 footer { margin-top: 36px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); max-width: 80ch; }
 footer a { color: inherit; }
 
+/* Detailansicht */
+#dlg {
+  width: min(1180px, calc(100vw - 24px)); max-width: none; max-height: calc(100dvh - 24px);
+  padding: 0; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden;
+  background: var(--surface); color: var(--fg);
+}
+#dlg::backdrop { background: rgba(8, 11, 17, .62); backdrop-filter: blur(3px); }
+.dlg-in { display: flex; flex-direction: column; max-height: calc(100dvh - 24px); overflow: auto; overscroll-behavior: contain; }
+.dlg-head {
+  position: sticky; top: 0; z-index: 2; display: flex; align-items: flex-start; gap: 12px;
+  padding: 14px 14px 12px 18px; background: var(--surface); border-bottom: 1px solid var(--line-soft);
+}
+.dlg-head h2 { margin: 0; font: 700 23px/1.15 var(--font-display); letter-spacing: -0.015em; }
+.dlg-sub { margin: 4px 0 0; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.dlg-nav { margin-left: auto; display: flex; gap: 6px; flex: 0 0 auto; }
+.iconbtn {
+  width: 38px; height: 38px; border-radius: 10px; cursor: pointer; font-size: 15px; line-height: 1;
+  background: var(--surface); color: var(--fg); border: 1px solid var(--line);
+}
+.iconbtn:hover { background: var(--sunken); }
+.iconbtn[disabled] { opacity: .35; cursor: default; }
+/* Feste Bühne: nicht vom Flex-Layout stauchen lassen, sonst wird der Rahmen unten angeschnitten. */
+#dStage { position: relative; flex: none; width: 100%; aspect-ratio: 1346 / 988; max-height: min(58vh, 870px); background: var(--shot-bg); overflow: hidden; }
+#dImg { display: block; width: 100%; height: 100%; object-fit: contain; }
+#dFrame { position: absolute; left: 0; top: 0; width: 1346px; height: 988px; border: 0; transform-origin: top left; transform: scale(var(--s, 1)); background: var(--shot-bg); }
+.dlg-body { display: grid; gap: 14px; padding: 16px 18px 20px; }
+.dlg-acts { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.ghostbtn {
+  height: 38px; padding: 0 14px; border-radius: 10px; cursor: pointer; font: 600 14px/1 var(--font-ui);
+  background: var(--surface); color: var(--fg); border: 1px solid var(--line);
+}
+.ghostbtn[aria-pressed="true"] { background: var(--accent-soft); border-color: color-mix(in srgb, var(--accent) 45%, var(--line)); }
+.dlg-acts a { padding: 0 6px; height: 38px; display: inline-flex; align-items: center; color: var(--fg); font-weight: 600; font-size: 14px; text-underline-offset: 3px; }
+.facts { display: grid; grid-template-columns: 1fr; gap: 8px 18px; margin: 0; }
+@media (min-width: 760px) { .facts { grid-template-columns: 1fr 1fr; } }
+.facts > div { display: grid; grid-template-columns: 102px minmax(0, 1fr); gap: 10px; align-items: baseline; padding-top: 8px; border-top: 1px solid var(--line-soft); }
+.facts dt { font: 600 11px/1.4 var(--font-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin: 0; }
+.facts dd { margin: 0; font-size: 13.5px; }
+.note { margin: 0; font-size: 12.5px; color: var(--muted); }
+
 #toast {
   position: fixed; left: 50%; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%);
   width: min(92vw, 520px); padding: 12px 16px; border-radius: 12px; z-index: 10;
@@ -122,8 +208,11 @@ footer a { color: inherit; }
 
 :focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
 @media (prefers-reduced-motion: no-preference) {
-  .card { transition: transform .15s ease, box-shadow .15s ease; }
-  .card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(10, 20, 40, .10); }
+  .card { transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease; }
+  .card:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(10, 20, 40, .10); border-color: color-mix(in srgb, var(--accent) 28%, var(--line)); }
+  .shot img { transition: transform .35s cubic-bezier(.2,.7,.3,1); }
+  .card:hover .shot img { transform: scale(1.015); }
+  .shot-hint { transition: opacity .18s ease, transform .18s ease; }
 }
 </style>
 
@@ -131,9 +220,10 @@ footer a { color: inherit; }
   <header class="intro">
     <p class="eyebrow">Skill · /__CMD__</p>
     <h1>All Top Brands Design</h1>
-    <p class="lede">Such dir einen Look für deine App aus. Jede Karte zeigt Grundton, Farben, Schrift und Button-Form eines Marken-Designs.</p>
+    <p class="lede"><b>Musterscreens: dieselbe Beispiel-App in jeder Designsprache</b> – eigene Darstellungen, keine
+      Originalscreens. Jede Karte zeigt den Ansatz, den Aufbau, Farben, Schrift und Button-Form eines Marken-Designs.</p>
     <ol class="steps">
-      <li><b>1</b> Design aussuchen</li>
+      <li><b>1</b> Karte antippen und Screens ansehen</li>
       <li><b>2</b> „Auswählen“ tippen</li>
       <li><b>3</b> Befehl bei Claude einfügen</li>
     </ol>
@@ -141,9 +231,9 @@ footer a { color: inherit; }
 
   <div class="bar" role="search">
     <div class="bar-row">
-      <label class="visually-hidden" for="q" hidden>Suchen</label>
-      <input id="q" type="search" autocomplete="off" placeholder="Suchen: Marke, „dunkel“, „Creme“, „Grün“ …">
-      <label for="cat" hidden>Kategorie</label>
+      <label class="vh" for="q">Suchen</label>
+      <input id="q" type="search" autocomplete="off" placeholder="Suchen: Marke, „dunkel“, „Regale“, „Leiste unten“ …">
+      <label class="vh" for="cat">Kategorie</label>
       <select id="cat"><option value="">Alle Kategorien</option></select>
     </div>
     <div class="bar-row">
@@ -157,6 +247,10 @@ footer a { color: inherit; }
       </div>
       <span class="count" id="count" aria-live="polite"></span>
     </div>
+    <div class="bar-row" id="ansRow" hidden>
+      <span class="bar-label" id="ansLabel">Ansatz</span>
+      <div class="chips chips-ans" role="group" aria-labelledby="ansLabel" id="ansChips"></div>
+    </div>
   </div>
 
   <main id="grid" class="grid"></main>
@@ -165,10 +259,41 @@ footer a { color: inherit; }
   <footer>
     Grundlage: <a href="https://github.com/VoltAgent/awesome-design-md" target="_blank" rel="noopener">awesome-design-md</a> (MIT-Lizenz).
     Inoffizielle Nachbildungen aus öffentlich sichtbarem CSS, keine offiziellen Designsysteme; Marken- und Schriftrechte liegen bei den Inhabern.
-    Die Vorschauen nutzen Ersatzschriften (Inter, Fraunces, JetBrains Mono) mit Gewicht und Laufweite des Originals.
+    Die Musterscreens sind eigene Darstellungen einer Beispiel-App mit Beispielinhalten – keine Originalscreens der Marken.
+    Farb- und Schriftproben nutzen Ersatzschriften (Inter, Fraunces, JetBrains Mono) mit Gewicht und Laufweite des Originals.
     „Original“ öffnet die Vorschau auf getdesign.md.
   </footer>
 </div>
+
+<dialog id="dlg" aria-labelledby="dName">
+  <div class="dlg-in">
+    <div class="dlg-head">
+      <div>
+        <h2 id="dName"></h2>
+        <p class="dlg-sub" id="dSub"></p>
+      </div>
+      <div class="dlg-nav">
+        <button class="iconbtn" id="dPrev" aria-label="Vorheriges Design" title="Vorheriges Design (←)">←</button>
+        <button class="iconbtn" id="dNext" aria-label="Nächstes Design" title="Nächstes Design (→)">→</button>
+        <button class="iconbtn" id="dClose" aria-label="Schließen" title="Schließen (Esc)">✕</button>
+      </div>
+    </div>
+    <div id="dStage">
+      <img id="dImg" alt="">
+      <iframe id="dFrame" hidden sandbox referrerpolicy="no-referrer" scrolling="no" title="Musterscreens mit Animationen"></iframe>
+    </div>
+    <div class="dlg-body">
+      <div class="dlg-acts">
+        <button class="ghostbtn" id="dLive" aria-pressed="false">Live mit Animationen</button>
+        <button class="pick" id="dPick">Auswählen</button>
+        <a id="dProfil" href="#">Profil lesen ↗</a>
+        <a id="dOrig" href="#" target="_blank" rel="noopener">Original ↗</a>
+      </div>
+      <dl class="facts" id="dFacts"></dl>
+      <p class="note" id="dNote">Eigene Musterscreens mit Beispielinhalten – keine Originalscreens der Marke.</p>
+    </div>
+  </div>
+</dialog>
 <div id="toast" role="status" hidden></div>
 
 <script>
@@ -176,6 +301,14 @@ const CMD = "__CMD__";
 const DATA = /*DATA*/[];
 const TONE = { hell: "Hell", dunkel: "Dunkel", gemischt: "Hell & dunkel", retro: "Retro" };
 const FONT = { sans: "Inter, system-ui, sans-serif", serif: "Fraunces, Georgia, serif", mono: "'JetBrains Mono', ui-monospace, monospace" };
+const ANSATZ = {
+  buehne: "Große Bühne", regale: "Medien-Regale", galerie: "Bild-Karten", werkzeug: "Präzises Werkzeug",
+  editorial: "Editorial", daten: "Daten und Zahlen", verspielt: "Verspielt", plakativ: "Plakativ",
+  minimal: "Stilles Minimal", leuchten: "Verlauf und Leuchten", retro: "Retro",
+};
+const FACTS = [["aufbau", "Aufbau"], ["navigation", "Navigation"], ["komponenten", "Komponenten"],
+               ["icons", "Icons"], ["bewegung", "Bewegung"], ["schrift", "Schrift"]];
+const SHOT_W = 1346, SHOT_H = 988;
 
 function lum(hex) {
   const v = [1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16) / 255)
@@ -185,6 +318,7 @@ function lum(hex) {
 function contrast(a, b) { const x = lum(a), y = lum(b); return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05); }
 function esc(s) { return String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])); }
 function radiusLabel(r) { return r >= 999 ? "Pill" : r === 0 ? "eckig" : Math.round(r) + " px"; }
+function ansName(k) { return ANSATZ[k] || k; }
 
 function button(d, bandBg, bandInk) {
   const r = Math.min(d.radius, 999);
@@ -212,19 +346,59 @@ function preview(d) {
   return `<div class="band" style="--pv-bg:${bg};--pv-ink:${ink}">${h}${t}${button(d, bg, ink)}</div>`;
 }
 
+/* Kleine Button-Probe: Form und Füllung der Marke in einem Streifen. */
+function shape(d) {
+  const r = Math.min(d.radius, 999);
+  const base = d.mode === "dunkel" ? (d.dark || "#000000") : (d.light || "#ffffff");
+  const ink = d.mode === "dunkel" ? (d.inkDark || "#ffffff") : (d.inkLight || "#111111");
+  let st = `border-radius:${r}px;`;
+  st += (d.ghost || !d.primary)
+    ? `background:${base};border-color:${ink};`
+    : `background:${d.primary};border-color:${contrast(d.primary, base) < 1.4 ? d.onPrimary : d.primary};`;
+  return `<span class="shape" style="${st}" title="Button-Form: Ecken ${radiusLabel(d.radius)}"></span>`;
+}
+
+function thumbOf(d) { return `screens/klein/${encodeURIComponent(d.slug)}.webp`; }
+function shotOf(d) { return `screens/${encodeURIComponent(d.slug)}.png`; }
+function liveOf(d) { return `screens/${encodeURIComponent(d.slug)}.html`; }
+function profilOf(d) { return `designsprache/${encodeURIComponent(d.slug)}.md`; }
+function altOf(d) { return `Drei Musterscreens der Beispiel-App (Start, Bibliothek, Detail) in der Designsprache von ${d.name}`; }
+function openable(d) { return !!(d.shot || d.profil); }
+
+function ansRow(d) {
+  if (!d.ansatz) return "";
+  const a = `<span class="ans">${esc(ansName(d.ansatz))}</span>`;
+  const b = d.ansatz2 ? `<span class="ans alt">+ ${esc(ansName(d.ansatz2))}</span>` : "";
+  return `<p class="ans-row">${a}${b}</p>`;
+}
+
 function card(d) {
-  const sw = d.swatches.map(c => `<li><i style="--c:${c}" title="${c}"></i><small>${c}</small></li>`).join("");
+  const sw = d.swatches.map(c => `<li><i style="--c:${c}"></i></li>`).join("");
+  const top = d.thumb
+    ? `<button class="shot" type="button" data-open="${esc(d.slug)}" aria-label="${esc(altOf(d))} – groß ansehen">
+         <img src="${thumbOf(d)}" alt="${esc(altOf(d))}" loading="lazy" decoding="async" width="680" height="435">
+         <span class="shot-hint" aria-hidden="true">Groß ansehen</span>
+       </button>`
+    : `<div class="preview"><span class="pv-tag">Farbprobe</span><div class="pv-bands" aria-hidden="true">${preview(d)}</div>
+         <span class="vh">Für ${esc(d.name)} gibt es noch keine Musterscreens – gezeigt wird eine Farb- und Schriftprobe.</span></div>`;
   return `<article class="card" id="${esc(d.slug)}" data-slug="${esc(d.slug)}">
-    <div class="preview" aria-hidden="true">${preview(d)}</div>
+    ${top}
     <div class="info">
       <div class="head"><h2>${esc(d.name)}</h2><span class="tone">${TONE[d.mode]}</span></div>
+      ${ansRow(d)}
       <p class="cat">${esc(d.cat)}</p>
       <p class="blurb">${esc(d.blurb)}</p>
-      <ul class="swatches" aria-label="Farben">${sw}</ul>
-      <p class="meta">Schrift: ${esc(d.font || "–")} · Ecken: ${radiusLabel(d.radius)}</p>
+      ${d.aufbau ? `<p class="aufbau">${esc(d.aufbau)}</p>` : ""}
+      <div class="tokens">
+        <ul class="swatches" role="img" aria-label="Farben: ${esc(d.swatches.join(", "))}">${sw}</ul>
+        <span class="sep" aria-hidden="true"></span>
+        ${shape(d)}
+        <p class="meta">${esc(d.font || "–")} · ${radiusLabel(d.radius)}</p>
+      </div>
       <div class="actions">
         <button class="pick" data-slug="${esc(d.slug)}" data-name="${esc(d.name)}">Auswählen</button>
-        <a class="peek" href="https://getdesign.md/${encodeURIComponent(d.slug)}/design-md" target="_blank" rel="noopener">Original ↗</a>
+        ${openable(d) ? `<button class="peek" type="button" data-open="${esc(d.slug)}">Details</button>`
+                      : `<a class="peek" href="https://getdesign.md/${encodeURIComponent(d.slug)}/design-md" target="_blank" rel="noopener">Original ↗</a>`}
         <button class="fav" data-slug="${esc(d.slug)}" aria-pressed="false" aria-label="${esc(d.name)} merken" title="Merken">★</button>
       </div>
     </div>
@@ -240,24 +414,40 @@ const cats = [...new Set(DATA.map(d => d.cat))];
 const sel = document.getElementById("cat");
 sel.insertAdjacentHTML("beforeend", cats.map(c => `<option>${esc(c)}</option>`).join(""));
 
+/* Ansatz-Chips mit Anzahl (zählt Haupt- und Zweitansatz, wie der Filter) */
+const ansCount = {};
+for (const d of DATA) for (const k of [d.ansatz, d.ansatz2]) if (k) ansCount[k] = (ansCount[k] || 0) + 1;
+const ansKeys = [...Object.keys(ANSATZ), ...Object.keys(ansCount)].filter((k, i, a) => ansCount[k] && a.indexOf(k) === i);
+if (ansKeys.length) {
+  document.getElementById("ansRow").hidden = false;
+  document.getElementById("ansChips").innerHTML =
+    `<button class="chip" data-ans="" aria-pressed="true">Alle Ansätze</button>` +
+    ansKeys.map(k => `<button class="chip" data-ans="${esc(k)}" aria-pressed="false">${esc(ansName(k))}<b>${ansCount[k]}</b></button>`).join("");
+}
+
 let favs = new Set();
 try { favs = new Set(JSON.parse(localStorage.getItem("md74:favs") || "[]")); } catch (e) {}
 function saveFavs() { try { localStorage.setItem("md74:favs", JSON.stringify([...favs])); } catch (e) {} }
 
-const state = { q: "", mode: "", cat: "", favOnly: false };
-const haystack = Object.fromEntries(DATA.map(d => [d.slug,
-  [d.name, d.slug, d.cat, d.blurb, d.font, TONE[d.mode]].join(" ").toLowerCase()]));
+const state = { q: "", mode: "", cat: "", ans: "", favOnly: false };
+const haystack = Object.fromEntries(DATA.map(d => [d.slug, [
+  d.name, d.slug, d.cat, d.blurb, d.font, TONE[d.mode], d.aufbau, d.navigation, d.komponenten,
+  d.icons, d.bewegung, d.schrift, ansName(d.ansatz || ""), ansName(d.ansatz2 || ""),
+].filter(Boolean).join(" ").toLowerCase()]));
 
+let visible = [];
 function apply() {
   const words = state.q.toLowerCase().split(/\s+/).filter(Boolean);
-  let n = 0;
+  visible = [];
   for (const el of cards) {
     const d = byslug[el.dataset.slug];
     const ok = (!state.mode || d.mode === state.mode) && (!state.cat || d.cat === state.cat)
+      && (!state.ans || d.ansatz === state.ans || d.ansatz2 === state.ans)
       && (!state.favOnly || favs.has(d.slug)) && words.every(w => haystack[d.slug].includes(w));
     el.hidden = !ok;
-    if (ok) n++;
+    if (ok) visible.push(d.slug);
   }
+  const n = visible.length;
   document.getElementById("count").textContent = n === DATA.length ? `${n} Designs` : `${n} von ${DATA.length}`;
   document.getElementById("empty").hidden = n > 0;
 }
@@ -267,21 +457,26 @@ function syncFavButtons() {
 
 document.getElementById("q").addEventListener("input", e => { state.q = e.target.value; apply(); });
 sel.addEventListener("change", e => { state.cat = e.target.value; apply(); });
-for (const chip of document.querySelectorAll(".chip[data-mode]")) {
-  chip.addEventListener("click", () => {
-    state.mode = chip.dataset.mode;
-    for (const c of document.querySelectorAll(".chip[data-mode]")) c.setAttribute("aria-pressed", c === chip);
-    apply();
-  });
+function chipGroup(attr, key) {
+  for (const chip of document.querySelectorAll(`.chip[data-${attr}]`)) {
+    chip.addEventListener("click", () => {
+      state[key] = chip.dataset[attr];
+      for (const c of document.querySelectorAll(`.chip[data-${attr}]`)) c.setAttribute("aria-pressed", c === chip);
+      apply();
+    });
+  }
 }
+chipGroup("mode", "mode");
+chipGroup("ans", "ans");
 const favChip = document.getElementById("favOnly");
 favChip.addEventListener("click", () => {
   state.favOnly = !state.favOnly; favChip.setAttribute("aria-pressed", state.favOnly); apply();
 });
 document.getElementById("reset").addEventListener("click", () => {
-  Object.assign(state, { q: "", mode: "", cat: "", favOnly: false });
+  Object.assign(state, { q: "", mode: "", cat: "", ans: "", favOnly: false });
   document.getElementById("q").value = ""; sel.value = "";
   for (const c of document.querySelectorAll(".chip[data-mode]")) c.setAttribute("aria-pressed", c.dataset.mode === "");
+  for (const c of document.querySelectorAll(".chip[data-ans]")) c.setAttribute("aria-pressed", c.dataset.ans === "");
   favChip.setAttribute("aria-pressed", false); apply();
 });
 
@@ -291,20 +486,23 @@ function showToast(html, keep) {
   toast.innerHTML = html; toast.hidden = false; clearTimeout(toastTimer);
   if (!keep) toastTimer = setTimeout(() => { toast.hidden = true; }, 4200);
 }
-grid.addEventListener("click", async e => {
-  const pick = e.target.closest(".pick");
-  if (pick) {
-    const text = `/${CMD} ${pick.dataset.slug}`;
-    try {
-      await navigator.clipboard.writeText(text);
-      showToast(`<b>${esc(pick.dataset.name)}</b> gewählt. Kopiert: <code>${esc(text)}</code><br>Jetzt bei Claude einfügen und senden.`);
-    } catch (err) {
-      showToast(`<b>${esc(pick.dataset.name)}</b> gewählt. Kopiere diesen Befehl und schick ihn Claude:<input id="cmdOut" readonly value="${esc(text)}">`, true);
-      const inp = document.getElementById("cmdOut"); inp.focus(); inp.select();
-      setTimeout(() => { toast.hidden = true; }, 12000);
-    }
-    return;
+async function pickDesign(slug, name) {
+  const text = `/${CMD} ${slug}`;
+  try {
+    await navigator.clipboard.writeText(text);
+    showToast(`<b>${esc(name)}</b> gewählt. Kopiert: <code>${esc(text)}</code><br>Jetzt bei Claude einfügen und senden.`);
+  } catch (err) {
+    showToast(`<b>${esc(name)}</b> gewählt. Kopiere diesen Befehl und schick ihn Claude:<input id="cmdOut" readonly value="${esc(text)}">`, true);
+    const inp = document.getElementById("cmdOut"); inp.focus(); inp.select();
+    setTimeout(() => { toast.hidden = true; }, 12000);
   }
+}
+
+grid.addEventListener("click", e => {
+  const open = e.target.closest("[data-open]");
+  if (open) { openDetail(open.dataset.open); return; }
+  const pick = e.target.closest(".pick");
+  if (pick) { pickDesign(pick.dataset.slug, pick.dataset.name); return; }
   const fav = e.target.closest(".fav");
   if (fav) {
     const s = fav.dataset.slug;
@@ -313,12 +511,134 @@ grid.addEventListener("click", async e => {
   }
 });
 
+/* ---------- Detailansicht ---------- */
+const dlg = document.getElementById("dlg");
+const dImg = document.getElementById("dImg"), dFrame = document.getElementById("dFrame");
+const dStage = document.getElementById("dStage"), dLive = document.getElementById("dLive");
+let current = null, hashLock = false;
+
+function setHash(slug) {
+  const url = slug ? "#" + encodeURIComponent(slug) : location.pathname + location.search;
+  hashLock = true;
+  try { history.replaceState(null, "", url); } catch (e) { if (slug) location.hash = slug; }
+  setTimeout(() => { hashLock = false; }, 0);
+}
+function fitFrame() {                       // in die Bühne einpassen und zentrieren
+  const w = dStage.clientWidth, h = dStage.clientHeight;
+  if (!w || !h) return;
+  const s = Math.min(w / SHOT_W, h / SHOT_H);
+  dFrame.style.setProperty("--s", s);
+  dFrame.style.left = Math.round((w - SHOT_W * s) / 2) + "px";
+  dFrame.style.top = Math.round((h - SHOT_H * s) / 2) + "px";
+}
+if (window.ResizeObserver) new ResizeObserver(fitFrame).observe(dStage);
+else window.addEventListener("resize", fitFrame);
+
+function showStill() {
+  dFrame.hidden = true; dFrame.removeAttribute("src");
+  dImg.hidden = false;
+  dLive.setAttribute("aria-pressed", "false");
+  dLive.textContent = "Live mit Animationen";
+}
+function showLive() {
+  if (!current || !current.live) return;
+  dFrame.src = liveOf(current);
+  dFrame.hidden = false; dImg.hidden = true;
+  dLive.setAttribute("aria-pressed", "true");
+  dLive.textContent = "Standbild zeigen";
+  fitFrame();
+}
+dLive.addEventListener("click", () => {
+  dLive.getAttribute("aria-pressed") === "true" ? showStill() : showLive();
+});
+
+function fill(d) {
+  current = d;
+  document.getElementById("dName").textContent = d.name;
+  const sub = [d.ansatz ? `<span class="ans">${esc(ansName(d.ansatz))}</span>` : "",
+               d.ansatz2 ? `<span class="ans alt">+ ${esc(ansName(d.ansatz2))}</span>` : "",
+               `<span class="tone">${TONE[d.mode]}</span>`, `<span class="cat">${esc(d.cat)}</span>`].join("");
+  document.getElementById("dSub").innerHTML = sub;
+  showStill();
+  if (d.shot) {
+    dStage.hidden = false;
+    dImg.src = shotOf(d);
+    dImg.alt = altOf(d);
+  } else {
+    dStage.hidden = true;
+    dImg.removeAttribute("src");
+  }
+  dLive.hidden = !d.live;
+  document.getElementById("dNote").hidden = !d.shot;
+  document.getElementById("dPick").dataset.slug = d.slug;
+  document.getElementById("dPick").dataset.name = d.name;
+  const prof = document.getElementById("dProfil");
+  prof.hidden = !d.profil;
+  prof.href = profilOf(d);
+  document.getElementById("dOrig").href = `https://getdesign.md/${encodeURIComponent(d.slug)}/design-md`;
+  const rows = FACTS.filter(([k]) => d[k]).map(([k, label]) =>
+    `<div><dt>${label}</dt><dd>${esc(d[k])}</dd></div>`).join("");
+  document.getElementById("dFacts").innerHTML = rows ||
+    `<div><dt>Hinweis</dt><dd>Für diese Marke gibt es noch kein Designsprache-Profil.</dd></div>`;
+  const list = navList();
+  const i = list.indexOf(d.slug);
+  document.getElementById("dPrev").disabled = list.length < 2;
+  document.getElementById("dNext").disabled = list.length < 2;
+  setHash(d.slug);
+}
+function navList() {
+  const list = visible.filter(s => openable(byslug[s]));
+  return list.length ? list : DATA.filter(openable).map(d => d.slug);
+}
+function openDetail(slug) {
+  const d = byslug[slug];
+  if (!d || !openable(d)) return;
+  const wasOpen = dlg.open;
+  fill(d);
+  if (!wasOpen) {
+    dlg.showModal();
+    // Fokus selbst setzen: beim Öffnen über einen Deep-Link während des Ladens landet er sonst im Body.
+    requestAnimationFrame(() => { if (dlg.open) document.getElementById("dClose").focus(); });
+  }
+}
+function step(delta) {
+  if (!current) return;
+  const list = navList();
+  let i = list.indexOf(current.slug);
+  if (i < 0) i = 0;
+  fill(byslug[list[(i + delta + list.length) % list.length]]);
+  dlg.querySelector(".dlg-in").scrollTop = 0;
+}
+document.getElementById("dPrev").addEventListener("click", () => step(-1));
+document.getElementById("dNext").addEventListener("click", () => step(1));
+document.getElementById("dClose").addEventListener("click", () => dlg.close());
+document.getElementById("dPick").addEventListener("click", e => pickDesign(e.target.dataset.slug, e.target.dataset.name));
+dlg.addEventListener("click", e => {
+  if (e.target !== dlg) return;
+  const r = dlg.getBoundingClientRect();
+  if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) dlg.close();
+});
+dlg.addEventListener("close", () => { showStill(); current = null; setHash(""); });
+document.addEventListener("keydown", e => {   // am Dokument, damit es auch ohne Fokus im Dialog greift
+  if (!dlg.open || e.altKey || e.ctrlKey || e.metaKey) return;
+  if (e.key === "ArrowLeft") { e.preventDefault(); step(-1); }
+  else if (e.key === "ArrowRight") { e.preventDefault(); step(1); }
+});
+
 syncFavButtons();
 apply();
-const target = decodeURIComponent(location.hash.slice(1));
-if (target && byslug[target]) {
-  const el = document.getElementById(target);
+
+function fromHash() {
+  const slug = decodeURIComponent(location.hash.slice(1) || "");
+  if (!slug || !byslug[slug]) return;
+  const el = document.getElementById(slug);
+  if (openable(byslug[slug])) { openDetail(slug); return; }
+  if (dlg.open) dlg.close();
   el.classList.add("flash");
   el.scrollIntoView({ block: "center" });
 }
+window.addEventListener("hashchange", () => { if (!hashLock) fromHash(); });
+// Erst nach dem Parsen öffnen, sonst setzt der Browser den Fokus danach zurück in den Body.
+if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", fromHash, { once: true });
+else fromHash();
 </script>

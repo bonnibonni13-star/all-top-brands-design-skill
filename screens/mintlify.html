@@ -1,0 +1,553 @@
+<!doctype html>
+<html lang="de"><head><meta charset="utf-8"><style id="ms-base">
+/* Musterscreens – Basis. Wird vom Renderer vor die eigenen Stile gesetzt; eigene Regeln überschreiben sie.
+   Platzhalter der Form „{{scene:<name>}}“ ersetzt der Renderer durch das SVG aus scenes/<name>.svg. */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body { background: #e7e7eb; font-family: Inter, "DejaVu Sans", sans-serif; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+.ms-wrap { display: inline-block; background: #e7e7eb; }
+.stage { display: flex; gap: 40px; align-items: flex-start; padding: 48px 48px 20px; width: max-content; }
+.shot { margin: 0; display: flex; flex-direction: column; gap: 14px; }
+.shot > figcaption { font: 600 13px/1 Inter, "DejaVu Sans", sans-serif; letter-spacing: .08em; text-transform: uppercase; color: #6b6b74; padding-left: 8px; }
+.phone { position: relative; width: 390px; height: 844px; overflow: hidden; border-radius: 40px; isolation: isolate;
+  box-shadow: 0 0 0 1px rgba(0,0,0,.06), 0 18px 50px rgba(0,0,0,.14); }
+.ms-foot { font: 500 13px/1.4 Inter, "DejaVu Sans", sans-serif; color: #6b6b74; padding: 0 56px 30px; }
+.ms-foot b { color: #3a3a40; font-weight: 600; }
+
+/* Rücksetzungen ohne Spezifität: eigene Klassen gewinnen immer. Eigene Resets bitte ebenfalls mit :where(). */
+:where(.phone) :where(h1, h2, h3, h4, h5, h6, p, ul, ol, li, figure, blockquote, dl, dd) { margin: 0; padding: 0; }
+:where(.phone) :where(ul, ol) { list-style: none; }
+:where(.phone) :where(button, input, select, textarea) { font: inherit; color: inherit; background: none; border: 0; padding: 0; margin: 0; }
+
+/* Icons: <i data-icon="lucide:house"></i> oder <i data-icon="ph-bold:house"></i> → Inline-SVG mit Klasse .ic */
+.ic { width: 1em; height: 1em; display: inline-block; vertical-align: -0.125em; flex: none; }
+.ic-missing { outline: 2px dashed red; }
+
+/* Statusleiste und Gestenleiste */
+.sb { height: 46px; display: flex; align-items: center; justify-content: space-between; padding: 4px 26px 0 32px;
+  font: 600 15px/1 Inter, "DejaVu Sans", sans-serif; position: relative; z-index: 30; }
+.sb-icons { display: flex; gap: 6px; font-size: 16px; align-items: center; }
+.hi { position: absolute; left: 50%; bottom: 8px; width: 134px; height: 5px; border-radius: 3px; transform: translateX(-50%);
+  background: currentColor; opacity: .45; z-index: 40; }
+
+/* Bilder (abstrakte Motive, gleich für alle Marken). Ausschnitt per background-position/-size, Behandlung frei. */
+[class*="scene-"] { background-size: cover; background-position: center; background-repeat: no-repeat; }
+.scene-see { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300' preserveAspectRatio='xMidYMid slice'%3E%3Cdefs%3E%3ClinearGradient id='a' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%2386cdf6'/%3E%3Cstop offset='.64' stop-color='%23ffe4b5'/%3E%3C/linearGradient%3E%3ClinearGradient id='b' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%234fb3cc'/%3E%3Cstop offset='1' stop-color='%231c627d'/%3E%3C/linearGradient%3E%3CradialGradient id='g'%3E%3Cstop offset='0' stop-color='%23fff6dc'/%3E%3Cstop offset='1' stop-color='%23fff6dc' stop-opacity='0'/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect width='400' height='300' fill='url(%23a)'/%3E%3Ccircle cx='296' cy='138' r='70' fill='url(%23g)'/%3E%3Ccircle cx='296' cy='138' r='26' fill='%23fff4d2'/%3E%3Cpath d='M0 176C60 148 112 156 162 166S250 146 312 152 380 168 400 164V300H0Z' fill='%2386b596'/%3E%3Cpath d='M0 190C80 174 140 188 200 184S322 170 400 182V300H0Z' fill='%234c8764'/%3E%3Crect y='198' width='400' height='102' fill='url(%23b)'/%3E%3Cpath d='M262 212H330M30 230H150M210 248H372M80 268H190' stroke='%23c9eef6' stroke-width='3' stroke-linecap='round' opacity='.45'/%3E%3Cpath d='M120 199l18-12 4 12z' fill='%23fdfdfd'/%3E%3Cpath d='M137 186v14' stroke='%23fdfdfd' stroke-width='2'/%3E%3C/svg%3E"); }
+.scene-lissabon { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300' preserveAspectRatio='xMidYMid slice'%3E%3Cdefs%3E%3ClinearGradient id='a' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23ffd9a3'/%3E%3Cstop offset='1' stop-color='%23f39a63'/%3E%3C/linearGradient%3E%3Cpattern id='w' width='18' height='24' patternUnits='userSpaceOnUse'%3E%3Crect x='6' y='7' width='6' height='10' rx='1' fill='%235b3428' opacity='.38'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width='400' height='300' fill='url(%23a)'/%3E%3Ccircle cx='84' cy='80' r='26' fill='%23fff2d4'/%3E%3Cpath d='M0 168h64v132H0z' fill='%23f6e6c8'/%3E%3Cpath d='M-4 170l36-20 36 20z' fill='%23c5513a'/%3E%3Cpath d='M64 146h72v154H64z' fill='%23eaa7a1'/%3E%3Cpath d='M60 148l40-24 40 24z' fill='%23b2412c'/%3E%3Cpath d='M136 180h56v120h-56z' fill='%239fc6d8'/%3E%3Cpath d='M132 182l32-18 32 18z' fill='%23c5513a'/%3E%3Cpath d='M192 136h84v164h-84z' fill='%23e3a65a'/%3E%3Cpath d='M188 138l46-26 46 26z' fill='%23b2412c'/%3E%3Cpath d='M276 162h62v138h-62z' fill='%23f6e6c8'/%3E%3Cpath d='M272 164l35-19 35 19z' fill='%23c5513a'/%3E%3Cpath d='M338 150h66v150h-66z' fill='%23eaa7a1'/%3E%3Cpath d='M334 152l37-22 37 22z' fill='%23b2412c'/%3E%3Crect y='150' width='400' height='150' fill='url(%23w)'/%3E%3Cpath d='M0 262c90-18 210-18 400 0v38H0z' fill='%239b3d2a'/%3E%3Crect x='150' y='236' width='70' height='30' rx='6' fill='%23f2c94c'/%3E%3Crect x='156' y='241' width='16' height='12' rx='2' fill='%235b3428' opacity='.5'/%3E%3Crect x='178' y='241' width='16' height='12' rx='2' fill='%235b3428' opacity='.5'/%3E%3Crect x='200' y='241' width='14' height='12' rx='2' fill='%235b3428' opacity='.5'/%3E%3C/svg%3E"); }
+.scene-konzert { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300' preserveAspectRatio='xMidYMid slice'%3E%3Cdefs%3E%3CradialGradient id='a' cx='.5' cy='1' r='1'%3E%3Cstop offset='0' stop-color='%234a1670'/%3E%3Cstop offset='1' stop-color='%230c0619'/%3E%3C/radialGradient%3E%3ClinearGradient id='p' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23ff5fcf' stop-opacity='.85'/%3E%3Cstop offset='1' stop-color='%23ff5fcf' stop-opacity='0'/%3E%3C/linearGradient%3E%3ClinearGradient id='c' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%2352dcff' stop-opacity='.8'/%3E%3Cstop offset='1' stop-color='%2352dcff' stop-opacity='0'/%3E%3C/linearGradient%3E%3CradialGradient id='s'%3E%3Cstop offset='0' stop-color='%23ff9a5c' stop-opacity='.9'/%3E%3Cstop offset='1' stop-color='%23ff9a5c' stop-opacity='0'/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect width='400' height='300' fill='url(%23a)'/%3E%3Cpath d='M90 0h14l70 260H40z' fill='url(%23p)' opacity='.7'/%3E%3Cpath d='M300 0h14l66 260H230z' fill='url(%23c)' opacity='.7'/%3E%3Cpath d='M196 0h10l60 250H140z' fill='url(%23p)' opacity='.45'/%3E%3Cellipse cx='200' cy='232' rx='190' ry='60' fill='url(%23s)'/%3E%3Cg fill='%23fff' opacity='.8'%3E%3Ccircle cx='40' cy='40' r='1.4'/%3E%3Ccircle cx='150' cy='24' r='1.2'/%3E%3Ccircle cx='260' cy='52' r='1.3'/%3E%3Ccircle cx='360' cy='30' r='1.5'/%3E%3C/g%3E%3Cpath d='M0 300V262c12-10 22-12 30-4 8-14 22-16 30-4 10-12 24-12 32 0 8-16 24-16 32-2 10-10 22-10 30 2 8-14 24-14 32 0 10-10 22-10 30 0 8-16 24-14 32 0 10-10 22-10 30 2 8-12 22-12 30-2 10-8 20-6 32 4V300z' fill='%2307030f'/%3E%3Cpath d='M60 262l-6-26M182 258l8-30M300 262l-4-28' stroke='%2307030f' stroke-width='7' stroke-linecap='round'/%3E%3C/svg%3E"); }
+.scene-nacht { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300' preserveAspectRatio='xMidYMid slice'%3E%3Cdefs%3E%3ClinearGradient id='a' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%230a0f2e'/%3E%3Cstop offset='.45' stop-color='%232d1a5e'/%3E%3Cstop offset='.62' stop-color='%23ff4f7e'/%3E%3C/linearGradient%3E%3ClinearGradient id='s' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23ffd36b'/%3E%3Cstop offset='1' stop-color='%23ff4f7e'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='400' height='300' fill='url(%23a)'/%3E%3Ccircle cx='200' cy='168' r='62' fill='url(%23s)'/%3E%3Cg fill='%234a2a78'%3E%3Crect x='138' y='140' width='124' height='5'/%3E%3Crect x='138' y='152' width='124' height='6'/%3E%3Crect x='138' y='165' width='124' height='7'/%3E%3C/g%3E%3Cpath d='M0 186h22v-22h14v-12h16v34h18v-26h12v26h22v-40h16v40h40V186h120v-30h14v30h18v-22h16v22h14v-36h18v36h40v-24h14v24h18' fill='%231b1145'/%3E%3Crect y='186' width='400' height='114' fill='%23120b2b'/%3E%3Cpath d='M200 186L-60 300M200 186L460 300' stroke='%23ff4fd8' stroke-width='2.5' opacity='.9'/%3E%3Cpath d='M200 186l-30 114M200 186l30 114' stroke='%2352e5ff' stroke-width='2' opacity='.6'/%3E%3Cpath d='M200 186L118 300M200 186l82 114' stroke='%2352e5ff' stroke-width='1.2' opacity='.35'/%3E%3Cpath d='M-20 214H420M-20 238H420M-20 270H420' stroke='%23ff4fd8' stroke-width='1' opacity='.35'/%3E%3Cg fill='%23fff'%3E%3Ccircle cx='60' cy='40' r='1.2'/%3E%3Ccircle cx='330' cy='28' r='1.4'/%3E%3Ccircle cx='250' cy='70' r='1'/%3E%3Ccircle cx='110' cy='90' r='1.1'/%3E%3C/g%3E%3C/svg%3E"); }
+.scene-herbst { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300' preserveAspectRatio='xMidYMid slice'%3E%3Cdefs%3E%3ClinearGradient id='a' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23fbd38d'/%3E%3Cstop offset='1' stop-color='%23e7843f'/%3E%3C/linearGradient%3E%3ClinearGradient id='m' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23fff' stop-opacity='0'/%3E%3Cstop offset='.5' stop-color='%23fff' stop-opacity='.35'/%3E%3Cstop offset='1' stop-color='%23fff' stop-opacity='0'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='400' height='300' fill='url(%23a)'/%3E%3Cg opacity='.55'%3E%3Ccircle cx='40' cy='150' r='46' fill='%23d9663a'/%3E%3Ccircle cx='130' cy='130' r='54' fill='%23e89a3c'/%3E%3Ccircle cx='250' cy='140' r='50' fill='%23c8502f'/%3E%3Ccircle cx='350' cy='125' r='58' fill='%23e89a3c'/%3E%3C/g%3E%3Crect y='150' width='400' height='60' fill='url(%23m)'/%3E%3Cg fill='%234a2a1d'%3E%3Crect x='66' y='170' width='9' height='110'/%3E%3Crect x='186' y='160' width='10' height='120'/%3E%3Crect x='306' y='168' width='9' height='112'/%3E%3C/g%3E%3Ccircle cx='70' cy='160' r='44' fill='%23c2452d'/%3E%3Ccircle cx='96' cy='182' r='30' fill='%23e5862c'/%3E%3Ccircle cx='190' cy='148' r='52' fill='%23f0a93a'/%3E%3Ccircle cx='160' cy='176' r='28' fill='%23c2452d'/%3E%3Ccircle cx='310' cy='156' r='48' fill='%238f2d1f'/%3E%3Ccircle cx='338' cy='186' r='30' fill='%23e5862c'/%3E%3Cpath d='M0 262c80-14 160-10 240-2s120 4 160-6v46H0z' fill='%236b3a22'/%3E%3Cg fill='%23f2b44c'%3E%3Cellipse cx='120' cy='272' rx='6' ry='3'/%3E%3Cellipse cx='260' cy='282' rx='5' ry='2.5'/%3E%3Cellipse cx='340' cy='270' rx='6' ry='3'/%3E%3C/g%3E%3C/svg%3E"); }
+.scene-studio { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300' preserveAspectRatio='xMidYMid slice'%3E%3Cdefs%3E%3CradialGradient id='a' cx='.25' cy='.35' r='.9'%3E%3Cstop offset='0' stop-color='%236b3f12'/%3E%3Cstop offset='.55' stop-color='%231d1209'/%3E%3Cstop offset='1' stop-color='%230a0705'/%3E%3C/radialGradient%3E%3CradialGradient id='l'%3E%3Cstop offset='0' stop-color='%23ffb347' stop-opacity='.55'/%3E%3Cstop offset='1' stop-color='%23ffb347' stop-opacity='0'/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect width='400' height='300' fill='url(%23a)'/%3E%3Cellipse cx='90' cy='90' rx='150' ry='110' fill='url(%23l)'/%3E%3Ccircle cx='262' cy='160' r='116' fill='%23111'/%3E%3Cg fill='none' stroke='%232b2b2b' stroke-width='1.5'%3E%3Ccircle cx='262' cy='160' r='104'/%3E%3Ccircle cx='262' cy='160' r='92'/%3E%3Ccircle cx='262' cy='160' r='80'/%3E%3Ccircle cx='262' cy='160' r='68'/%3E%3Ccircle cx='262' cy='160' r='56'/%3E%3C/g%3E%3Cpath d='M190 84a104 104 0 0 1 120-14' stroke='%235a5a5a' stroke-width='3' fill='none' opacity='.6'/%3E%3Ccircle cx='262' cy='160' r='36' fill='%23e3a33b'/%3E%3Ccircle cx='262' cy='160' r='4' fill='%23111'/%3E%3Cpath d='M380 20l-60 110' stroke='%23c9c9c9' stroke-width='5' stroke-linecap='round'/%3E%3Crect x='306' y='124' width='22' height='12' rx='3' fill='%23d9d9d9' transform='rotate(-60 317 130)'/%3E%3C/svg%3E"); }
+.scene-wien { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300' preserveAspectRatio='xMidYMid slice'%3E%3Cdefs%3E%3ClinearGradient id='a' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23c9dcf2'/%3E%3Cstop offset='.7' stop-color='%23f6d6de'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='400' height='300' fill='url(%23a)'/%3E%3Cg fill='%23aebfd4'%3E%3Crect x='0' y='170' width='70' height='70'/%3E%3Crect x='300' y='160' width='100' height='80'/%3E%3Crect x='60' y='182' width='40' height='58'/%3E%3C/g%3E%3Cg fill='%238ea3bd'%3E%3Crect x='120' y='150' width='160' height='90'/%3E%3Cpath d='M150 150a50 50 0 0 1 100 0z'/%3E%3Crect x='196' y='72' width='8' height='30'/%3E%3Ccircle cx='200' cy='70' r='5'/%3E%3Crect x='104' y='96' width='14' height='144'/%3E%3Crect x='282' y='96' width='14' height='144'/%3E%3Cpath d='M100 96h22l-11-16zM278 96h22l-11-16z'/%3E%3Crect x='166' y='170' width='68' height='70' fill='%237a90ab'/%3E%3Cpath d='M166 170h68l-34-22z' fill='%239fb2c9'/%3E%3C/g%3E%3Cg fill='%237a90ab'%3E%3Crect x='176' y='186' width='6' height='54'/%3E%3Crect x='190' y='186' width='6' height='54'/%3E%3Crect x='204' y='186' width='6' height='54'/%3E%3Crect x='218' y='186' width='6' height='54'/%3E%3C/g%3E%3Cpath d='M0 236c100-10 300-10 400 0v64H0z' fill='%23f6f8fc'/%3E%3Cpath d='M0 262c120-8 280-6 400 4' stroke='%23dfe6f0' stroke-width='3' fill='none'/%3E%3Cg fill='%23fff' opacity='.85'%3E%3Ccircle cx='40' cy='60' r='2'/%3E%3Ccircle cx='90' cy='120' r='1.6'/%3E%3Ccircle cx='150' cy='40' r='2.2'/%3E%3Ccircle cx='250' cy='110' r='1.8'/%3E%3Ccircle cx='330' cy='50' r='2'/%3E%3Ccircle cx='370' cy='120' r='1.6'/%3E%3Ccircle cx='300' cy='200' r='1.8'/%3E%3Ccircle cx='60' cy='210' r='2'/%3E%3C/g%3E%3C/svg%3E"); }
+.scene-film { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300' preserveAspectRatio='xMidYMid slice'%3E%3Cdefs%3E%3ClinearGradient id='a' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%230f4c5c'/%3E%3Cstop offset='.45' stop-color='%231f7a77'/%3E%3Cstop offset='.7' stop-color='%23f4a259'/%3E%3Cstop offset='1' stop-color='%23e76f51'/%3E%3C/linearGradient%3E%3ClinearGradient id='r' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23ffd27a' stop-opacity='.9'/%3E%3Cstop offset='1' stop-color='%23ffd27a' stop-opacity='0'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='400' height='300' fill='url(%23a)'/%3E%3Ccircle cx='250' cy='196' r='44' fill='%23ffd166'/%3E%3Crect x='206' y='214' width='88' height='86' fill='url(%23r)' opacity='.7'/%3E%3Cpath d='M0 214h400v86H0z' fill='%230b2a33' opacity='.55'/%3E%3Cpath d='M0 214c40-6 70-30 96-28s40 20 70 22 70-8 100-4 90 8 134 4v8H0z' fill='%230b2a33'/%3E%3Cpath d='M70 214c-2-40 4-70 14-92' stroke='%230b2a33' stroke-width='5' fill='none'/%3E%3Cpath d='M84 122c-18-8-38-4-50 8M84 122c-6-16-22-24-38-22M84 122c14-12 34-14 48-4M84 122c18-2 32 8 38 22M84 122c4-16 16-26 30-28' stroke='%230b2a33' stroke-width='5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); }
+.scene-person { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' preserveAspectRatio='xMidYMid slice'%3E%3Cdefs%3E%3ClinearGradient id='a' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23f3d9c1'/%3E%3Cstop offset='1' stop-color='%23d8a98a'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' fill='url(%23a)'/%3E%3Cpath d='M14 104c4-22 18-32 36-32s32 10 36 32z' fill='%233d5a80'/%3E%3Ccircle cx='50' cy='44' r='19' fill='%239c6b52'/%3E%3Cpath d='M30 44c0-16 9-25 21-25 13 0 21 9 21 22-6-6-16-9-26-8-7 1-12 5-16 11z' fill='%233a2418'/%3E%3C/svg%3E"); }
+
+/* Erprobte Bildausschnitte für weitere „Fotos“ aus einem Motiv (z. B. Fotoraster): class="scene-lissabon crop-3" */
+.crop-1 { background-size: 260%; background-position: 8% 18%; }
+.crop-2 { background-size: 320%; background-position: 85% 60%; }
+.crop-3 { background-size: 360%; background-position: 50% 95%; }
+.crop-4 { background-size: 300%; background-position: 60% 35%; }
+.crop-5 { background-size: 280%; background-position: 0% 60%; }
+.crop-6 { background-size: 500%; background-position: 20% 20%; }
+.crop-7 { background-size: 240%; background-position: 100% 90%; }
+.crop-8 { background-size: 550%; background-position: 70% 55%; }
+.crop-9 { background-size: 220%; background-position: 35% 0%; }
+.crop-10 { background-size: 420%; background-position: 40% 62%; }
+.crop-11 { background-size: 340%; background-position: 95% 45%; }
+.crop-12 { background-size: 300%; background-position: 0% 100%; }
+
+/* Körnung als Überlagerung: Element bekommt .grain, Stärke per --grain (0–1). */
+.grain { position: relative; }
+.grain::after { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: var(--grain, .18); mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E"); background-size: 160px 160px; }
+
+/* Horizontale Reihen dürfen am Rand angeschnitten sein wie beim echten Scrollen. */
+.row-x { display: flex; overflow: hidden; }
+
+</style>
+<title>Musterscreens Mintlify</title>
+<style>
+/* ==========================================================================
+   Mintlify – Designsprache als App-Vorlage
+   Werte aus references/mintlify.md (Farben, Typo, Radien, Abstände, Schatten).
+   App-Muster, Icons und Bewegung sind Ableitungen/Empfehlungen.
+   Grundsätze: ein Himmelsverlauf als Auftakt, danach flache weiße Dokufläche
+   · Haarlinien statt Schatten · alle Buttons sind Pillen · Inter + Mono als Paar
+   · Minzgrün nur als einzelner Akzent.
+   ========================================================================== */
+:root {
+  /* Flächen */
+  --canvas: #ffffff;
+  --surface: #f7f7f7;
+  --surface-soft: #fafafa;
+  --surface-code: #1c1c1e;
+  --hairline: #e5e5e5;
+  --hairline-soft: #ededed;
+  --hairline-dark: #2b2b2e;
+  /* Text */
+  --ink: #0a0a0a;
+  --charcoal: #1c1c1e;
+  --slate: #3a3a3c;
+  --steel: #5a5a5c;
+  --stone: #888888;
+  --muted: #a8a8aa;
+  --on-dark: #ffffff;
+  --on-dark-muted: #b3b3b3;
+  /* Akzente */
+  --mint: #00d4a4;
+  --mint-deep: #00b48a;
+  --tag-blue: #3772cf;
+  /* Himmelsband */
+  --sky-from: #87a8c8;
+  --sky-mid: #b9c8d2;
+  --sky-to: #f5e9d8;
+  /* Schrift */
+  --font: "Inter", "DejaVu Sans", sans-serif;
+  --font-display: "Inter Display", "Inter", sans-serif;
+  --mono: "DejaVu Sans Mono", monospace;
+  /* Radien */
+  --r-xs: 4px;
+  --r-sm: 6px;
+  --r-md: 8px;
+  --r-lg: 12px;
+  --r-xl: 16px;
+  --r-full: 9999px;
+  /* Abstände */
+  --s-xxs: 4px;
+  --s-xs: 8px;
+  --s-sm: 12px;
+  --s-md: 16px;
+  --s-lg: 20px;
+  --s-xl: 24px;
+  --s-xxl: 32px;
+  /* Schatten */
+  --sh-card: 0 4px 12px rgba(0, 0, 0, .08);
+  --sh-mockup: 0 24px 48px -8px rgba(0, 0, 0, .12);
+  /* Bewegung (Empfehlung) */
+  --dur-s: 150ms;
+  --dur-m: 200ms;
+  --ease: cubic-bezier(.4, 0, .2, 1);
+}
+
+/* ---------- Grundlage ---------- */
+.phone { background: var(--canvas); color: var(--ink); font: 400 16px/1.5 var(--font); }
+.phone .hi { color: var(--ink); }
+:where(.phone) :where(h1, h2, h3, p, ul, li) { margin: 0; }
+.ic-l { stroke-width: 1.5; }
+.mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+
+/* ---------- Typo-Rollen ---------- */
+.micro-up { font: 600 11px/1.4 var(--font); letter-spacing: .5px; text-transform: uppercase; color: var(--steel); }
+.h-hero { font: 600 32px/1.1 var(--font-display); letter-spacing: -1px; }
+.h-page { font: 600 28px/1.25 var(--font-display); letter-spacing: -.4px; }
+.h-5 { font: 600 15px/1.4 var(--font); }
+.sub { font: 400 15px/1.5 var(--font); color: var(--steel); }
+.body-sm { font: 400 14px/1.5 var(--font); color: var(--steel); }
+.caption { font: 400 13px/1.4 var(--font); color: var(--stone); }
+
+/* ---------- Himmelsband (einziger Verlauf, einmal pro Screen) ---------- */
+.sky { position: relative; overflow: hidden; padding-bottom: 54px;
+  background: linear-gradient(180deg, #5d82a8 0%, #7b9fc1 30%, #b7c3cb 62%, var(--sky-to) 88%, var(--canvas) 100%); }
+.sky .sb { color: #ffffff; }
+.cloud { position: absolute; border-radius: var(--r-full); background: #ffffff; filter: blur(11px); pointer-events: none; }
+.cloud-a { width: 212px; height: 58px; left: -54px; top: 104px; opacity: .6; }
+.cloud-b { width: 162px; height: 46px; right: -44px; top: 150px; opacity: .5; }
+.cloud-c { width: 310px; height: 70px; left: 30px; top: 216px; opacity: .62; }
+.cloud-d { width: 96px; height: 50px; left: 28px; top: 86px; opacity: .5; }
+
+/* Kopfzeile im Band */
+.sky-nav { position: relative; z-index: 3; display: flex; align-items: center; justify-content: space-between;
+  height: 44px; padding: 0 var(--s-md); color: #fff; }
+.brand { display: flex; align-items: center; gap: 8px; font: 600 15px/1 var(--font); letter-spacing: -.1px; }
+.brand-mark { width: 22px; height: 22px; border-radius: var(--r-sm); background: rgba(255, 255, 255, .9);
+  display: grid; place-items: center; }
+.brand-mark span { width: 9px; height: 9px; border-radius: var(--r-full); background: var(--mint); }
+.avatar { width: 28px; height: 28px; border-radius: var(--r-full); box-shadow: 0 0 0 1px rgba(255, 255, 255, .6); }
+
+.hero-mid { position: relative; z-index: 3; text-align: center; padding: 18px 26px 0; }
+.hero-mid .micro-up { color: #ffffff; }
+.hero-mid .h-hero { color: #fff; margin-top: 8px; }
+.hero-mid .sub { color: rgba(255, 255, 255, .96); margin-top: 8px; font-size: 14px; }
+.hero-btns { display: flex; justify-content: center; gap: var(--s-xs); margin-top: 16px; }
+
+/* ---------- Buttons: immer Pille ---------- */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 7px; flex: none;
+  height: 38px; padding: 0 20px; border-radius: var(--r-full);
+  font: 500 14px/1.3 var(--font); white-space: nowrap;
+  transition: opacity var(--dur-s) var(--ease), transform var(--dur-s) var(--ease); }
+.btn .ic { font-size: 16px; }
+.btn--primary { background: var(--ink); color: var(--on-dark); }
+.btn--mint { background: var(--mint); color: var(--ink); font-weight: 600; }
+.btn--outline { background: var(--canvas); color: var(--ink); box-shadow: inset 0 0 0 1px var(--hairline); }
+.btn--ghost { background: none; color: var(--ink); border-radius: var(--r-md); height: 32px; padding: 0 12px; }
+.btn:active { opacity: .92; transform: scale(.98); }
+.icon-round { width: 36px; height: 36px; border-radius: var(--r-full); display: grid; place-items: center;
+  background: var(--canvas); color: var(--ink); box-shadow: inset 0 0 0 1px var(--hairline); font-size: 17px; flex: none; }
+.icon-plain { width: 32px; height: 32px; border-radius: var(--r-md); display: grid; place-items: center;
+  color: var(--steel); font-size: 19px; flex: none; }
+
+/* ---------- Überlappende Produktkarte ---------- */
+.mockup { position: relative; z-index: 4; margin: -44px var(--s-md) 0; padding: 8px;
+  background: var(--canvas); border: 1px solid var(--hairline-soft); border-radius: var(--r-lg);
+  box-shadow: var(--sh-mockup); }
+.mockup-img { height: 112px; border-radius: var(--r-md); }
+.mockup-foot { display: flex; align-items: center; justify-content: space-between; gap: var(--s-sm);
+  padding: 10px 6px 4px; }
+.badge-mono { display: inline-block; padding: 2px 7px; border-radius: var(--r-sm); background: var(--surface);
+  border: 1px solid var(--hairline); color: var(--steel); font: 400 12px/1.5 var(--mono); }
+
+/* ---------- Weiße Dokufläche ---------- */
+.doc { padding: 0 var(--s-md); }
+.sec { margin-top: 18px; }
+.sec-head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--s-sm); margin-bottom: 10px; }
+.card { background: var(--canvas); border: 1px solid var(--hairline); border-radius: var(--r-lg); overflow: hidden; }
+.prop { display: flex; align-items: center; gap: var(--s-sm); padding: 11px 14px;
+  border-bottom: 1px solid var(--hairline-soft); }
+.prop:last-child { border-bottom: 0; }
+.prop .grow { flex: 1; min-width: 0; }
+.prop .h-5 { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.thumb { width: 36px; height: 36px; border-radius: var(--r-sm); flex: none; box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .06); }
+.prop .ic { color: var(--stone); font-size: 18px; }
+.check { color: var(--mint); font-size: 17px; }
+.meter { height: 6px; border-radius: var(--r-full); background: var(--surface); overflow: hidden; margin-top: 10px;
+  box-shadow: inset 0 0 0 1px var(--hairline-soft); }
+.meter i { display: block; height: 100%; background: var(--ink); border-radius: var(--r-full); }
+
+/* ---------- Obere Leiste (Doku) ---------- */
+.top-bar { position: relative; z-index: 5; display: flex; align-items: center; gap: 10px;
+  height: 52px; padding: 0 var(--s-md); border-bottom: 1px solid var(--hairline-soft); background: var(--canvas); }
+.search-pill { flex: 1; display: flex; align-items: center; gap: 8px; height: 36px; padding: 0 12px;
+  background: var(--surface); border: 1px solid var(--hairline); border-radius: var(--r-md);
+  color: var(--steel); font: 400 14px/1 var(--font); }
+.search-pill .ic { font-size: 16px; color: var(--stone); }
+.search-pill .key { margin-left: auto; padding: 1px 6px; border-radius: var(--r-xs); background: var(--canvas);
+  border: 1px solid var(--hairline); color: var(--stone); font: 400 11px/1.5 var(--mono); }
+
+/* ---------- Unterstrich-Tabs ---------- */
+.tabs { display: flex; gap: 2px; border-bottom: 1px solid var(--hairline); }
+.tabs button { padding: 9px 12px; color: var(--steel); font: 500 14px/1.5 var(--font);
+  border-bottom: 2px solid transparent; margin-bottom: -1px;
+  transition: color var(--dur-s) var(--ease); }
+.tabs button.is-on { color: var(--ink); border-bottom-color: var(--ink); font-weight: 600; }
+
+/* ---------- Doku-Navigationsliste (Bibliothek) ---------- */
+.group-head { padding: 16px 10px 6px; }
+.nav-item { position: relative; display: flex; align-items: center; gap: 10px; padding: 7px 10px; border-radius: var(--r-sm);
+  transition: background-color var(--dur-s) var(--ease); }
+.nav-item .thumb { width: 30px; height: 30px; }
+.nav-item .grow { flex: 1; min-width: 0; }
+.nav-item .h-5 { font-size: 14px; font-weight: 400; color: var(--slate); }
+.nav-item.is-on { background: var(--surface); }
+.nav-item.is-on .h-5 { color: var(--ink); font-weight: 500; }
+.nav-item.is-on::before { content: ""; position: absolute; left: 2px; top: 8px; bottom: 8px; width: 3px;
+  border-radius: var(--r-full); background: var(--mint); }
+
+/* ---------- Detail ---------- */
+.crumbs { display: flex; align-items: center; gap: 5px; min-width: 0; flex: 1;
+  font: 400 13px/1 var(--font); color: var(--stone); }
+.crumbs .ic { font-size: 13px; }
+.crumbs .here { color: var(--ink); font-weight: 500; }
+.detail-img { height: 140px; border-radius: var(--r-lg); border: 1px solid var(--hairline-soft); }
+.chip-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.detail-actions { display: flex; align-items: center; gap: var(--s-xs); margin-top: 14px; }
+.detail-actions .btn--primary { flex: 1; height: 40px; }
+.photo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 12px; }
+.photo { aspect-ratio: 1; border-radius: var(--r-md); }
+
+/* ---------- Dunkler Code-Block (Signatur auf heller Seite) ---------- */
+.code { margin-top: 14px; background: var(--surface-code); border-radius: var(--r-md); overflow: hidden; }
+.code-head { display: flex; align-items: center; justify-content: space-between; gap: var(--s-sm);
+  padding: 8px 12px; border-bottom: 1px solid var(--hairline-dark);
+  color: var(--on-dark-muted); font: 400 13px/1.4 var(--font); }
+.code-head .name { color: var(--on-dark); font-weight: 500; }
+.code-copy { padding: 3px 8px; border-radius: var(--r-sm); border: 1px solid var(--hairline-dark);
+  color: var(--on-dark-muted); font: 400 12px/1.4 var(--font); }
+.code-body { padding: 10px 12px 12px; font: 400 12.5px/1.75 var(--mono); }
+.code-line { display: flex; gap: 10px; color: var(--on-dark-muted); white-space: nowrap; }
+.code-line .num { color: #55555a; width: 14px; text-align: right; flex: none; }
+.code-line .tr { color: #9ad8ff; }
+.code-line .tm { color: var(--mint); margin-left: auto; }
+
+/* ---------- Navigation unten: Pille um das aktive Icon ---------- */
+.tabbar { position: absolute; left: 0; right: 0; bottom: 0; height: 74px; z-index: 20;
+  display: flex; align-items: flex-start; padding: 7px 8px 0;
+  background: var(--canvas); border-top: 1px solid var(--hairline); }
+.tab { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px;
+  color: var(--steel); font: 400 11.5px/1.4 var(--font); }
+.tab .pill { display: grid; place-items: center; width: 50px; height: 26px; border-radius: var(--r-full);
+  font-size: 19px; transition: background-color var(--dur-s) var(--ease); }
+.tab.is-on { color: var(--ink); font-weight: 500; }
+.tab.is-on .pill { background: #ebecee; }
+.tab-avatar { width: 20px; height: 20px; border-radius: var(--r-full); box-shadow: 0 0 0 1px var(--hairline); }
+
+/* ---------- Auslaufen nach unten ---------- */
+.fade { position: absolute; left: 0; right: 0; bottom: 74px; height: 48px; z-index: 10; pointer-events: none;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0), var(--canvas)); }
+.scroll { position: absolute; left: 0; right: 0; overflow: hidden; }
+
+/* ---------- Bewegung ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+  .sec, .mockup { animation: fadeUp var(--dur-m) var(--ease) both; }
+  .sec:nth-of-type(2) { animation-delay: 60ms; }
+  .sec:nth-of-type(3) { animation-delay: 120ms; }
+}
+</style></head>
+<body>
+<div class="ms-wrap"><main class="stage">
+
+<!-- ================================ START ================================ -->
+<figure class="shot"><figcaption>Start</figcaption><section class="phone" id="start">
+  <header class="sky">
+    <span class="cloud cloud-a"></span><span class="cloud cloud-b"></span>
+    <span class="cloud cloud-c"></span><span class="cloud cloud-d"></span>
+    <span class="cloud" style="width:118px;height:62px;left:166px;top:196px;opacity:.6"></span>
+    <span class="cloud" style="width:84px;height:44px;right:16px;top:126px;opacity:.45"></span>
+    <div class="sb"><span>9:41</span><span class="sb-icons"><svg class="ic ic-p ic-ph-fill" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-fill:cell-signal-full"><path d="M208,40V200a16,16,0,0,1-16,16H32A16,16,0,0,1,20.7,188.68l160-160A16,16,0,0,1,208,40Z"/></svg><svg class="ic ic-p ic-ph-fill" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-fill:wifi-high"><path d="M244.35,92.8l-104,125.43A15.93,15.93,0,0,1,128,224h0a15.93,15.93,0,0,1-12.31-5.77L11.65,92.8A15.65,15.65,0,0,1,8.11,80.91,15.93,15.93,0,0,1,14.28,70.1,186.67,186.67,0,0,1,128,32,186.67,186.67,0,0,1,241.72,70.1a15.93,15.93,0,0,1,6.17,10.81A15.65,15.65,0,0,1,244.35,92.8Z"/></svg><svg class="ic ic-p ic-ph-fill" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-fill:battery-full"><path d="M200,56H32A24,24,0,0,0,8,80v96a24,24,0,0,0,24,24H200a24,24,0,0,0,24-24V80A24,24,0,0,0,200,56Zm8,120a8,8,0,0,1-8,8H32a8,8,0,0,1-8-8V80a8,8,0,0,1,8-8H200a8,8,0,0,1,8,8ZM192,96v64a8,8,0,0,1-8,8H48a8,8,0,0,1-8-8V96a8,8,0,0,1,8-8H184A8,8,0,0,1,192,96Zm64,0v64a8,8,0,0,1-16,0V96a8,8,0,0,1,16,0Z"/></svg></span></div>
+    <div class="sky-nav">
+      <span class="brand"><span class="brand-mark"><span></span></span>Medien</span>
+      <span class="avatar scene-person"></span>
+    </div>
+    <div class="hero-mid">
+      <p class="micro-up">Rückblick · vor einem Jahr</p>
+      <h1 class="h-hero">Herbstwald</h1>
+      <p class="sub">86 Fotos · Okt. 2024 · aus Google Fotos</p>
+      <div class="hero-btns">
+        <button class="btn btn--mint" type="button"><svg class="ic ic-l ic-l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-i="lucide:play"><path d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z" /></svg>Diashow starten</button>
+        <button class="btn btn--outline" type="button">Zum Album</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="mockup">
+    <div class="mockup-img scene-herbst"></div>
+    <div class="mockup-foot">
+      <span class="h-5">Herbstwald</span>
+      <span class="badge-mono">86 Fotos</span>
+    </div>
+  </div>
+
+  <div class="doc">
+    <section class="sec">
+      <div class="sec-head"><p class="micro-up">Zuletzt hinzugefügt</p><span class="caption">Alle ansehen</span></div>
+      <div class="card">
+        <div class="prop">
+          <span class="thumb scene-see"></span>
+          <span class="grow"><span class="h-5">Sommer am See</span><p class="caption">Album · 128 Fotos · Aug. 2025</p></span>
+          <svg class="ic ic-l ic-l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-i="lucide:chevron-right"><path d="m9 18 6-6-6-6" /></svg>
+        </div>
+        <div class="prop">
+          <span class="thumb scene-konzert"></span>
+          <span class="grow"><span class="h-5">Konzert im Park</span><p class="caption">Videos · 12 Videos · 1:04 Std.</p></span>
+          <svg class="ic ic-l ic-l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-i="lucide:chevron-right"><path d="m9 18 6-6-6-6" /></svg>
+        </div>
+        <div class="prop">
+          <span class="thumb scene-nacht"></span>
+          <span class="grow"><span class="h-5">Nachtfahrt</span><p class="caption">Playlist · 24 Titel · 1 Std. 32 Min.</p></span>
+          <svg class="ic ic-l ic-l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-i="lucide:chevron-right"><path d="m9 18 6-6-6-6" /></svg>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec">
+      <div class="sec-head"><p class="micro-up">Quellen</p><span class="caption mono">412 / 600 GB</span></div>
+      <div class="meter" style="margin:0 0 12px"><i style="width:69%"></i></div>
+      <div class="card">
+        <div class="prop">
+          <svg class="ic ic-l ic-l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-i="lucide:cloud"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z" /></svg>
+          <span class="grow"><span class="h-5">Google Fotos</span></span>
+          <span class="badge-mono">214 GB</span>
+          <svg class="ic ic-l ic-l check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-i="lucide:circle-check"><circle cx="12" cy="12" r="10" /><path d="m16 9-5.5 5.5L8 12" /></svg>
+        </div>
+        <div class="prop">
+          <svg class="ic ic-l ic-l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-i="lucide:hard-drive"><path d="M10 16h.01" /><path d="M2.212 11.577a2 2 0 0 0-.212.896V18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-5.527a2 2 0 0 0-.212-.896L18.55 5.11A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z" /><path d="M21.946 12.013H2.054" /><path d="M6 16h.01" /></svg>
+          <span class="grow"><span class="h-5">NAS</span></span>
+          <span class="badge-mono">186 GB</span>
+          <svg class="ic ic-l ic-l check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-i="lucide:circle-check"><circle cx="12" cy="12" r="10" /><path d="m16 9-5.5 5.5L8 12" /></svg>
+        </div>
+        <div class="prop">
+          <svg class="ic ic-l ic-l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-i="lucide:usb"><circle cx="10" cy="7" r="1" /><circle cx="4" cy="20" r="1" /><path d="M4.7 19.3 19 5" /><path d="m21 3-3 1 2 2Z" /><path d="M9.26 7.68 5 12l2 5" /><path d="m10 14 5 2 3.5-3.5" /><path d="m18 12 1-1 1 1-1 1Z" /></svg>
+          <span class="grow"><span class="h-5">USB-Stick</span></span>
+          <span class="badge-mono">12 GB</span>
+          <svg class="ic ic-l ic-l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-i="lucide:plug-zap"><path d="M6.3 20.3a2.4 2.4 0 0 0 3.4 0L12 18l-6-6-2.3 2.3a2.4 2.4 0 0 0 0 3.4Z" /><path d="m2 22 3-3" /><path d="M7.5 13.5 10 11" /><path d="M10.5 16.5 13 14" /><path d="m18 3-4 4h6l-4 4" /></svg>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="fade"></div>
+  <nav class="tabbar" aria-label="Navigation">
+    <button class="tab is-on" type="button"><span class="pill"><svg class="ic ic-l ic-l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-i="lucide:house"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" /><path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /></svg></span>Start</button>
+    <button class="tab" type="button"><span class="pill"><svg class="ic ic-l ic-l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-i="lucide:book-open"><path d="M12 5v16" /><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z" /></svg></span>Bibliothek</button>
+    <button class="tab" type="button"><span class="pill"><svg class="ic ic-l ic-l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-i="lucide:search"><path d="m21 21-4.34-4.34" /><circle cx="11" cy="11" r="8" /></svg></span>Suche</button>
+    <button class="tab" type="button"><span class="pill"><span class="tab-avatar scene-person"></span></span>Profil</button>
+  </nav>
+  <div class="hi"></div>
+</section></figure>
+
+<!-- ============================= BIBLIOTHEK ============================== -->
+<figure class="shot"><figcaption>Bibliothek</figcaption><section class="phone" id="bibliothek">
+  <div class="sb"><span>9:41</span><span class="sb-icons"><svg class="ic ic-p ic-ph-fill" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-fill:cell-signal-full"><path d="M208,40V200a16,16,0,0,1-16,16H32A16,16,0,0,1,20.7,188.68l160-160A16,16,0,0,1,208,40Z"/></svg><svg class="ic ic-p ic-ph-fill" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-fill:wifi-high"><path d="M244.35,92.8l-104,125.43A15.93,15.93,0,0,1,128,224h0a15.93,15.93,0,0,1-12.31-5.77L11.65,92.8A15.65,15.65,0,0,1,8.11,80.91,15.93,15.93,0,0,1,14.28,70.1,186.67,186.67,0,0,1,128,32,186.67,186.67,0,0,1,241.72,70.1a15.93,15.93,0,0,1,6.17,10.81A15.65,15.65,0,0,1,244.35,92.8Z"/></svg><svg class="ic ic-p ic-ph-fill" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-fill:battery-full"><path d="M200,56H32A24,24,0,0,0,8,80v96a24,24,0,0,0,24,24H200a24,24,0,0,0,24-24V80A24,24,0,0,0,200,56Zm8,120a8,8,0,0,1-8,8H32a8,8,0,0,1-8-8V80a8,8,0,0,1,8-8H200a8,8,0,0,1,8,8ZM192,96v64a8,8,0,0,1-8,8H48a8,8,0,0,1-8-8V96a8,8,0,0,1,8-8H184A8,8,0,0,1,192,96Zm64,0v64a8,8,0,0,1-16,0V96a8,8,0,0,1,16,0Z"/></svg></span></div>
+
+  <header class="top-bar">
+    <button class="icon-plain" type="button" aria-label="Menü"><svg class="ic ic-l ic-l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-i="lucide:panel-left"><rect width="18" height="18" x="3" y="3" rx="2" /><path d="M9 3v18" /></svg></button>
+    <span class="search-pill"><svg class="ic ic-l ic-l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-i="lucide:search"><path d="m21 21-4.34-4.34" /><circle cx="11" cy="11" r="8" /></svg>Suchen<span class="key">⌘K</span></span>
+    <span class="avatar scene-person" style="width:30px;height:30px;box-shadow:0 0 0 1px var(--hairline)"></span>
+  </header>
+
+  <div class="doc" style="padding-top:14px">
+    <p class="crumbs" style="margin-bottom:6px">Medien<svg class="ic ic-l ic-l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-i="lucide:chevron-right"><path d="m9 18 6-6-6-6" /></svg><span class="here">Bibliothek</span></p>
+    <h1 class="h-page">Bibliothek</h1>
+    <p class="body-sm" style="margin-top:6px">8 Sammlungen aus drei Quellen, nach Art gruppiert.</p>
+  </div>
+
+  <div style="padding:14px 16px 0">
+    <div class="tabs" role="tablist">
+      <button class="is-on" type="button">Alle</button>
+      <button type="button">Fotos</button>
+      <button type="button">Videos</button>
+      <button type="button">Musik</button>
+      <button type="button">Alben</button>
+    </div>
+  </div>
+
+  <div class="doc" style="padding:0 6px">
+    <p class="micro-up group-head">Alben</p>
+    <div class="nav-item is-on">
+      <span class="thumb scene-lissabon"></span>
+      <span class="grow"><span class="h-5">Lissabon</span></span>
+      <span class="badge-mono">342</span>
+    </div>
+    <div class="nav-item">
+      <span class="thumb scene-see"></span>
+      <span class="grow"><span class="h-5">Sommer am See</span></span>
+      <span class="badge-mono">128</span>
+    </div>
+    <div class="nav-item">
+      <span class="thumb scene-herbst"></span>
+      <span class="grow"><span class="h-5">Herbstwald</span></span>
+      <span class="badge-mono">86</span>
+    </div>
+    <div class="nav-item">
+      <span class="thumb scene-wien"></span>
+      <span class="grow"><span class="h-5">Winter in Wien</span></span>
+      <span class="badge-mono">203</span>
+    </div>
+
+    <p class="micro-up group-head">Videos</p>
+    <div class="nav-item">
+      <span class="thumb scene-konzert"></span>
+      <span class="grow"><span class="h-5">Konzert im Park</span></span>
+      <span class="badge-mono">1:04</span>
+    </div>
+    <div class="nav-item">
+      <span class="thumb scene-film"></span>
+      <span class="grow"><span class="h-5">Kurzfilme 2024</span></span>
+      <span class="badge-mono">38 Min</span>
+    </div>
+
+    <p class="micro-up group-head">Musik</p>
+    <div class="nav-item">
+      <span class="thumb scene-nacht"></span>
+      <span class="grow"><span class="h-5">Nachtfahrt</span></span>
+      <span class="badge-mono">24</span>
+    </div>
+    <div class="nav-item">
+      <span class="thumb scene-studio"></span>
+      <span class="grow"><span class="h-5">Studio-Sessions</span></span>
+      <span class="badge-mono">11</span>
+    </div>
+
+    <p class="micro-up group-head">Quellen</p>
+    <div class="nav-item">
+      <svg class="ic ic-l ic-l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-i="lucide:cloud" style="width:30px;text-align:center;color:var(--stone);font-size:17px"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z" /></svg>
+      <span class="grow"><span class="h-5">Google Fotos</span></span>
+      <span class="badge-mono">214 GB</span>
+    </div>
+    <div class="nav-item">
+      <svg class="ic ic-l ic-l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-i="lucide:hard-drive" style="width:30px;text-align:center;color:var(--stone);font-size:17px"><path d="M10 16h.01" /><path d="M2.212 11.577a2 2 0 0 0-.212.896V18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-5.527a2 2 0 0 0-.212-.896L18.55 5.11A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z" /><path d="M21.946 12.013H2.054" /><path d="M6 16h.01" /></svg>
+      <span class="grow"><span class="h-5">NAS</span></span>
+      <span class="badge-mono">186 GB</span>
+    </div>
+    <div class="nav-item">
+      <svg class="ic ic-l ic-l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-i="lucide:usb" style="width:30px;text-align:center;color:var(--stone);font-size:17px"><circle cx="10" cy="7" r="1" /><circle cx="4" cy="20" r="1" /><path d="M4.7 19.3 19 5" /><path d="m21 3-3 1 2 2Z" /><path d="M9.26 7.68 5 12l2 5" /><path d="m10 14 5 2 3.5-3.5" /><path d="m18 12 1-1 1 1-1 1Z" /></svg>
+      <span class="grow"><span class="h-5">USB-Stick</span></span>
+      <span class="badge-mono">12 GB</span>
+    </div>
+  </div>
+
+  <div class="fade"></div>
+  <nav class="tabbar" aria-label="Navigation">
+    <button class="tab" type="button"><span class="pill"><svg class="ic ic-l ic-l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-i="lucide:house"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" /><path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /></svg></span>Start</button>
+    <button class="tab is-on" type="button"><span class="pill"><svg class="ic ic-l ic-l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-i="lucide:book-open"><path d="M12 5v16" /><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z" /></svg></span>Bibliothek</button>
+    <button class="tab" type="button"><span class="pill"><svg class="ic ic-l ic-l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-i="lucide:search"><path d="m21 21-4.34-4.34" /><circle cx="11" cy="11" r="8" /></svg></span>Suche</button>
+    <button class="tab" type="button"><span class="pill"><span class="tab-avatar scene-person"></span></span>Profil</button>
+  </nav>
+  <div class="hi"></div>
+</section></figure>
+
+<!-- =============================== DETAIL ================================ -->
+<figure class="shot"><figcaption>Detail</figcaption><section class="phone" id="detail">
+  <div class="sb"><span>9:41</span><span class="sb-icons"><svg class="ic ic-p ic-ph-fill" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-fill:cell-signal-full"><path d="M208,40V200a16,16,0,0,1-16,16H32A16,16,0,0,1,20.7,188.68l160-160A16,16,0,0,1,208,40Z"/></svg><svg class="ic ic-p ic-ph-fill" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-fill:wifi-high"><path d="M244.35,92.8l-104,125.43A15.93,15.93,0,0,1,128,224h0a15.93,15.93,0,0,1-12.31-5.77L11.65,92.8A15.65,15.65,0,0,1,8.11,80.91,15.93,15.93,0,0,1,14.28,70.1,186.67,186.67,0,0,1,128,32,186.67,186.67,0,0,1,241.72,70.1a15.93,15.93,0,0,1,6.17,10.81A15.65,15.65,0,0,1,244.35,92.8Z"/></svg><svg class="ic ic-p ic-ph-fill" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" data-i="ph-fill:battery-full"><path d="M200,56H32A24,24,0,0,0,8,80v96a24,24,0,0,0,24,24H200a24,24,0,0,0,24-24V80A24,24,0,0,0,200,56Zm8,120a8,8,0,0,1-8,8H32a8,8,0,0,1-8-8V80a8,8,0,0,1,8-8H200a8,8,0,0,1,8,8ZM192,96v64a8,8,0,0,1-8,8H48a8,8,0,0,1-8-8V96a8,8,0,0,1,8-8H184A8,8,0,0,1,192,96Zm64,0v64a8,8,0,0,1-16,0V96a8,8,0,0,1,16,0Z"/></svg></span></div>
+
+  <header class="top-bar">
+    <button class="icon-plain" type="button" aria-label="Zurück"><svg class="ic ic-l ic-l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-i="lucide:chevron-left"><path d="m15 18-6-6 6-6" /></svg></button>
+    <nav class="crumbs" aria-label="Pfad">
+      Bibliothek<svg class="ic ic-l ic-l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-i="lucide:chevron-right"><path d="m9 18 6-6-6-6" /></svg>Alben<svg class="ic ic-l ic-l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-i="lucide:chevron-right"><path d="m9 18 6-6-6-6" /></svg><span class="here">Lissabon</span>
+    </nav>
+    <button class="icon-plain" type="button" aria-label="Mehr"><svg class="ic ic-l ic-l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-i="lucide:ellipsis"><circle cx="12" cy="12" r="1" /><circle cx="19" cy="12" r="1" /><circle cx="5" cy="12" r="1" /></svg></button>
+  </header>
+
+  <div class="doc" style="padding-top:14px">
+    <div class="detail-img scene-lissabon"></div>
+    <h1 class="h-page" style="margin-top:14px">Lissabon</h1>
+    <div class="chip-row">
+      <span class="badge-mono">342 Fotos</span>
+      <span class="badge-mono">18 Videos</span>
+      <span class="badge-mono">Mai 2025</span>
+      <span class="badge-mono">4,8 GB</span>
+    </div>
+    <div class="detail-actions">
+      <button class="btn btn--primary" type="button"><svg class="ic ic-l ic-l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-i="lucide:play"><path d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z" /></svg>Diashow starten</button>
+      <button class="icon-round" type="button" aria-label="Teilen"><svg class="ic ic-l ic-l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-i="lucide:share-2"><circle cx="18" cy="5" r="3" /><circle cx="6" cy="12" r="3" /><circle cx="18" cy="19" r="3" /><line x1="8.59" x2="15.42" y1="13.51" y2="17.49" /><line x1="15.41" x2="8.59" y1="6.51" y2="10.49" /></svg></button>
+      <button class="icon-round" type="button" aria-label="Favorit"><svg class="ic ic-l ic-l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-i="lucide:heart"><path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5" /></svg></button>
+    </div>
+
+    <div class="code">
+      <div class="code-head"><span><span class="name">Musik zur Diashow</span> · Nachtfahrt</span><span class="code-copy">Ändern</span></div>
+      <div class="code-body">
+        <p class="code-line"><span class="num">1</span><span class="tr">Neonlichter</span><span class="tm">3:42</span></p>
+        <p class="code-line"><span class="num">2</span><span class="tr">Autobahn bei Nacht</span><span class="tm">4:05</span></p>
+        <p class="code-line"><span class="num">3</span><span class="tr">Spiegelung</span><span class="tm">3:18</span></p>
+      </div>
+    </div>
+
+    <div style="margin-top:16px">
+      <div class="tabs" role="tablist">
+        <button class="is-on" type="button">Fotos</button>
+        <button type="button">Videos</button>
+        <button type="button">Orte</button>
+      </div>
+    </div>
+    <div class="photo-grid">
+      <span class="photo scene-lissabon crop-1"></span>
+      <span class="photo scene-lissabon crop-4"></span>
+      <span class="photo scene-lissabon crop-9"></span>
+      <span class="photo scene-lissabon crop-11"></span>
+      <span class="photo scene-lissabon crop-2"></span>
+      <span class="photo scene-lissabon crop-5"></span>
+    </div>
+  </div>
+
+  <div class="fade"></div>
+  <nav class="tabbar" aria-label="Navigation">
+    <button class="tab" type="button"><span class="pill"><svg class="ic ic-l ic-l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-i="lucide:house"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" /><path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /></svg></span>Start</button>
+    <button class="tab is-on" type="button"><span class="pill"><svg class="ic ic-l ic-l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-i="lucide:book-open"><path d="M12 5v16" /><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z" /></svg></span>Bibliothek</button>
+    <button class="tab" type="button"><span class="pill"><svg class="ic ic-l ic-l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" data-i="lucide:search"><path d="m21 21-4.34-4.34" /><circle cx="11" cy="11" r="8" /></svg></span>Suche</button>
+    <button class="tab" type="button"><span class="pill"><span class="tab-avatar scene-person"></span></span>Profil</button>
+  </nav>
+  <div class="hi"></div>
+</section></figure>
+
+</main><footer class="ms-foot"><b>Mintlify-Stil</b> · Ansatz: Präzises Werkzeug + Stilles Minimal · eigene Musterscreens mit Beispielinhalten, keine Originalscreens der Marke</footer></div>
+</body></html>
