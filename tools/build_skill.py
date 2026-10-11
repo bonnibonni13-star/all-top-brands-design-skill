@@ -255,6 +255,7 @@ TOOL_FILES = [
     "SKILL.template.md", "build_skill.py", "extract_tokens.py", "build_catalog.py",
     "katalog.template.html", "render_screens.py", "live_screens.py", "build_vorschau.py",
     "screens/ANLEITUNG.md", "screens/base.css", "vorschau/vorlage.html", "vorschau/icons.js",
+    "test_skill.py",
 ]
 if _args.tools:
     src = pathlib.Path(_args.tools)

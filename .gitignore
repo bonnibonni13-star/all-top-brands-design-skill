@@ -1,1 +1,5 @@
 .DS_Store
+
+# Icon-Sammlungen: eigene Projekte (Lucide ISC, Phosphor MIT), nicht mitversionieren
+icons/
+screens/qa/
