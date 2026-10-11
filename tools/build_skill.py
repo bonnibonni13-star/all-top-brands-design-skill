@@ -204,6 +204,13 @@ for c in order:
 index = "\n".join(lines).rstrip() + "\n"
 
 # Rebuild in place: only SKILL.md, LICENSE and references/ are replaced; other files (tools/, README, katalog) stay.
+def gleicher_ordner(a, b):
+    """True, wenn Quelle und Ziel derselbe Ordner sind (In-Place-Rebuild): dann nichts löschen und kopieren."""
+    try:
+        return pathlib.Path(a).resolve() == pathlib.Path(b).resolve()
+    except OSError:
+        return False
+
 out.mkdir(parents=True, exist_ok=True)
 if (out / "references").exists():
     shutil.rmtree(out / "references")
@@ -214,10 +221,15 @@ shutil.copyfile(repo / "LICENSE", out / "LICENSE")
 
 if _args.sprache:
     dst = out / "designsprache"
-    shutil.rmtree(dst, ignore_errors=True)
-    dst.mkdir()
-    for slug in slugs:
-        shutil.copyfile(sprache_dir / f"{slug}.md", dst / f"{slug}.md")
+    if gleicher_ordner(sprache_dir, dst):
+        fehlt = sorted(s for s in slugs if not (dst / f"{s}.md").exists())
+        if fehlt:
+            sys.exit(f"Profile fehlen in {dst}: {fehlt}")
+    else:
+        shutil.rmtree(dst, ignore_errors=True)
+        dst.mkdir()
+        for slug in slugs:
+            shutil.copyfile(sprache_dir / f"{slug}.md", dst / f"{slug}.md")
 
 if _args.screens:
     src = pathlib.Path(_args.screens)
@@ -226,13 +238,14 @@ if _args.screens:
         sys.exit(f"Musterscreens fehlen: {missing}")
     dst = out / "screens"
     klein = dst / "klein"
-    if dst.exists():
-        for f in list(dst.glob("*.png")) + list(dst.glob("*.html")):
-            f.unlink()
-    dst.mkdir(parents=True, exist_ok=True)
-    for slug in slugs:
-        for e in ("png", "html"):
-            shutil.copyfile(src / f"{slug}.{e}", dst / f"{slug}.{e}")
+    if not gleicher_ordner(src, dst):
+        if dst.exists():
+            for f in list(dst.glob("*.png")) + list(dst.glob("*.html")):
+                f.unlink()
+        dst.mkdir(parents=True, exist_ok=True)
+        for slug in slugs:
+            for e in ("png", "html"):
+                shutil.copyfile(src / f"{slug}.{e}", dst / f"{slug}.{e}")
     if klein.is_dir():
         for f in klein.glob("*.webp"):
             if f.stem not in slugs:
@@ -245,10 +258,11 @@ if _args.animationen:
     if fehlt:
         sys.exit(f"Animations-Katalog unvollständig in {src}: {fehlt}")
     dst = out / "animationen"
-    shutil.rmtree(dst, ignore_errors=True)
-    dst.mkdir()
-    for f in noetig:
-        shutil.copyfile(src / f, dst / f)
+    if not gleicher_ordner(src, dst):
+        shutil.rmtree(dst, ignore_errors=True)
+        dst.mkdir()
+        for f in noetig:
+            shutil.copyfile(src / f, dst / f)
 
 # tools/ im Skill erneuern: nur die Dateien, die der Skill selbst braucht.
 TOOL_FILES = [
@@ -263,11 +277,12 @@ if _args.tools:
     if fehlt:
         sys.exit(f"Werkzeuge fehlen in {src}: {fehlt}")
     dst = out / "tools"
-    shutil.rmtree(dst, ignore_errors=True)
-    for f in TOOL_FILES:
-        (dst / f).parent.mkdir(parents=True, exist_ok=True)
-        shutil.copyfile(src / f, dst / f)
-    shutil.copytree(src / "screens" / "scenes", dst / "screens" / "scenes")
+    if not gleicher_ordner(src, dst):
+        shutil.rmtree(dst, ignore_errors=True)
+        for f in TOOL_FILES:
+            (dst / f).parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(src / f, dst / f)
+        shutil.copytree(src / "screens" / "scenes", dst / "screens" / "scenes")
 
 tpl = template.read_text(encoding="utf-8")
 assert tpl.count("<!-- INDEX -->") == 1

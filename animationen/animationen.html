@@ -709,6 +709,21 @@ body:not(.bewegt) .e-snack{transform:none;opacity:1}
     kacheln.filter(function (k) { return k.hasAttribute("data-einmal") && !k.hidden; }).forEach(starten);
   }, 5200);
 
+  /* --- Beim Hereinscrollen abspielen: Wer zu einer Kachel scrollt, sieht ihren Effekt,
+         statt des Standbilds vom Seitenstart. Neu gestartet wird nur beim Hereinkommen. --- */
+  if ("IntersectionObserver" in window) {
+    var beobachter = new IntersectionObserver(function (eintraege) {
+      eintraege.forEach(function (e) {
+        var k = e.target;
+        if (!e.isIntersecting || k.hidden) { k._draussen = true; return; }
+        if (k._draussen === false) return;
+        k._draussen = false;
+        if (body.classList.contains("bewegt")) starten(k);
+      });
+    }, { threshold: 0.6 });
+    kacheln.forEach(function (k) { k._draussen = true; beobachter.observe(k); });
+  }
+
   /* --- Bereiche, Suche, Filter --- */
   var bereiche = [];
   kacheln.forEach(function (k) {
